@@ -1,0 +1,69 @@
+name: app
+description: "A new Flutter project."
+publish_to: 'none'
+
+version: 2.9.6+96
+
+environment:
+  sdk: ^3.7.2
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+  circular_bottom_navigation: ^2.4.0
+  http: ^1.5.0
+  intl: ^0.20.2
+  regexpattern: ^2.6.0
+  webview_flutter: ^4.13.0
+  shared_preferences: ^2.5.3
+  url_launcher: ^6.3.2
+  permission_handler: ^12.0.1
+  mobile_scanner: ^7.0.1
+  html: ^0.15.6
+  share_plus: ^11.0.0
+  google_mobile_ads: ^6.0.0
+  flutter_localizations:
+    sdk: flutter
+  excel: ^4.0.6
+  path_provider: ^2.1.5
+  pdf: ^3.11.3
+  file_picker: ^10.2.4
+  encrypt: ^5.0.3
+  mrx_charts: ^0.1.3
+  in_app_review: ^2.0.10
+  cached_network_image: ^3.4.1
+  firebase_core: ^4.0.0
+  firebase_analytics: ^12.0.0
+  firebase_messaging: ^16.0.0
+  flutter_local_notifications: ^19.4.0
+  app_tracking_transparency: ^2.0.6+1
+  adapty_flutter: ^3.10.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/
+    - assets/fonts/ubuntu/Ubuntu-Light.ttf
+    - assets/fonts/ubuntu/Ubuntu-Regular.ttf
+    - assets/fonts/ubuntu/Ubuntu-Medium.ttf
+    - assets/fonts/ubuntu/Ubuntu-Bold.ttf
+
+  fonts:
+    - family: Ubuntu
+      fonts:
+        - asset: assets/fonts/ubuntu/Ubuntu-Light.ttf
+          weight: 300
+        - asset: assets/fonts/ubuntu/Ubuntu-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/ubuntu/Ubuntu-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/ubuntu/Ubuntu-Bold.ttf
+          weight: 700
+

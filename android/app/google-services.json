@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "831534707030",
+    "firebase_url": "https://kolayhesappro-f8747-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "kolayhesappro-f8747",
+    "storage_bucket": "kolayhesappro-f8747.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:831534707030:android:7d0d64f1abbd709b2926f7",
+        "android_client_info": {
+          "package_name": "com.kolayhesap.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyARmfBUrmNtVmbHBjWMjbsHTISF5CFdplo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
