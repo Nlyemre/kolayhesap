@@ -165,7 +165,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: "Kolay Hesap app",
+      title: "Kolay Hesap",
       debugShowCheckedModeBanner: false,
       theme: Tema.normalTema,
       supportedLocales: const [Locale('tr', 'TR')],
