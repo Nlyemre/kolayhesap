@@ -79,14 +79,12 @@
 
   <!-- 9. EKRAN YÖNLENDİRME (SADECE PORTRE) -->
   <key>UISupportedInterfaceOrientations</key>
-  <array>
+<array>
     <string>UIInterfaceOrientationPortrait</string>
-  </array>
-
-  <key>UISupportedInterfaceOrientations~ipad</key>
-  <array>
-    <string>UIInterfaceOrientationPortrait</string>
-  </array>
+    <string>UIInterfaceOrientationPortraitUpsideDown</string>
+    <string>UIInterfaceOrientationLandscapeLeft</string>
+    <string>UIInterfaceOrientationLandscapeRight</string>
+</array>
 
   <!-- 10. DOSYA PAYLAŞIMI -->
   <key>UIFileSharingEnabled</key>
