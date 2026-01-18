@@ -147,7 +147,7 @@ class _FrekansState extends State<Frekans> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: const BackButton(color: Renk.koyuMavi),
+        leading: const BackButton(color: Renk.pastelKoyuMavi),
 
         title: const Text("Frekans"),
       ),
@@ -351,7 +351,7 @@ class _FrekansState extends State<Frekans> with TickerProviderStateMixin {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(label, style: const TextStyle(fontWeight: FontWeight.w500)),
-          Text(value, style: const TextStyle(color: Renk.koyuMavi)),
+          Text(value, style: const TextStyle(color: Renk.pastelKoyuMavi)),
         ],
       ),
     );

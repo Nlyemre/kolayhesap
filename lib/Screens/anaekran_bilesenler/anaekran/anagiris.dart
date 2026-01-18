@@ -584,12 +584,12 @@ class AylikMesaiBolumu extends StatelessWidget {
           [
             ChartGroupPieDataItem(
               amount: brutMesai,
-              color: const Color.fromARGB(210, 29, 84, 147),
+              color: Renk.pastelKoyuMavi,
               label: "Brüt Mesai",
             ),
             ChartGroupPieDataItem(
               amount: netMesai,
-              color: const Color.fromARGB(150, 38, 203, 203),
+              color: Renk.pastelAcikMavi,
               label: "Net Mesai",
             ),
           ],
@@ -987,7 +987,7 @@ class GrafikCubugu extends StatelessWidget {
                       textHeight *
                       0.50, // Yazı boyutunu yüksekliğe göre ölçekle
                   fontWeight: FontWeight.w500,
-                  color: const Color.fromARGB(255, 29, 84, 147),
+                  color: Renk.pastelKoyuMavi,
                 ),
               ),
               Padding(
@@ -1966,7 +1966,7 @@ class DetayButonu extends StatelessWidget {
       child: Container(
         width: double.infinity,
         decoration: BoxDecoration(
-          color: Renk.koyuMavi.withValues(alpha: 0.04),
+          color: Renk.pastelKoyuMavi.withValues(alpha: 0.04),
           border: Border.all(width: 1.0, color: Renk.cita),
           borderRadius: const BorderRadius.all(Radius.circular(8)),
         ),
@@ -1976,7 +1976,7 @@ class DetayButonu extends StatelessWidget {
             metin,
             textAlign: TextAlign.center,
             style: const TextStyle(
-              color: Renk.koyuMavi,
+              color: Renk.pastelKoyuMavi,
               fontSize: 12.5,
               fontWeight: FontWeight.w500,
               overflow: TextOverflow.ellipsis,
@@ -2003,7 +2003,7 @@ class BolumBasligi extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 45,
-      color: Renk.koyuMavi.withValues(alpha: 0.06),
+      color: Renk.pastelKoyuMavi.withValues(alpha: 0.06),
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

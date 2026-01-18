@@ -1,12 +1,11 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:math';
 
 import 'package:app/Screens/anaekran_bilesenler/anaekran/anasayfa.dart';
 import 'package:app/Screens/anaekran_bilesenler/ciktilar/kur.dart';
+import 'package:app/Screens/anaekran_bilesenler/veriler/girisveriler.dart';
 import 'package:app/Screens/anaekran_bilesenler/zam/zamhesaplama.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -37,8 +36,8 @@ class MaasHesaplayici {
   List<num> avans = List.filled(12, 0);
   List<num> sendikaKesintisi = List.filled(12, 0);
   List<num> mesaiListe = List.filled(12, 0);
-  List<num> agiGelir = List.filled(12, 0);
-  List<num> damgaGelir = List.filled(12, 0);
+  List<num> gelirVergisiIstisnasi = List.filled(12, 0);
+  List<num> damgaVergisiIstisnasi = List.filled(12, 0);
   List<num> zam = List.filled(12, 0);
   List<num> kidem = List.filled(12, 0);
   List<num> sosyalzam = List.filled(12, 0);
@@ -103,39 +102,20 @@ class MaasHesaplayici {
   MaasHesaplayici(this.context, this.widget);
 
   Future<void> veriGuncelle() async {
-    final response = await http.get(
-      Uri.parse('https://kolayhesappro.com/giris_veriler.php'),
+    gelirVergisiIstisnasi = List<num>.from(
+      GirisVerileri2026.gelirVergisiIstisnasi,
+    );
+    damgaVergisiIstisnasi = List<num>.from(
+      GirisVerileri2026.damgaVergisiIstisnasi,
     );
 
-    if (response.statusCode == 200) {
-      final Map<String, dynamic> girisVeriler = jsonDecode(response.body);
-      agiGelir[0] = girisVeriler["AGİ_1"] ?? 3315.70;
-      agiGelir[1] = girisVeriler["AGİ_1"] ?? 3315.70;
-      agiGelir[2] = girisVeriler["AGİ_1"] ?? 3315.70;
-      agiGelir[3] = girisVeriler["AGİ_1"] ?? 3315.70;
-      agiGelir[4] = girisVeriler["AGİ_1"] ?? 3315.70;
-      agiGelir[5] = girisVeriler["AGİ_1"] ?? 3315.70;
-      agiGelir[6] = girisVeriler["AGİ_2"] ?? 3315.70;
-      agiGelir[7] = girisVeriler["AGİ_3"] ?? 4257.57;
-      agiGelir[8] = girisVeriler["AGİ_4"] ?? 4420.93;
-      agiGelir[9] = girisVeriler["AGİ_4"] ?? 4420.93;
-      agiGelir[10] = girisVeriler["AGİ_4"] ?? 4420.93;
-      agiGelir[11] = girisVeriler["AGİ_4"] ?? 4420.93;
+    kdv1 = GirisVerileri2026.kdv1;
+    kdv2 = GirisVerileri2026.kdv2;
+    kdv3 = GirisVerileri2026.kdv3;
 
-      for (int i = 0; i < 12; i++) {
-        damgaGelir[i] =
-            i <= 5
-                ? girisVeriler["DAMGA_1"] ?? 197.38
-                : girisVeriler["DAMGA_2"] ?? 197.38;
-      }
-
-      kdv1 = girisVeriler["KDV1"] ?? 158000;
-      kdv2 = girisVeriler["KDV2"] ?? 330000;
-      kdv3 = girisVeriler["KDV3"] ?? 1200000;
-      engelli1 = girisVeriler["ENGELLİ1"] ?? 9900;
-      engelli2 = girisVeriler["ENGELLİ2"] ?? 5700;
-      engelli3 = girisVeriler["ENGELLİ3"] ?? 2400;
-    }
+    engelli1 = GirisVerileri2026.engelli1;
+    engelli2 = GirisVerileri2026.engelli2;
+    engelli3 = GirisVerileri2026.engelli3;
     await gelenVeriler();
   }
 
@@ -356,8 +336,8 @@ class MaasHesaplayici {
         ikramiyeListe[i] = 0;
         mesaiListe[i] = 0;
         sosyalHakgelen[i] = 0;
-        agiGelir[i] = 0;
-        damgaGelir[i] = 0;
+        gelirVergisiIstisnasi[i] = 0;
+        damgaVergisiIstisnasi[i] = 0;
         cocukparasi[i] = 0;
       }
     }
@@ -473,7 +453,7 @@ class MaasHesaplayici {
     for (int i = 0; i < 12; i++) {
       vergitoplam[i] =
           (gelirVergisi[i] + sgkKes[i] + damgaKes[i]) -
-          (damgaGelir[i] + agiGelir[i]);
+          (damgaVergisiIstisnasi[i] + gelirVergisiIstisnasi[i]);
       netOdeme[i] =
           burut[i] - (vergitoplam[i] + sendikaKesintisi[i] + besListe[i]);
       toplamOdeme[i] = netOdeme[i] - avans[i];
@@ -504,8 +484,12 @@ class MaasHesaplayici {
       saatTabloVerileri[9][i] = Hesaplayici.paraBirimiFormatla(
         burut[i] == 0 ? 0 : aylarVergi[i],
       );
-      saatTabloVerileri[10][i] = Hesaplayici.paraBirimiFormatla(agiGelir[i]);
-      saatTabloVerileri[11][i] = Hesaplayici.paraBirimiFormatla(damgaGelir[i]);
+      saatTabloVerileri[10][i] = Hesaplayici.paraBirimiFormatla(
+        gelirVergisiIstisnasi[i],
+      );
+      saatTabloVerileri[11][i] = Hesaplayici.paraBirimiFormatla(
+        damgaVergisiIstisnasi[i],
+      );
       saatTabloVerileri[12][i] = Hesaplayici.paraBirimiFormatla(
         sendikaKesintisi[i],
       );

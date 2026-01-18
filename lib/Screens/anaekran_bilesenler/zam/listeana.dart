@@ -119,7 +119,7 @@ class _AylikNetUcretKarsilastirmaState
                         baslik,
                         style: const TextStyle(
                           fontSize: 15,
-                          color: Renk.koyuMavi,
+                          color: Renk.pastelKoyuMavi,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -128,7 +128,7 @@ class _AylikNetUcretKarsilastirmaState
                       "Detaylar >",
                       style: TextStyle(
                         fontSize: 15,
-                        color: Renk.koyuMavi,
+                        color: Renk.pastelKoyuMavi,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -186,7 +186,7 @@ class _AylikNetUcretKarsilastirmaState
           style: const TextStyle(
             fontSize: 12,
             fontWeight: FontWeight.w500,
-            color: Renk.koyuMavi,
+            color: Renk.pastelKoyuMavi,
           ),
         ),
       ],

@@ -23,7 +23,21 @@ class _NekadarState extends State<Nekadar> {
   double _totalInflationChange = 0.0;
 
   final Map<String, double> _tufeRates = {
-    // 2024 yılı için TÜFE oranları
+    // 2026 yılı için TÜFE oranları
+    "2026-01": 0.0,
+    "2026-02": 0.0,
+    "2026-03": 0.0,
+    "2026-04": 0.0,
+    "2026-05": 0.0,
+    "2026-06": 0.0,
+    "2026-07": 0.0,
+    "2026-08": 0.0,
+    "2026-09": 0.0,
+    "2026-10": 0.0,
+    "2026-11": 0.0,
+    "2026-12": 0.0,
+
+    // 2025 yılı için TÜFE oranları
     "2025-01": 5.08,
     "2025-02": 2.27,
     "2025-03": 2.46,
@@ -33,8 +47,8 @@ class _NekadarState extends State<Nekadar> {
     "2025-07": 2.06,
     "2025-08": 2.04,
     "2025-09": 3.23,
-    "2025-10": 0.0,
-    "2025-11": 0.0,
+    "2025-10": 2.55,
+    "2025-11": 0.87,
     "2025-12": 0.0,
 
     // 2024 yılı için TÜFE oranları
@@ -408,7 +422,7 @@ class _NekadarState extends State<Nekadar> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: const BackButton(color: Renk.koyuMavi),
+        leading: const BackButton(color: Renk.pastelKoyuMavi),
 
         title: const Text("Değer Kaybı Hesapla"),
       ),
@@ -446,7 +460,7 @@ class _NekadarState extends State<Nekadar> {
                                 " Başlangıç Tarihi:",
                                 style: TextStyle(
                                   fontSize: 14,
-                                  color: Renk.koyuMavi,
+                                  color: Renk.pastelKoyuMavi,
                                   fontWeight: FontWeight.w500,
                                 ),
                                 overflow: TextOverflow.ellipsis,
@@ -481,7 +495,7 @@ class _NekadarState extends State<Nekadar> {
                               " Bitiş Tarihi:",
                               style: TextStyle(
                                 fontSize: 14,
-                                color: Renk.koyuMavi,
+                                color: Renk.pastelKoyuMavi,
                                 fontWeight: FontWeight.w500,
                               ),
                               overflow: TextOverflow.ellipsis,
@@ -529,13 +543,13 @@ class _NekadarState extends State<Nekadar> {
                     Yansatirikili.satir(
                       'Güncel Değer:',
                       '${NumberFormat("#,##0.00", "tr_TR").format(_result)} TL',
-                      Renk.koyuMavi,
+                      Renk.pastelKoyuMavi,
                     ),
                     Dekor.cizgi15,
                     Yansatirikili.satir(
                       'Toplam Endeks Değişim Oranı:',
                       '${NumberFormat("#,##0.00", "tr_TR").format(_totalInflationChange)} %',
-                      Renk.koyuMavi,
+                      Renk.pastelKoyuMavi,
                     ),
                     Dekor.cizgi15,
                     Padding(
@@ -595,7 +609,7 @@ class _NekadarState extends State<Nekadar> {
           style: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w500,
-            color: Renk.koyuMavi,
+            color: Renk.pastelKoyuMavi,
           ),
         ),
         const SizedBox(height: 10),

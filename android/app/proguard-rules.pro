@@ -1,130 +1,82 @@
-# Flutter Temel Koruma
+####################################
+# FLUTTER (ZORUNLU)
+####################################
 -keep class io.flutter.** { *; }
--keep class io.flutter.plugins.** { *; }
 -keep class io.flutter.embedding.** { *; }
+-dontwarn io.flutter.**
 
-# Google Mobile Ads
--keep class com.google.android.gms.ads.** { *; }
--keep class com.google.ads.** { *; }
--dontwarn com.google.android.gms.ads.**
--dontwarn com.google.ads.**
-
-# Firebase Core
+####################################
+# FIREBASE (CORE + ANALYTICS + MESSAGING)
+####################################
 -keep class com.google.firebase.** { *; }
--keep class com.google.** { *; }
 -dontwarn com.google.firebase.**
 
-# Firebase Messaging
+# Firebase Messaging (bildirimler için şart)
 -keep class com.google.firebase.messaging.FirebaseMessagingService { *; }
 
-# Firebase Analytics
--keep class com.google.firebase.analytics.** { *; }
+####################################
+# GOOGLE MOBILE ADS (ADMOB)
+####################################
+-keep class com.google.android.gms.ads.** { *; }
+-dontwarn com.google.android.gms.ads.**
 
-# HTTP ve Network İşlemleri
--keep class io.flutter.plugins.http.** { *; }
--keep class okhttp3.** { *; }
--keep class okio.** { *; }
--dontwarn okhttp3.**
--dontwarn okio.**
+####################################
+# ML KIT / MOBILE SCANNER (BARKOD – QR)
+####################################
+-keep class com.google.mlkit.** { *; }
+-dontwarn com.google.mlkit.**
 
-# Shared Preferences
--keep class android.content.SharedPreferences { *; }
--keep class com.tencent.mmkv.** { *; }
--dontwarn com.tencent.mmkv.**
+####################################
+# ANDROIDX / CORE
+####################################
+-dontwarn androidx.**
 
-# URL Launcher
+####################################
+# PLAY CORE (SPLIT / INSTALL / REVIEW)
+####################################
+-keep class com.google.android.play.core.** { *; }
+-dontwarn com.google.android.play.core.**
+
+####################################
+# URL LAUNCHER (CUSTOM TABS)
+####################################
 -keep class androidx.browser.customtabs.** { *; }
 
-# WebView
--keepclassmembers class * extends android.webkit.WebViewClient {
-   public void onReceivedSslError(...);
-}
-
-# Permission Handler
+####################################
+# PERMISSION HANDLER
+####################################
 -keep class com.baseflow.permissionhandler.** { *; }
 -dontwarn com.baseflow.permissionhandler.**
 
-# File Picker
+####################################
+# FILE PICKER
+####################################
 -keep class com.mr.flutter.plugin.filepicker.** { *; }
 -dontwarn com.mr.flutter.plugin.filepicker.**
 
-# PDF ve Excel İşlemleri
--keep class org.apache.poi.** { *; }
--keep class com.itextpdf.** { *; }
--dontwarn org.apache.**
--dontwarn com.itextpdf.**
-
-# Flutter Local Notifications
+####################################
+# FLUTTER LOCAL NOTIFICATIONS
+####################################
 -keep class com.dexterous.flutterlocalnotifications.** { *; }
 -dontwarn com.dexterous.flutterlocalnotifications.**
 
-# Mobile Scanner (ML Kit)
--keep class com.google.mlkit.vision.barcode.** { *; }
--dontwarn com.google.mlkit.**
-
-# Cached Network Image
--keep class com.github.omniloader.** { *; }
--dontwarn com.github.omniloader.**
-
-# In App Review
--keep class dev.britannio.in_app_review.** { *; }
--dontwarn dev.britannio.in_app_review.**
-
-# Share Plus
--keep class dev.fluttercommunity.plus.share.** { *; }
--dontwarn dev.fluttercommunity.plus.share.**
-
-# Html Paketi
--keep class org.jsoup.** { *; }
--dontwarn org.jsoup.**
-
-# Encrypt Paketi
--keep class com.example.encrypt.** { *; }
--dontwarn com.example.encrypt.**
-
-# Mrx Charts
--keep class com.mrx.charts.** { *; }
--dontwarn com.mrx.charts.**
-
-# Intl Paketi
--keep class com.example.intl.** { *; }
--dontwarn com.example.intl.**
-
-# Genel Kurallar
--keepattributes *Annotation*
--keepattributes Signature
--keepattributes Exceptions
--keepattributes InnerClasses
--keepattributes EnclosingMethod
-
-# Desugar Desteği
+####################################
+# DESUGARING (JAVA 17)
+####################################
 -dontwarn j$.**
 -dontwarn java.lang.invoke.**
 
-# Hata Ayıklama için Gereksiz Uyarıları Bastırma
--dontwarn org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement
+####################################
+# GENEL GEREKLİ ATTRIBUTELAR
+####################################
+-keepattributes *Annotation*
+-keepattributes Signature
+-keepattributes InnerClasses
+-keepattributes EnclosingMethod
+
+####################################
+# GEREKSİZ UYARILARI BASTIR
+####################################
 -dontwarn javax.annotation.**
 -dontwarn sun.misc.**
 -dontwarn android.util.**
-
-# Flutter Test ve Geliştirme Araçları
--keep class dev.flutter.plugins.integration_test.** { *; }
--keep class androidx.test.** { *; }
-
-# Play Core Split Install için özel kurallar
--keep class com.google.android.play.core.splitinstall.** { *; }
--keep class com.google.android.play.core.tasks.** { *; }
--keep class com.google.android.play.core.splitcompat.** { *; }
-
-# Otomatik oluşturulan dontwarn kuralları
--dontwarn com.google.android.play.core.splitcompat.SplitCompatApplication
--dontwarn com.google.android.play.core.splitinstall.SplitInstallException
--dontwarn com.google.android.play.core.splitinstall.SplitInstallManager
--dontwarn com.google.android.play.core.splitinstall.SplitInstallManagerFactory
--dontwarn com.google.android.play.core.splitinstall.SplitInstallRequest$Builder
--dontwarn com.google.android.play.core.splitinstall.SplitInstallRequest
--dontwarn com.google.android.play.core.splitinstall.SplitInstallSessionState
--dontwarn com.google.android.play.core.splitinstall.SplitInstallStateUpdatedListener
--dontwarn com.google.android.play.core.tasks.OnFailureListener
--dontwarn com.google.android.play.core.tasks.OnSuccessListener
--dontwarn com.google.android.play.core.tasks.Task

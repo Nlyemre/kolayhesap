@@ -123,11 +123,15 @@ class _ZamaylarDetayState extends State<ZamaylarDetay> {
             padding: const EdgeInsets.all(5.0),
             child: IconButton(
               onPressed: _paylas,
-              icon: const Icon(Icons.share, size: 20.0, color: Renk.koyuMavi),
+              icon: const Icon(
+                Icons.share,
+                size: 20.0,
+                color: Renk.pastelKoyuMavi,
+              ),
             ),
           ),
         ],
-        leading: const BackButton(color: Renk.koyuMavi),
+        leading: const BackButton(color: Renk.pastelKoyuMavi),
 
         title: Text(widget.aydetay16),
       ),
@@ -166,7 +170,9 @@ class _ZamaylarDetayState extends State<ZamaylarDetay> {
                           height: 20,
                           width: 20,
                           padding: const EdgeInsets.all(8.0),
-                          decoration: const BoxDecoration(color: Renk.koyuMavi),
+                          decoration: const BoxDecoration(
+                            color: Renk.pastelKoyuMavi,
+                          ),
                         ),
                         const Padding(
                           padding: EdgeInsets.only(left: 16),
@@ -188,7 +194,7 @@ class _ZamaylarDetayState extends State<ZamaylarDetay> {
                               style: const TextStyle(
                                 fontSize: 15,
                                 fontWeight: FontWeight.bold,
-                                color: Renk.koyuMavi,
+                                color: Renk.pastelKoyuMavi,
                               ),
                               textScaler: TextScaler.noScaling,
                             ),
@@ -211,7 +217,9 @@ class _ZamaylarDetayState extends State<ZamaylarDetay> {
                           height: 20,
                           width: 20,
                           padding: const EdgeInsets.all(8.0),
-                          decoration: const BoxDecoration(color: Renk.acikMavi),
+                          decoration: const BoxDecoration(
+                            color: Renk.pastelAcikMavi,
+                          ),
                         ),
                         const Padding(
                           padding: EdgeInsets.only(left: 16),
@@ -256,7 +264,9 @@ class _ZamaylarDetayState extends State<ZamaylarDetay> {
                           height: 20,
                           width: 20,
                           padding: const EdgeInsets.all(8.0),
-                          decoration: const BoxDecoration(color: Renk.acikMavi),
+                          decoration: const BoxDecoration(
+                            color: Renk.pastelAcikMavi,
+                          ),
                         ),
                         const Padding(
                           padding: EdgeInsets.only(left: 16),
@@ -291,7 +301,7 @@ class _ZamaylarDetayState extends State<ZamaylarDetay> {
                   Yansatirikili.satir(
                     'Net Maaş',
                     '${widget.aydetay15} TL',
-                    Renk.koyuMavi,
+                    Renk.pastelKoyuMavi,
                   ),
                   Yansatirikili.satir(
                     'B.E.S %3',
@@ -307,7 +317,7 @@ class _ZamaylarDetayState extends State<ZamaylarDetay> {
                   Yansatirikili.satir(
                     'Kalan Maaş',
                     '${widget.aydetay14} TL',
-                    Renk.koyuMavi,
+                    Renk.pastelKoyuMavi,
                   ),
                   const Padding(
                     padding: EdgeInsets.only(left: 10, right: 10, top: 10),
@@ -349,7 +359,7 @@ class _ZamaylarDetayState extends State<ZamaylarDetay> {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(vertical: 10.0),
-      color: Renk.koyuMavi.withValues(alpha: 0.1),
+      color: Renk.pastelKoyuMavi.withValues(alpha: 0.1),
       child: Padding(
         padding: const EdgeInsets.only(left: 15),
         child: Text(
@@ -357,7 +367,7 @@ class _ZamaylarDetayState extends State<ZamaylarDetay> {
           style: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w400,
-            color: Renk.koyuMavi,
+            color: Renk.pastelKoyuMavi,
           ),
         ),
       ),
@@ -372,23 +382,31 @@ class _ZamaylarDetayState extends State<ZamaylarDetay> {
             ? Yansatirikili.satir(
               'Saat Ücreti',
               '${widget.aydetay19} TL',
-              Renk.koyuMavi,
+              Renk.pastelKoyuMavi,
             )
             : Yansatirikili.satir(
               'Brüt Maaş',
               '${widget.aydetay0} TL',
-              Renk.koyuMavi,
+              Renk.pastelKoyuMavi,
             ),
         Dekor.cizgi15,
-        Yansatirikili.satir('İkramiye', '${widget.aydetay1} TL', Renk.koyuMavi),
+        Yansatirikili.satir(
+          'İkramiye',
+          '${widget.aydetay1} TL',
+          Renk.pastelKoyuMavi,
+        ),
         Dekor.cizgi15,
         Yansatirikili.satir(
           'Sosyal Haklar',
           '${widget.aydetay2} TL',
-          Renk.koyuMavi,
+          Renk.pastelKoyuMavi,
         ),
         Dekor.cizgi15,
-        Yansatirikili.satir('Mesailer', '${widget.aydetay3} TL', Renk.koyuMavi),
+        Yansatirikili.satir(
+          'Mesailer',
+          '${widget.aydetay3} TL',
+          Renk.pastelKoyuMavi,
+        ),
       ],
     );
   }
@@ -437,19 +455,19 @@ class _ZamaylarDetayState extends State<ZamaylarDetay> {
         Yansatirikili.satir(
           'Gelir vergi iadesi',
           '${widget.aydetay10} TL',
-          Renk.koyuMavi,
+          Renk.pastelKoyuMavi,
         ),
         Dekor.cizgi15,
         Yansatirikili.satir(
           'Damga vergi iadesi',
           '${widget.aydetay11} TL',
-          Renk.koyuMavi,
+          Renk.pastelKoyuMavi,
         ),
         Dekor.cizgi15,
         Yansatirikili.satir(
           'Toplam Destekler',
           '${_numberFormat.format(double.tryParse(toplama(widget.aydetay10.replaceAll('.', '').replaceAll(',', '.'), widget.aydetay11.replaceAll('.', '').replaceAll(',', '.'), "0", "0")))} TL',
-          Renk.koyuMavi,
+          Renk.pastelKoyuMavi,
         ),
         Dekor.cizgi15,
       ],

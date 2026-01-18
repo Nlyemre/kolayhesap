@@ -1,114 +1,103 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" 
+"http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
+<dict>
+
+  <!-- 1. TEMEL UYGULAMA BİLGİLERİ -->
+  <key>CFBundleDevelopmentRegion</key>
+  <string>$(DEVELOPMENT_LANGUAGE)</string>
+
+  <key>CFBundleDisplayName</key>
+  <string>Kolay Hesap</string>
+
+  <key>CFBundleExecutable</key>
+  <string>$(EXECUTABLE_NAME)</string>
+
+  <key>CFBundleIdentifier</key>
+  <string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+
+  <key>CFBundleInfoDictionaryVersion</key>
+  <string>6.0</string>
+
+  <key>CFBundleName</key>
+  <string>KolayHesap</string>
+
+  <key>CFBundlePackageType</key>
+  <string>APPL</string>
+
+  <key>CFBundleShortVersionString</key>
+  <string>$(FLUTTER_BUILD_NAME)</string>
+
+  <key>CFBundleVersion</key>
+  <string>$(FLUTTER_BUILD_NUMBER)</string>
+
+  <key>LSRequiresIPhoneOS</key>
+  <true/>
+
+  <!-- 2. LAUNCH SCREEN -->
+  <key>UILaunchStoryboardName</key>
+  <string>LaunchScreen</string>
+
+  <!-- 3. ANA STORYBOARD -->
+  <key>UIMainStoryboardFile</key>
+  <string>Main</string>
+
+  <!-- 4. İZİNLER -->
+  <key>NSCameraUsageDescription</key>
+  <string>QR kod taramak için kameraya erişim gerekiyor.</string>
+
+  <key>NSPhotoLibraryUsageDescription</key>
+  <string>Bazı özellikler fotoğraf erişimi gerektirebilir.</string>
+
+  <key>NSUserTrackingUsageDescription</key>
+  <string>Size daha uygun reklamlar gösterebilmek için izin istenmektedir.</string>
+
+  <!-- 5. APP TRANSPORT SECURITY -->
+  <key>NSAppTransportSecurity</key>
   <dict>
-    <!-- 1. TEMEL BİLGİLER -->
-    <key>CFBundleDevelopmentRegion</key>
-    <string>$(DEVELOPMENT_LANGUAGE)</string>
-    <key>CFBundleDisplayName</key>
-    <string>Kolay Hesap</string>
-    <key>CFBundleExecutable</key>
-    <string>$(EXECUTABLE_NAME)</string>
-    <key>CFBundleIdentifier</key>
-    <string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
-    <key>CFBundleInfoDictionaryVersion</key>
-    <string>6.0</string>
-    <key>CFBundleName</key>
-    <string>KolayHesap</string>
-    <key>CFBundlePackageType</key>
-    <string>APPL</string>
-    <key>CFBundleShortVersionString</key>
-    <string>$(FLUTTER_BUILD_NAME)</string>
-    <key>CFBundleSignature</key>
-    <string>????</string>
-    <key>CFBundleVersion</key>
-    <string>$(FLUTTER_BUILD_NUMBER)</string>
-    <key>LSRequiresIPhoneOS</key>
-    <true/>
-
-    <!-- 2. LAUNCH SCREEN -->
-    <key>UILaunchStoryboardName</key>
-    <string>LaunchScreen</string>
-
-    <!-- 3. Ana Storyboard Dosyası -->
-    <key>UIMainStoryboardFile</key>
-    <string>Main</string>
-
-    <!-- 4. KAMERA İZNİ -->
-    <key>NSCameraUsageDescription</key>
-    <string>QR kod taramak için kameraya erişim gerekiyor.</string>
-
-    <key>NSPhotoLibraryUsageDescription</key>
-    <string>Uygulama doğrudan fotoğraf kütüphanesine erişmemektedir, ancak bazı özellikler veya kullanılan bileşenler bu izni tetikleyebilir.</string>
-
-    <!-- 5. SADECE HTTPS KULLANIMI -->
-    <key>NSAppTransportSecurity</key>
-    <dict>
-      <key>NSAllowsArbitraryLoads</key>
-      <false/>
-    </dict>
-
-    <!-- 6. ARKA PLAN MODLARI -->
-    <key>UIBackgroundModes</key>
-    <array>
-      <string>remote-notification</string>
-    </array>
-
-    <!-- 7. BİLDİRİM İZİNLERİ -->
-    <key>UNNotificationUsageDescription</key>
-    <string>Uygulama size bildirim gönderebilmek için izin istiyor.</string>
-
-    <!-- 9. TAKİP İZNİ (Reklam) -->
-    <key>NSUserTrackingUsageDescription</key>
-    <string>Size daha iyi reklam deneyimi sunabilmek için izin vermeniz gerekiyor.</string>
-
-    <!-- 10. GOOGLE ADS -->
-    <key>GADApplicationIdentifier</key>
-    <string>ca-app-pub-3309512680871363~7032488847</string>
-
-    <!-- 12. FIREBASE -->
-    <key>FirebaseAppDelegateProxyEnabled</key>
+    <key>NSAllowsArbitraryLoads</key>
     <false/>
-    <key>FirebaseAutomaticDataCollectionEnabled</key>
-    <true/>
-
-    <!-- 13. ARKA PLAN GÖREV İZİNLERİ -->
-    <key>BGTaskSchedulerPermittedIdentifiers</key>
-    <array>
-      <string>$(PRODUCT_BUNDLE_IDENTIFIER).background-task</string>
-    </array>
-
-    <!-- 14. EKRAN YÖNLENDİRME -->
-    <key>UISupportedInterfaceOrientations</key>
-    <array>
-      <string>UIInterfaceOrientationPortrait</string>
-      <string>UIInterfaceOrientationLandscapeLeft</string>
-      <string>UIInterfaceOrientationLandscapeRight</string>
-    </array>
-    <key>UISupportedInterfaceOrientations~ipad</key>
-    <array>
-      <string>UIInterfaceOrientationPortrait</string>
-      <string>UIInterfaceOrientationPortraitUpsideDown</string>
-      <string>UIInterfaceOrientationLandscapeLeft</string>
-      <string>UIInterfaceOrientationLandscapeRight</string>
-    </array>
-
-    <!-- 15. PERFORMANS & GİRİŞ İZİNLERİ -->
-    <key>CADisableMinimumFrameDurationOnPhone</key>
-    <true/>
-    <key>UIApplicationSupportsIndirectInputEvents</key>
-    <true/>
-
-    <!-- 17. Dosya Paylaşımı ve Yerinde Açma -->
-    <key>UIFileSharingEnabled</key>
-    <true/>
-    <key>LSSupportsOpeningDocumentsInPlace</key>
-    <true/>
-
-    <!-- 18. Bildirim Stili -->
-    <key>NSUserNotificationAlertStyle</key>
-    <string>alert</string>
-    <key>NSUserNotificationCenterDefaultUserNotificationCenter</key>
-    <true/>
   </dict>
+
+  <!-- 6. PUSH NOTIFICATION -->
+  <key>UIBackgroundModes</key>
+  <array>
+    <string>remote-notification</string>
+  </array>
+
+  <!-- 7. GOOGLE ADMOB -->
+  <key>GADApplicationIdentifier</key>
+  <string>ca-app-pub-3309512680871363~7032488847</string>
+
+  <!-- 8. FIREBASE (MANUEL DELEGATE KULLANIYORSUN) -->
+  <key>FirebaseAppDelegateProxyEnabled</key>
+  <false/>
+
+  <key>FirebaseAutomaticDataCollectionEnabled</key>
+  <true/>
+
+  <!-- 9. EKRAN YÖNLENDİRME (SADECE PORTRE) -->
+  <key>UISupportedInterfaceOrientations</key>
+  <array>
+    <string>UIInterfaceOrientationPortrait</string>
+  </array>
+
+  <key>UISupportedInterfaceOrientations~ipad</key>
+  <array>
+    <string>UIInterfaceOrientationPortrait</string>
+  </array>
+
+  <!-- 10. DOSYA PAYLAŞIMI -->
+  <key>UIFileSharingEnabled</key>
+  <true/>
+
+  <key>LSSupportsOpeningDocumentsInPlace</key>
+  <true/>
+
+  <!-- 11. PERFORMANS -->
+  <key>CADisableMinimumFrameDurationOnPhone</key>
+  <true/>
+
+</dict>
 </plist>

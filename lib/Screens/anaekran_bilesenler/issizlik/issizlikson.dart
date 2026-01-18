@@ -118,11 +118,15 @@ class _IssizlikSonState extends State<IssizlikSon> {
                   paylasMetin: _paylas,
                 );
               },
-              icon: const Icon(Icons.share, size: 20.0, color: Renk.koyuMavi),
+              icon: const Icon(
+                Icons.share,
+                size: 20.0,
+                color: Renk.pastelKoyuMavi,
+              ),
             ),
           ),
         ],
-        leading: const BackButton(color: Renk.koyuMavi),
+        leading: const BackButton(color: Renk.pastelKoyuMavi),
 
         title: const Text("İşsizlik Maaş Sonuçları"),
       ),
@@ -138,7 +142,7 @@ class _IssizlikSonState extends State<IssizlikSon> {
                   Yansatirikili.satir(
                     'İşsizlik Maaşı Brüt',
                     '${NumberFormat("#,##0.00", "tr_TR").format(double.parse(widget.issizlik4))} TL',
-                    Renk.koyuMavi,
+                    Renk.pastelKoyuMavi,
                   ),
                   Yansatirikili.satir(
                     'İşsizlik Damga Vergisi',
@@ -149,7 +153,7 @@ class _IssizlikSonState extends State<IssizlikSon> {
                   Yansatirikili.satir(
                     'İşsizlik Maaşı Net',
                     '${NumberFormat("#,##0.00", "tr_TR").format(double.parse(widget.issizlik6))} TL',
-                    Renk.koyuMavi,
+                    Renk.pastelKoyuMavi,
                   ),
                   const Padding(
                     padding: EdgeInsets.only(top: 10, left: 15, right: 15),
@@ -160,7 +164,7 @@ class _IssizlikSonState extends State<IssizlikSon> {
                     child: Container(
                       width: double.infinity,
                       padding: const EdgeInsets.symmetric(vertical: 10.0),
-                      color: Renk.koyuMavi.withValues(alpha: 0.1),
+                      color: Renk.pastelKoyuMavi.withValues(alpha: 0.1),
                       child: const Padding(
                         padding: EdgeInsets.only(left: 15),
                         child: Text(
@@ -168,7 +172,7 @@ class _IssizlikSonState extends State<IssizlikSon> {
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w400,
-                            color: Renk.koyuMavi,
+                            color: Renk.pastelKoyuMavi,
                           ),
                         ),
                       ),
@@ -177,31 +181,31 @@ class _IssizlikSonState extends State<IssizlikSon> {
                   Yansatirikili.satir(
                     '4 Ay Toplam Kazanç',
                     '${NumberFormat("#,##0.00", "tr_TR").format(double.parse(widget.issizlik0))} TL',
-                    Renk.koyuMavi,
+                    Renk.pastelKoyuMavi,
                   ),
                   Dekor.cizgi15,
                   Yansatirikili.satir(
                     'Aylık Ortalama Kazanç',
                     '${NumberFormat("#,##0.00", "tr_TR").format(double.parse(widget.issizlik1))} TL',
-                    Renk.koyuMavi,
+                    Renk.pastelKoyuMavi,
                   ),
                   Dekor.cizgi15,
                   Yansatirikili.satir(
                     'Ortalama Kazanç %40',
                     '${NumberFormat("#,##0.00", "tr_TR").format(double.parse(widget.issizlik2))} TL',
-                    Renk.koyuMavi,
+                    Renk.pastelKoyuMavi,
                   ),
                   Dekor.cizgi15,
                   Yansatirikili.satir(
                     'Ödeme Üst Sınır %80',
                     '${NumberFormat("#,##0.00", "tr_TR").format(double.parse(widget.issizlik3))} TL',
-                    Renk.koyuMavi,
+                    Renk.pastelKoyuMavi,
                   ),
                   Dekor.cizgi15,
                   Yansatirikili.satir(
                     'İşsizlik Brüt Maaş',
                     '${NumberFormat("#,##0.00", "tr_TR").format(double.parse(widget.issizlik4))} TL',
-                    Renk.koyuMavi,
+                    Renk.pastelKoyuMavi,
                   ),
                   Dekor.cizgi15,
                   Yansatirikili.satir(
@@ -213,25 +217,25 @@ class _IssizlikSonState extends State<IssizlikSon> {
                   Yansatirikili.satir(
                     'Günlük İşsizlik Ödeneği',
                     '${NumberFormat("#,##0.00", "tr_TR").format(double.parse(widget.issizlik9))} TL',
-                    Renk.koyuMavi,
+                    Renk.pastelKoyuMavi,
                   ),
                   Dekor.cizgi15,
                   Yansatirikili.satir(
                     'Aylık İşsizlik Ödeneği',
                     '${NumberFormat("#,##0.00", "tr_TR").format(double.parse(widget.issizlik6))} TL',
-                    Renk.koyuMavi,
+                    Renk.pastelKoyuMavi,
                   ),
                   Dekor.cizgi15,
                   Yansatirikili.satir(
                     'Toplam İşsizlik Ödeneği',
                     '${NumberFormat("#,##0.00", "tr_TR").format(double.parse(widget.issizlik8))} TL',
-                    Renk.koyuMavi,
+                    Renk.pastelKoyuMavi,
                   ),
                   Dekor.cizgi15,
                   Yansatirikili.satir(
                     'İşsizlik Maaşı Süresi',
                     widget.issizlik7,
-                    Renk.koyuMavi,
+                    Renk.pastelKoyuMavi,
                   ),
                   Dekor.cizgi15,
                   const SizedBox(height: 10),
@@ -329,7 +333,7 @@ class _IssizlikSonState extends State<IssizlikSon> {
                 alignment: Alignment.topCenter,
                 height: 165,
                 decoration: BoxDecoration(
-                  color: Renk.koyuMavi.withValues(alpha: 0.06),
+                  color: Renk.pastelKoyuMavi.withValues(alpha: 0.06),
                   borderRadius: const BorderRadius.all(Radius.circular(10.0)),
                 ),
                 child: RotatedBox(
@@ -376,7 +380,7 @@ class _IssizlikSonState extends State<IssizlikSon> {
           quarterTurns: 3,
           child: Text(
             "$aysayi.Ay",
-            style: const TextStyle(fontSize: 8, color: Renk.koyuMavi),
+            style: const TextStyle(fontSize: 8, color: Renk.pastelKoyuMavi),
           ),
         ),
       ],

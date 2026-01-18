@@ -55,16 +55,14 @@ Future<void> initializeFirebase() async {
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
 
   // 1. Firebase başlatma (iOS için ilk sırada)
   await initializeFirebase();
 
   // 2. Sistem ayarları
-  await SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown,
-  ]);
+  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
 
   Intl.defaultLocale = 'tr_TR';
 

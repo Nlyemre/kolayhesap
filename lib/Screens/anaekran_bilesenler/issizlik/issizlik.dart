@@ -1,12 +1,10 @@
-import 'dart:convert';
-
 import 'package:app/Screens/anaekran_bilesenler/issizlik/issizlikson.dart';
 import 'package:app/Screens/anaekran_bilesenler/reklam/bannerreklam_2.dart';
 import 'package:app/Screens/anaekran_bilesenler/reklam/yerelreklam_3.dart';
 import 'package:app/Screens/anaekran_bilesenler/reklam/yerelreklam_5.dart';
 import 'package:app/Screens/anaekran_bilesenler/veriler/degiskenler.dart';
+import 'package:app/Screens/anaekran_bilesenler/veriler/girisveriler.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -35,24 +33,9 @@ class _IssizlikState extends State<Issizlik> {
   @override
   void initState() {
     super.initState();
-    _veriGuncelle();
     _metinsatiral();
     initializeDateFormatting('tr_TR');
-  }
-
-  Future<void> _veriGuncelle() async {
-    final response = await http.get(
-      Uri.parse('https://kolayhesappro.com/giris_veriler.php'),
-    );
-
-    if (response.statusCode == 200) {
-      final Map<String, dynamic> data = jsonDecode(response.body);
-      final yeniDeger = data["ASGARİ_ÜCRET"] ?? 26004.71;
-
-      if (mounted) {
-        asagariUcret = yeniDeger;
-      }
-    }
+    asagariUcret = GirisVerileri2026.asgariUcret;
   }
 
   @override
@@ -162,7 +145,7 @@ class _IssizlikState extends State<Issizlik> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: const BackButton(color: Renk.koyuMavi),
+        leading: const BackButton(color: Renk.pastelKoyuMavi),
 
         title: const Text("İşsizlik Maaşı Hesapla"),
       ),
@@ -225,7 +208,7 @@ class _IssizlikState extends State<Issizlik> {
               child: Text(
                 "Tümünü Temizle",
                 style: TextStyle(
-                  color: Renk.koyuMavi,
+                  color: Renk.pastelKoyuMavi,
                   fontSize: 13,
                   fontWeight: FontWeight.w400,
                 ),
@@ -312,7 +295,9 @@ class _IssizlikState extends State<Issizlik> {
               });
             },
             fillColor: WidgetStateProperty.resolveWith((states) {
-              if (states.contains(WidgetState.selected)) return Renk.koyuMavi;
+              if (states.contains(WidgetState.selected)) {
+                return Renk.pastelKoyuMavi;
+              }
               return null;
             }),
           );
@@ -368,14 +353,14 @@ class _IssizlikState extends State<Issizlik> {
       children: [
         Container(
           height: 40,
-          color: Renk.koyuMavi.withValues(alpha: 0.06),
+          color: Renk.pastelKoyuMavi.withValues(alpha: 0.06),
           child: const Align(
             alignment: Alignment.center,
             child: Text(
               "Sık Sorulan Sorular",
               style: TextStyle(
                 fontSize: 16,
-                color: Renk.koyuMavi,
+                color: Renk.pastelKoyuMavi,
                 fontWeight: FontWeight.w500,
               ),
             ),

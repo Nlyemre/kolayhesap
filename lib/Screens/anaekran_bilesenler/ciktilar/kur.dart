@@ -70,7 +70,7 @@ class _KursayfaState extends State<Kursayfa> {
       },
       child: Scaffold(
         appBar: AppBar(
-          leading: const BackButton(color: Renk.koyuMavi),
+          leading: const BackButton(color: Renk.pastelKoyuMavi),
 
           title: const Text(
             "Ülke Para Birimi Karşılaştırma",
@@ -123,7 +123,7 @@ class _KursayfaState extends State<Kursayfa> {
                                               style: const TextStyle(
                                                 fontSize: 18,
                                                 fontWeight: FontWeight.bold,
-                                                color: Renk.koyuMavi,
+                                                color: Renk.pastelKoyuMavi,
                                               ),
                                               textScaler: TextScaler.noScaling,
                                             ),
@@ -135,7 +135,7 @@ class _KursayfaState extends State<Kursayfa> {
                                                   style: TextStyle(
                                                     fontSize: 14,
                                                     fontWeight: FontWeight.bold,
-                                                    color: Renk.koyuMavi,
+                                                    color: Renk.pastelKoyuMavi,
                                                   ),
                                                   textScaler:
                                                       TextScaler.noScaling,
@@ -198,7 +198,7 @@ class _KursayfaState extends State<Kursayfa> {
                 style: const TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.w400,
-                  color: Renk.koyuMavi,
+                  color: Renk.pastelKoyuMavi,
                 ),
                 textScaler: TextScaler.noScaling,
               ),

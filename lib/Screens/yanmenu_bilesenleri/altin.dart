@@ -1,120 +1,210 @@
-import 'package:app/Screens/anaekran_bilesenler/reklam/bannerreklam_1.dart';
+import 'dart:convert';
+
+import 'package:app/Screens/anaekran_bilesenler/reklam/bannerreklam_2.dart';
 import 'package:app/Screens/anaekran_bilesenler/veriler/degiskenler.dart';
 import 'package:flutter/material.dart';
-import 'package:webview_flutter/webview_flutter.dart';
+import 'package:http/http.dart' as http;
 
-class Altin extends StatefulWidget {
-  const Altin({super.key});
+class AltinSayfasi extends StatefulWidget {
+  const AltinSayfasi({super.key});
 
   @override
-  State<Altin> createState() => _AltinState();
+  State<AltinSayfasi> createState() => _AltinSayfasiState();
 }
 
-class _AltinState extends State<Altin> {
-  bool _isLoading = true; // Yükleme durumunu kontrol eden değişken
-  late WebViewController controller;
+class _AltinSayfasiState extends State<AltinSayfasi>
+    with AutomaticKeepAliveClientMixin {
+  Map<String, dynamic> altinler = {};
+  bool yukleniyor = true;
+  String? hata;
+
+  // Göstermek istediğimiz altın türleri (sırayla, popüler olanlar önce)
+  final List<String> altinKodlari = [
+    'GA', // Gram Altın
+    '22', // 22 Ayar Bilezik (gram)
+    'C', // Çeyrek Altın
+    'Y', // Yarım Altın
+    'T', // Tam Altın
+    'ATA', // Ata Altın
+    'CMR', // Cumhuriyet Altını
+    'GR', // Gremse Altın
+    'RA', // Reşat Altın
+    'HA', // Hamit Altın
+    '14', // 14 Ayar
+    '18', // 18 Ayar
+    'XAUUSD', // Ons Altın (USD)
+  ];
+
+  final Map<String, String> altinIsimleri = {
+    'GA': 'Gram Altın',
+    '22': '22 Ayar Bilezik (Gram)',
+    'C': 'Çeyrek Altın',
+    'Y': 'Yarım Altın',
+    'T': 'Tam Altın',
+    'ATA': 'Ata Altın',
+    'CMR': 'Cumhuriyet Altını',
+    'GR': 'Gremse Altın',
+    'RA': 'Reşat Altın',
+    'HA': 'Hamit Altın',
+    '14': '14 Ayar Altın',
+    '18': '18 Ayar Altın',
+    'XAUUSD': 'Ons Altın',
+  };
+
+  final String altinEmoji = '🪙';
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   void initState() {
     super.initState();
-
-    _initializeWebViewController();
+    altinGetir();
   }
 
-  void _initializeWebViewController() {
-    controller =
-        WebViewController()
-          ..setJavaScriptMode(JavaScriptMode.unrestricted)
-          ..setBackgroundColor(const Color(0x00000000))
-          ..setNavigationDelegate(
-            NavigationDelegate(
-              onPageFinished: (String url) {
-                if (mounted) {
-                  setState(() {
-                    _isLoading =
-                        false; // Sayfa yüklendiğinde yükleme göstergesini gizle
-                  });
-                }
-              },
-              onPageStarted: (String url) {
-                if (mounted) {
-                  setState(() {
-                    _isLoading =
-                        true; // Sayfa yüklenmeye başladığında yükleme göstergesini göster
-                  });
-                }
-              },
-              onWebResourceError: (WebResourceError error) {
-                if (mounted) {
-                  setState(() {
-                    _isLoading =
-                        false; // Hata durumunda yükleme göstergesini gizle
-                  });
-                }
-              },
-              onNavigationRequest: (NavigationRequest request) {
-                if (request.url.startsWith('https://www.youtube.com/')) {
-                  return NavigationDecision.prevent;
-                }
-                return NavigationDecision.navigate;
-              },
-            ),
-          );
-    _loadHtmlContent();
-  }
+  Future<void> altinGetir() async {
+    try {
+      final res = await http.get(
+        Uri.parse('https://api.genelpara.com/json/?list=altin&sembol=all'),
+      );
 
-  void _loadHtmlContent() async {
-    const String htmlContent = '''
-    <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    body, html {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      width: 100%;
+      if (!mounted) return;
+
+      if (res.statusCode == 200) {
+        final decoded = json.decode(res.body);
+        setState(() {
+          altinler = decoded['data'] ?? {};
+          yukleniyor = false;
+          hata = null;
+        });
+      } else {
+        setState(() {
+          hata = 'Sunucu hatası: ${res.statusCode}';
+          yukleniyor = false;
+        });
+      }
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        hata = 'Bağlantı hatası: $e';
+        yukleniyor = false;
+      });
     }
-    iframe {
-      width: 100%;
-      height: 100%;
-    }
-  </style>
-</head>
-<body>
-    <iframe src="https://api.genelpara.com/iframe/?symbol=altin&altin=GA,C,Y,T,CMR,XAU/USD,ATA,14,18,22,GR,GAG,BSL,IKB,HA,XAUEUR&stil=stil-8&renk=beyaz" title="Altın Fiyatları" frameborder="0" style="width:100%; height:100vh;"></iframe>
-</body>
-</html>
-  ''';
-    await controller.loadHtmlString(htmlContent);
   }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+
     return Scaffold(
       appBar: AppBar(
-        leading: const BackButton(color: Renk.koyuMavi),
-
-        title: const Text("Altin & Kur"),
-      ),
-      body: Column(
-        children: [
-          Expanded(
-            child: Stack(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 10, right: 10),
-                  child: WebViewWidget(controller: controller),
-                ),
-                if (_isLoading)
-                  const Center(child: CircularProgressIndicator()),
-              ],
-            ),
+        leading: const BackButton(color: Renk.pastelKoyuMavi),
+        title: const Text('Canlı Altın Fiyatları'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.refresh, color: Renk.pastelKoyuMavi),
+            onPressed: () {
+              setState(() => yukleniyor = true);
+              altinGetir();
+            },
           ),
-          const RepaintBoundary(child: BannerReklam()),
         ],
       ),
+      body:
+          yukleniyor
+              ? const Center(child: CircularProgressIndicator())
+              : hata != null
+              ? Center(child: Text(hata!))
+              : Column(
+                children: [
+                  Expanded(
+                    child: RefreshIndicator(
+                      onRefresh: altinGetir,
+                      child: ListView.builder(
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        itemCount: altinKodlari.length,
+                        itemBuilder: (context, index) {
+                          final kod = altinKodlari[index];
+                          final veri = altinler[kod];
+                          if (veri == null) return const SizedBox.shrink();
+
+                          final degisim =
+                              double.tryParse(
+                                veri['degisim']?.toString() ?? '0',
+                              ) ??
+                              0;
+
+                          final paraBirimi = veri['sembol'] ?? '₺';
+
+                          return CizgiliCerceve(
+                            golge: 5,
+                            margin: const EdgeInsets.symmetric(
+                              horizontal: 10,
+                              vertical: 4,
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(12),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        '$altinEmoji ${altinIsimleri[kod] ?? kod}',
+                                        style: const TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 4),
+                                      Text(
+                                        'Alış: ${veri['alis']} $paraBirimi  |  Satış: ${veri['satis']} $paraBirimi',
+                                        style: const TextStyle(
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      Icon(
+                                        degisim >= 0
+                                            ? Icons.arrow_upward
+                                            : Icons.arrow_downward,
+                                        color:
+                                            degisim >= 0
+                                                ? Colors.green
+                                                : Colors.red,
+                                        size: 18,
+                                      ),
+                                      const SizedBox(width: 4),
+                                      Text(
+                                        '${degisim >= 0 ? "+" : ""}${veri['degisim'] ?? '0'}%',
+                                        style: TextStyle(
+                                          color:
+                                              degisim >= 0
+                                                  ? Colors.green
+                                                  : Colors.red,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                  const RepaintBoundary(child: BannerReklamiki()),
+                ],
+              ),
     );
   }
 }

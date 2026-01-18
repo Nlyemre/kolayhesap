@@ -1,31 +1,24 @@
 import 'package:app/Screens/anaekran_bilesenler/abonelik/abonelik_satis.dart';
 import 'package:app/Screens/anaekran_bilesenler/reklam/yerelreklam_6.dart';
 import 'package:app/main.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mrx_charts/mrx_charts.dart';
 
 class Renk {
   // Sabit renkler
-  static const Color koyuMavi = Color.fromARGB(
-    255,
-    29,
-    85,
-    147,
-  ); // 1d5593 koyu mavi
-  static const Color acikMavi = Color.fromARGB(
-    203,
-    38,
-    202,
-    203,
-  ); // 26cacb açık mavi
+  static const Color pastelKoyuMavi = Color(0xFF3F74AE); // 1d5593 koyu mavi
+  static const Color pastelAcikMavi = Color(0xFF7FDADB); // 26cacb açık mavi
   static const Color kirmizi = Color.fromARGB(202, 200, 0, 0);
-  static const Color yesil = Color.fromARGB(201, 4, 122, 24);
-  static const Color mavibir = Color.fromARGB(230, 29, 84, 147);
   static const Color acikgri = Color.fromARGB(255, 250, 250, 250);
   static const Color cita = Color.fromARGB(113, 96, 125, 139);
+  static final Color pastelMavi = Color.lerp(Colors.blue, Colors.white, 0.9)!;
+  static final Color pastelYesil = Color.lerp(Colors.green, Colors.white, 0.9)!;
+  static final Color pastelKirmizi =
+      Color.lerp(Colors.red, Colors.white, 0.92)!;
   static const LinearGradient gradient = LinearGradient(
-    colors: [acikMavi, koyuMavi],
+    colors: [pastelAcikMavi, pastelKoyuMavi],
     begin: Alignment(1.0, -1.0),
     end: Alignment(1.0, 1.0),
   );
@@ -58,16 +51,26 @@ class Renk {
 
 class Mesaj {
   static void altmesaj(BuildContext context, String mesaj, Color renk) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(mesaj),
-        backgroundColor: renk,
-        behavior: SnackBarBehavior.floating,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-        ),
-      ),
-    );
+    try {
+      // Context hala geçerli mi kontrol et
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(mesaj),
+            backgroundColor: renk,
+            behavior: SnackBarBehavior.floating,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10.0)),
+            ),
+          ),
+        );
+      }
+    } catch (e) {
+      // Hata olursa sessizce devam et
+      if (kDebugMode) {
+        print("Snackbar gösterilemedi: $e");
+      }
+    }
   }
 }
 
@@ -181,7 +184,7 @@ class Kartt {
                     style: const TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
-                      color: Renk.koyuMavi,
+                      color: Renk.pastelKoyuMavi,
                     ),
                   ),
                 ],
@@ -462,8 +465,8 @@ class BilgiDialog {
     String buttonText = 'Kapat',
     VoidCallback? onButtonPressed,
     Color backgroundColor = Colors.white,
-    Color titleColor = Renk.koyuMavi,
-    Color buttonTextColor = Renk.koyuMavi,
+    Color titleColor = Renk.pastelKoyuMavi,
+    Color buttonTextColor = Renk.pastelKoyuMavi,
   }) {
     return showDialog<void>(
       context: context,
@@ -504,6 +507,66 @@ class BilgiDialog {
       },
     );
   }
+
+  static Future<bool?> showConfirmationDialog({
+    required BuildContext context,
+    required String title,
+    required String content,
+    String yesText = 'Evet',
+    String noText = 'Hayır',
+    Color yesButtonColor = Renk.pastelKoyuMavi,
+    Color noButtonColor = Renk.pastelKoyuMavi,
+    Color backgroundColor = Colors.white,
+    Color titleColor = Renk.pastelKoyuMavi,
+  }) {
+    return showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+          ),
+          backgroundColor: backgroundColor,
+          title: Text(
+            title,
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.w400,
+              color: titleColor,
+            ),
+          ),
+          content: Text(content),
+          actions: <Widget>[
+            // Hayır butonu
+            TextButton(
+              child: Text(
+                noText,
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w400,
+                  color: noButtonColor, // Renk.pastelKoyuMavi
+                ),
+              ),
+              onPressed: () => Navigator.of(context).pop(false),
+            ),
+
+            // Evet butonu - KIRMIZI DEĞİL, Renk.pastelKoyuMavi
+            TextButton(
+              child: Text(
+                yesText,
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w400,
+                  color: yesButtonColor, // Renk.pastelKoyuMavi
+                ),
+              ),
+              onPressed: () => Navigator.of(context).pop(true),
+            ),
+          ],
+        );
+      },
+    );
+  }
 }
 
 class AbonelikDialog {
@@ -535,7 +598,7 @@ class AbonelikDialog {
               style: TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.bold,
-                color: Renk.koyuMavi,
+                color: Renk.pastelKoyuMavi,
               ),
               textAlign: TextAlign.center,
             ),
@@ -549,7 +612,7 @@ class AbonelikDialog {
             const SizedBox(height: 28),
             const Row(
               children: [
-                Icon(Icons.block, color: Renk.koyuMavi),
+                Icon(Icons.block, color: Renk.pastelKoyuMavi),
                 SizedBox(width: 10),
                 Expanded(child: Text('Tüm reklamlar kaldırılır')),
               ],
@@ -557,7 +620,7 @@ class AbonelikDialog {
             const SizedBox(height: 12),
             const Row(
               children: [
-                Icon(Icons.lock_open, color: Renk.koyuMavi),
+                Icon(Icons.lock_open, color: Renk.pastelKoyuMavi),
                 SizedBox(width: 10),
                 Expanded(child: Text('Tüm premium içeriklere erişim')),
               ],
@@ -565,7 +628,7 @@ class AbonelikDialog {
             const SizedBox(height: 12),
             const Row(
               children: [
-                Icon(Icons.bolt_rounded, color: Renk.koyuMavi),
+                Icon(Icons.bolt_rounded, color: Renk.pastelKoyuMavi),
                 SizedBox(width: 10),
                 Expanded(child: Text('Kesintisiz ve hızlı kullanım')),
               ],
@@ -713,8 +776,8 @@ class CemberAna extends StatelessWidget {
     final List<Cember> data = [
       Cember(
         items: [
-          ChartPieItem(amount: deger1, name: isim1, color: Renk.koyuMavi),
-          ChartPieItem(amount: deger2, name: isim2, color: Renk.acikMavi),
+          ChartPieItem(amount: deger1, name: isim1, color: Renk.pastelKoyuMavi),
+          ChartPieItem(amount: deger2, name: isim2, color: Renk.pastelAcikMavi),
         ],
       ),
     ];
@@ -831,7 +894,7 @@ class CizgiliCerceve extends StatelessWidget {
         borderRadius: borderRadius,
         boxShadow: [
           BoxShadow(
-            color: Renk.koyuMavi.withValues(alpha: 0.15),
+            color: Renk.pastelKoyuMavi.withValues(alpha: 0.15),
             blurRadius: golge,
           ),
         ],
@@ -865,19 +928,19 @@ class Dekor {
 
   static const cizgi30 = Divider(color: Renk.cita, height: 30, thickness: 1);
   static const TextStyle butonText_12_500mavi = TextStyle(
-    color: Renk.koyuMavi,
+    color: Renk.pastelKoyuMavi,
     fontSize: 12,
     fontWeight: FontWeight.w500,
     overflow: TextOverflow.ellipsis,
   );
   static const TextStyle butonText_13_500mavi = TextStyle(
-    color: Renk.koyuMavi,
+    color: Renk.pastelKoyuMavi,
     fontSize: 13,
     fontWeight: FontWeight.w500,
     overflow: TextOverflow.ellipsis,
   );
   static const TextStyle butonText_14_500mavi = TextStyle(
-    color: Renk.koyuMavi,
+    color: Renk.pastelKoyuMavi,
     fontSize: 14,
     fontWeight: FontWeight.w500,
     overflow: TextOverflow.ellipsis,
@@ -901,19 +964,19 @@ class Dekor {
     overflow: TextOverflow.ellipsis,
   );
   static const TextStyle butonText_12_400mavi = TextStyle(
-    color: Renk.koyuMavi,
+    color: Renk.pastelKoyuMavi,
     fontSize: 12,
     fontWeight: FontWeight.w400,
     overflow: TextOverflow.ellipsis,
   );
   static const TextStyle butonText_13_400mavi = TextStyle(
-    color: Renk.koyuMavi,
+    color: Renk.pastelKoyuMavi,
     fontSize: 13,
     fontWeight: FontWeight.w400,
     overflow: TextOverflow.ellipsis,
   );
   static const TextStyle butonText_14_400mavi = TextStyle(
-    color: Renk.koyuMavi,
+    color: Renk.pastelKoyuMavi,
     fontSize: 14,
     fontWeight: FontWeight.w400,
     overflow: TextOverflow.ellipsis,
@@ -939,7 +1002,7 @@ class Dekor {
   static const TextStyle butonText_10_500mavi = TextStyle(
     fontSize: 10,
     fontWeight: FontWeight.w500,
-    color: Color.fromARGB(255, 29, 84, 147),
+    color: Renk.pastelKoyuMavi,
   );
   static const TextStyle butonText_10_400siyah = TextStyle(
     color: Color.fromARGB(255, 30, 30, 30),
@@ -957,7 +1020,7 @@ class Dekor {
     fontWeight: FontWeight.w500,
   );
   static const TextStyle butonText_11_500mavi = TextStyle(
-    color: Renk.koyuMavi,
+    color: Renk.pastelKoyuMavi,
     fontSize: 11,
     fontWeight: FontWeight.w500,
   );
@@ -974,7 +1037,7 @@ class Dekor {
   static const TextStyle butonText_18_500mavi = TextStyle(
     fontSize: 18,
     fontWeight: FontWeight.w500,
-    color: Renk.koyuMavi,
+    color: Renk.pastelKoyuMavi,
   );
   static const TextStyle butonText_15_400siyah = TextStyle(
     fontSize: 15,
@@ -989,12 +1052,12 @@ class Dekor {
   static const TextStyle butonText_16_500mavi = TextStyle(
     fontSize: 16,
     fontWeight: FontWeight.w500,
-    color: Renk.koyuMavi,
+    color: Renk.pastelKoyuMavi,
   );
   static const TextStyle butonText_15_500mavi = TextStyle(
     fontSize: 15,
     fontWeight: FontWeight.w500,
-    color: Renk.koyuMavi,
+    color: Renk.pastelKoyuMavi,
   );
   static const TextStyle butonText_11_400siyah = TextStyle(
     fontSize: 11,

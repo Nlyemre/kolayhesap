@@ -206,7 +206,7 @@ class _IslemlerSayfasiState extends State<IslemlerSayfasi> {
       child: Scaffold(
         appBar: AppBar(
           leading: IconButton(
-            icon: const BackButton(color: Renk.koyuMavi),
+            icon: const BackButton(color: Renk.pastelKoyuMavi),
             onPressed: () {
               final gelir = filtrelenmisIslemler
                   .where((i) => !i.giderMi)
@@ -238,7 +238,11 @@ class _IslemlerSayfasiState extends State<IslemlerSayfasi> {
                     paylasMetin: _paylas,
                   );
                 },
-                icon: const Icon(Icons.share, size: 20.0, color: Renk.koyuMavi),
+                icon: const Icon(
+                  Icons.share,
+                  size: 20.0,
+                  color: Renk.pastelKoyuMavi,
+                ),
               ),
             ),
           ],
@@ -327,7 +331,7 @@ class _IslemlerSayfasiState extends State<IslemlerSayfasi> {
                       child: const Icon(
                         Icons.add,
                         size: 30,
-                        color: Renk.koyuMavi,
+                        color: Renk.pastelKoyuMavi,
                       ),
                     ),
                   ),
@@ -381,14 +385,14 @@ class _IslemlerSayfasiState extends State<IslemlerSayfasi> {
     return Container(
       height: 40,
       width: double.infinity,
-      color: Renk.koyuMavi.withValues(alpha: 0.1),
+      color: Renk.pastelKoyuMavi.withValues(alpha: 0.1),
       child: Center(
         child: Text(
           metin,
           textAlign: TextAlign.center,
           style: const TextStyle(
             fontSize: 14,
-            color: Renk.koyuMavi,
+            color: Renk.pastelKoyuMavi,
             fontWeight: FontWeight.w400,
           ),
         ),
@@ -419,7 +423,7 @@ class _IslemlerSayfasiState extends State<IslemlerSayfasi> {
                         const Icon(
                           Icons.calendar_today,
                           size: 14,
-                          color: Renk.koyuMavi,
+                          color: Renk.pastelKoyuMavi,
                         ),
                         const SizedBox(width: 5),
                         Text(
@@ -446,7 +450,11 @@ class _IslemlerSayfasiState extends State<IslemlerSayfasi> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Icon(Icons.list, size: 14, color: Renk.koyuMavi),
+                        const Icon(
+                          Icons.list,
+                          size: 14,
+                          color: Renk.pastelKoyuMavi,
+                        ),
                         const SizedBox(width: 5),
                         Text(
                           _seciliKategori != null
@@ -479,7 +487,7 @@ class _IslemlerSayfasiState extends State<IslemlerSayfasi> {
               style: const TextStyle(
                 fontSize: 13,
                 fontWeight: FontWeight.w400,
-                color: Renk.koyuMavi,
+                color: Renk.pastelKoyuMavi,
               ),
               overflow: TextOverflow.ellipsis,
               maxLines: 3,
@@ -588,7 +596,7 @@ class _IslemlerSayfasiState extends State<IslemlerSayfasi> {
                     },
                     child: const Text(
                       'Tümünü Seç',
-                      style: TextStyle(color: Renk.koyuMavi),
+                      style: TextStyle(color: Renk.pastelKoyuMavi),
                     ),
                   ),
                 ),
@@ -619,7 +627,11 @@ class _IslemlerSayfasiState extends State<IslemlerSayfasi> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(kategori.ikon, color: Renk.mavibir, size: 30),
+                            Icon(
+                              kategori.ikon,
+                              color: Renk.pastelKoyuMavi,
+                              size: 30,
+                            ),
                             const SizedBox(height: 8),
                             Text(
                               kategori.ad,
@@ -709,7 +721,7 @@ class _IslemlerSayfasiState extends State<IslemlerSayfasi> {
                       },
                       child: const Text(
                         'Tüm Yılı Göster',
-                        style: TextStyle(color: Renk.koyuMavi),
+                        style: TextStyle(color: Renk.pastelKoyuMavi),
                       ),
                     ),
                   ),
@@ -748,7 +760,7 @@ class _IslemlerSayfasiState extends State<IslemlerSayfasi> {
                           },
                           child: const Text(
                             'Gün Veya Hafta Seç',
-                            style: TextStyle(color: Renk.koyuMavi),
+                            style: TextStyle(color: Renk.pastelKoyuMavi),
                           ),
                         ),
                       ),
@@ -794,7 +806,9 @@ class _IslemlerSayfasiState extends State<IslemlerSayfasi> {
                                     fontSize: 15,
                                     fontWeight: FontWeight.w500,
                                     color:
-                                        secili ? Renk.koyuMavi : Colors.black,
+                                        secili
+                                            ? Renk.pastelKoyuMavi
+                                            : Colors.black,
                                   ),
                                 ),
                                 const SizedBox(height: 4),
@@ -802,7 +816,10 @@ class _IslemlerSayfasiState extends State<IslemlerSayfasi> {
                                   selectedYear.toString(),
                                   style: TextStyle(
                                     fontSize: 12,
-                                    color: secili ? Renk.koyuMavi : Colors.grey,
+                                    color:
+                                        secili
+                                            ? Renk.pastelKoyuMavi
+                                            : Colors.grey,
                                   ),
                                 ),
                               ],
@@ -1080,7 +1097,7 @@ class _IslemlerSayfasiState extends State<IslemlerSayfasi> {
               child: CizgiliCerceve(
                 golge: 5,
                 child: ListTile(
-                  leading: Icon(kategori.ikon, color: Renk.mavibir),
+                  leading: Icon(kategori.ikon, color: Renk.pastelKoyuMavi),
                   title: Text(
                     islem.baslik,
                     maxLines: 1,
@@ -1108,7 +1125,7 @@ class _IslemlerSayfasiState extends State<IslemlerSayfasi> {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                      color: islem.giderMi ? Renk.kirmizi : Renk.koyuMavi,
+                      color: islem.giderMi ? Renk.kirmizi : Renk.pastelKoyuMavi,
                       fontWeight: FontWeight.w500,
                       fontSize: 15,
                     ),

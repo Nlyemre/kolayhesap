@@ -15,7 +15,7 @@ class _MTVhesaplaState extends State<MTVhesapla> {
   String _aractipi = "Lütfen Seçiniz";
   int yas = 0;
   int motorHacmi = 0;
-  int _mtv = 0;
+  double _mtv = 0;
   int tasitDegeri = 0;
   String _tesciltarihi = 'Lütfen Seçiniz';
   String _elektrikli = "Hayır";
@@ -24,8 +24,7 @@ class _MTVhesaplaState extends State<MTVhesapla> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: const BackButton(color: Renk.koyuMavi),
-
+        leading: const BackButton(color: Renk.pastelKoyuMavi),
         title: const Text("Araç MTV Hesapla"),
       ),
       body: Column(
@@ -119,8 +118,7 @@ class _MTVhesaplaState extends State<MTVhesapla> {
       padding: const EdgeInsets.only(bottom: 7, top: 7),
       child: DropdownButtonFormField<String>(
         decoration: InputDecoration(labelText: label),
-        dropdownColor:
-            Colors.white, // Açılan panelin arkaplan rengini beyaz yapar
+        dropdownColor: Colors.white,
         initialValue: value,
         items:
             items.map((String value) {
@@ -189,8 +187,7 @@ class _MTVhesaplaState extends State<MTVhesapla> {
       child: DropdownButtonFormField<int>(
         initialValue: yas,
         decoration: const InputDecoration(labelText: 'Araç Yaşı'),
-        dropdownColor:
-            Colors.white, // Açılan panelin arkaplan rengini beyaz yapar
+        dropdownColor: Colors.white,
         items: yasItems,
         onChanged: (value) {
           setState(() {
@@ -314,6 +311,75 @@ class _MTVhesaplaState extends State<MTVhesapla> {
           child: Text('1201 cm³ ve üzeri', style: Dekor.butonText_14_500siyah),
         ),
       ];
+    } else if (_aractipi == 'Panelvan') {
+      motorHacmiItems = const [
+        DropdownMenuItem(
+          value: 0,
+          child: Text('Lütfen Seçiniz', style: Dekor.butonText_14_500siyah),
+        ),
+        DropdownMenuItem(
+          value: 1900,
+          child: Text('1900 cm³ ve altı', style: Dekor.butonText_14_500siyah),
+        ),
+        DropdownMenuItem(
+          value: 1901,
+          child: Text('1901 cm³ ve üzeri', style: Dekor.butonText_14_500siyah),
+        ),
+      ];
+    } else if (_aractipi == 'Otobüs') {
+      motorHacmiItems = const [
+        DropdownMenuItem(
+          value: 0,
+          child: Text('Lütfen Seçiniz', style: Dekor.butonText_14_500siyah),
+        ),
+        DropdownMenuItem(
+          value: 25,
+          child: Text('25 kişiye kadar', style: Dekor.butonText_14_500siyah),
+        ),
+        DropdownMenuItem(
+          value: 35,
+          child: Text('26-35 kişiye kadar', style: Dekor.butonText_14_500siyah),
+        ),
+        DropdownMenuItem(
+          value: 45,
+          child: Text('36-45 kişiye kadar', style: Dekor.butonText_14_500siyah),
+        ),
+        DropdownMenuItem(
+          value: 46,
+          child: Text('46 kişi ve üzeri', style: Dekor.butonText_14_500siyah),
+        ),
+      ];
+    } else if (_aractipi == 'Kamyonet') {
+      motorHacmiItems = const [
+        DropdownMenuItem(
+          value: 0,
+          child: Text('Lütfen Seçiniz', style: Dekor.butonText_14_500siyah),
+        ),
+        DropdownMenuItem(
+          value: 1500,
+          child: Text('1.500 kg\'a kadar', style: Dekor.butonText_14_500siyah),
+        ),
+        DropdownMenuItem(
+          value: 3500,
+          child: Text('1.501 - 3.500 kg', style: Dekor.butonText_14_500siyah),
+        ),
+        DropdownMenuItem(
+          value: 5000,
+          child: Text('3.501 - 5.000 kg', style: Dekor.butonText_14_500siyah),
+        ),
+        DropdownMenuItem(
+          value: 10000,
+          child: Text('5.001 - 10.000 kg', style: Dekor.butonText_14_500siyah),
+        ),
+        DropdownMenuItem(
+          value: 20000,
+          child: Text('10.001 - 20.000 kg', style: Dekor.butonText_14_500siyah),
+        ),
+        DropdownMenuItem(
+          value: 20001,
+          child: Text('20.001 kg ve üzeri', style: Dekor.butonText_14_500siyah),
+        ),
+      ];
     } else {
       motorHacmiItems = const [
         DropdownMenuItem(
@@ -330,8 +396,7 @@ class _MTVhesaplaState extends State<MTVhesapla> {
         decoration: const InputDecoration(
           labelText: 'Motor Silindir Hacmi (cm³)',
         ),
-        dropdownColor:
-            Colors.white, // Açılan panelin arkaplan rengini beyaz yapar
+        dropdownColor: Colors.white,
         items: motorHacmiItems,
         onChanged: (value) {
           setState(() {
@@ -352,22 +417,22 @@ class _MTVhesaplaState extends State<MTVhesapla> {
           child: Text('Lütfen Seçiniz', style: Dekor.butonText_14_500siyah),
         ),
         DropdownMenuItem(
-          value: 259900,
+          value: 309100,
           child: Text(
-            '259.900 TL ye kadar',
+            '309.100 TL ye kadar',
             style: Dekor.butonText_14_500siyah,
           ),
         ),
         DropdownMenuItem(
-          value: 455300,
+          value: 541500,
           child: Text(
-            '259.900 TL ile 455.300 TL arası',
+            '309.100 TL ile 541.500 TL arası',
             style: Dekor.butonText_14_500siyah,
           ),
         ),
         DropdownMenuItem(
-          value: 455301,
-          child: Text('455.301 TL üzeri', style: Dekor.butonText_14_500siyah),
+          value: 541501,
+          child: Text('541.501 TL üzeri', style: Dekor.butonText_14_500siyah),
         ),
       ];
     } else if (motorHacmi <= 1600) {
@@ -377,22 +442,22 @@ class _MTVhesaplaState extends State<MTVhesapla> {
           child: Text('Lütfen Seçiniz', style: Dekor.butonText_14_500siyah),
         ),
         DropdownMenuItem(
-          value: 259900,
+          value: 309100,
           child: Text(
-            '259.900 TL ye kadar',
+            '309.100 TL ye kadar',
             style: Dekor.butonText_14_500siyah,
           ),
         ),
         DropdownMenuItem(
-          value: 455300,
+          value: 541500,
           child: Text(
-            '259.900 TL ile 455.300 TL arası',
+            '309.100 TL ile 541.500 TL arası',
             style: Dekor.butonText_14_500siyah,
           ),
         ),
         DropdownMenuItem(
-          value: 455301,
-          child: Text('455.301 TL üzeri', style: Dekor.butonText_14_500siyah),
+          value: 541501,
+          child: Text('541.501 TL üzeri', style: Dekor.butonText_14_500siyah),
         ),
       ];
     } else if (motorHacmi <= 1800) {
@@ -402,15 +467,15 @@ class _MTVhesaplaState extends State<MTVhesapla> {
           child: Text('Lütfen Seçiniz', style: Dekor.butonText_14_500siyah),
         ),
         DropdownMenuItem(
-          value: 651715,
+          value: 775100,
           child: Text(
-            '651.700 TL ye kadar',
+            '775.100 TL ye kadar',
             style: Dekor.butonText_14_500siyah,
           ),
         ),
         DropdownMenuItem(
-          value: 651701,
-          child: Text('651.701 TL üzeri', style: Dekor.butonText_14_500siyah),
+          value: 775101,
+          child: Text('775.101 TL üzeri', style: Dekor.butonText_14_500siyah),
         ),
       ];
     } else if (motorHacmi <= 2000) {
@@ -420,15 +485,15 @@ class _MTVhesaplaState extends State<MTVhesapla> {
           child: Text('Lütfen Seçiniz', style: Dekor.butonText_14_500siyah),
         ),
         DropdownMenuItem(
-          value: 651700,
+          value: 775100,
           child: Text(
-            '651.700 TL ye kadar',
+            '775.100 TL ye kadar',
             style: Dekor.butonText_14_500siyah,
           ),
         ),
         DropdownMenuItem(
-          value: 651701,
-          child: Text('651.701 TL üzeri', style: Dekor.butonText_14_500siyah),
+          value: 775101,
+          child: Text('775.101 TL üzeri', style: Dekor.butonText_14_500siyah),
         ),
       ];
     } else if (motorHacmi <= 2500) {
@@ -438,15 +503,15 @@ class _MTVhesaplaState extends State<MTVhesapla> {
           child: Text('Lütfen Seçiniz', style: Dekor.butonText_14_500siyah),
         ),
         DropdownMenuItem(
-          value: 813900,
+          value: 968100,
           child: Text(
-            '813.900 TL ye kadar',
+            '968.100 TL ye kadar',
             style: Dekor.butonText_14_500siyah,
           ),
         ),
         DropdownMenuItem(
-          value: 813901,
-          child: Text('813.901 TL üzeri', style: Dekor.butonText_14_500siyah),
+          value: 968101,
+          child: Text('968.101 TL üzeri', style: Dekor.butonText_14_500siyah),
         ),
       ];
     } else if (motorHacmi <= 3000) {
@@ -456,15 +521,15 @@ class _MTVhesaplaState extends State<MTVhesapla> {
           child: Text('Lütfen Seçiniz', style: Dekor.butonText_14_500siyah),
         ),
         DropdownMenuItem(
-          value: 1628900,
+          value: 1937500,
           child: Text(
-            '1.628.900 TL ye kadar',
+            '1.937.500 TL ye kadar',
             style: Dekor.butonText_14_500siyah,
           ),
         ),
         DropdownMenuItem(
-          value: 1628901,
-          child: Text('1.628.901 TL üzeri', style: Dekor.butonText_14_500siyah),
+          value: 1937501,
+          child: Text('1.937.501 TL üzeri', style: Dekor.butonText_14_500siyah),
         ),
       ];
     } else if (motorHacmi <= 3500) {
@@ -474,15 +539,15 @@ class _MTVhesaplaState extends State<MTVhesapla> {
           child: Text('Lütfen Seçiniz', style: Dekor.butonText_14_500siyah),
         ),
         DropdownMenuItem(
-          value: 1628900,
+          value: 1937500,
           child: Text(
-            '1.628.900 TL ye kadar',
+            '1.937.500 TL ye kadar',
             style: Dekor.butonText_14_500siyah,
           ),
         ),
         DropdownMenuItem(
-          value: 1628901,
-          child: Text('1.628.901 TL üzeri', style: Dekor.butonText_14_500siyah),
+          value: 1937501,
+          child: Text('1.937.501 TL üzeri', style: Dekor.butonText_14_500siyah),
         ),
       ];
     } else if (motorHacmi <= 4000) {
@@ -492,15 +557,15 @@ class _MTVhesaplaState extends State<MTVhesapla> {
           child: Text('Lütfen Seçiniz', style: Dekor.butonText_14_500siyah),
         ),
         DropdownMenuItem(
-          value: 2607700,
+          value: 3101800,
           child: Text(
-            '2.607.700 TL ye kadar',
+            '3.101.800 TL ye kadar',
             style: Dekor.butonText_14_500siyah,
           ),
         ),
         DropdownMenuItem(
-          value: 2607701,
-          child: Text('2.607.701 TL üzeri', style: Dekor.butonText_14_500siyah),
+          value: 3101801,
+          child: Text('3.101.801 TL üzeri', style: Dekor.butonText_14_500siyah),
         ),
       ];
     } else {
@@ -510,20 +575,19 @@ class _MTVhesaplaState extends State<MTVhesapla> {
           child: Text('Lütfen Seçiniz', style: Dekor.butonText_14_500siyah),
         ),
         DropdownMenuItem(
-          value: 3096500,
+          value: 3683200,
           child: Text(
-            '3.096.500 TL ye kadar',
+            '3.683.200 TL ye kadar',
             style: Dekor.butonText_14_500siyah,
           ),
         ),
         DropdownMenuItem(
-          value: 3096501,
-          child: Text('3.096.501 TL üzeri', style: Dekor.butonText_14_500siyah),
+          value: 3683201,
+          child: Text('3.683.201 TL üzeri', style: Dekor.butonText_14_500siyah),
         ),
       ];
     }
 
-    // Seçili değer listede var mı kontrol et, yoksa null ata
     int? selectedValue =
         tasitDegeriItems.any((item) => item.value == tasitDegeri)
             ? tasitDegeri
@@ -562,684 +626,595 @@ class _MTVhesaplaState extends State<MTVhesapla> {
   }
 
   void _calculateMTV(String arac, String elektrik) {
+    _mtv = 0; // Sıfırla
+
     if (arac == 'Otomobil') {
       if (elektrik == "Hayır") {
-        if (motorHacmi <= 1300) {
-          if (_tesciltarihi == 'Öncesi') {
-            if (yas <= 3) {
-              _mtv = 4834; // Öncesi, 0-3 yaş
-            } else if (yas <= 6) {
-              _mtv = 3372; // Öncesi, 4-6 yaş
-            } else if (yas <= 11) {
-              _mtv = 1882; // Öncesi, 7-11 yaş
-            } else if (yas <= 15) {
-              _mtv = 1420; // Öncesi, 12-15 yaş
-            } else {
-              _mtv = 499; // Öncesi, 16+ yaş
-            }
-          } else {
-            if (tasitDegeri <= 259900) {
-              _mtv =
-                  (yas <= 3)
-                      ? 4834
-                      : (yas <= 6)
-                      ? 3372
-                      : (yas <= 11)
-                      ? 1882
-                      : (yas <= 15)
-                      ? 1420
-                      : 499;
-            } else if (tasitDegeri <= 455300) {
-              _mtv =
-                  (yas <= 3)
-                      ? 5313
-                      : (yas <= 6)
-                      ? 3707
-                      : (yas <= 11)
-                      ? 2068
-                      : (yas <= 15)
-                      ? 1565
-                      : 551;
-            } else {
-              _mtv =
-                  (yas <= 3)
-                      ? 5803
-                      : (yas <= 6)
-                      ? 4042
-                      : (yas <= 11)
-                      ? 2264
-                      : (yas <= 15)
-                      ? 1709
-                      : 594;
-            }
-          }
-        } else if (motorHacmi <= 1600) {
-          if (_tesciltarihi == 'Öncesi') {
+        if (_tesciltarihi == 'Öncesi') {
+          // (I/A) Sayılı Tarife - 31/12/2017 öncesi tesciller
+          if (motorHacmi <= 1300) {
             _mtv =
                 (yas <= 3)
-                    ? 8421
+                    ? 5750
                     : (yas <= 6)
-                    ? 6314
+                    ? 4010
                     : (yas <= 11)
-                    ? 3661
+                    ? 2238
                     : (yas <= 15)
-                    ? 2587
-                    : 993;
-          } else {
-            if (tasitDegeri <= 259900) {
-              _mtv =
-                  (yas <= 3)
-                      ? 8421
-                      : (yas <= 6)
-                      ? 6314
-                      : (yas <= 11)
-                      ? 3661
-                      : (yas <= 15)
-                      ? 2587
-                      : 993;
-            } else if (tasitDegeri <= 455300) {
-              _mtv =
-                  (yas <= 3)
-                      ? 9267
-                      : (yas <= 6)
-                      ? 6948
-                      : (yas <= 11)
-                      ? 4031
-                      : (yas <= 15)
-                      ? 2838
-                      : 1085;
-            } else {
-              _mtv =
-                  (yas <= 3)
-                      ? 10112
-                      : (yas <= 6)
-                      ? 7577
-                      : (yas <= 11)
-                      ? 4389
-                      : (yas <= 15)
-                      ? 3098
-                      : 1184;
-            }
-          }
-        } else if (motorHacmi <= 1800) {
-          if (_tesciltarihi == 'Öncesi') {
+                    ? 1689
+                    : 593;
+          } else if (motorHacmi <= 1600) {
             _mtv =
                 (yas <= 3)
-                    ? 14885
+                    ? 10016
                     : (yas <= 6)
-                    ? 11626
+                    ? 7510
                     : (yas <= 11)
-                    ? 6848
+                    ? 4354
                     : (yas <= 15)
-                    ? 4168
-                    : 1612;
-          } else {
-            if (tasitDegeri <= 651700) {
-              _mtv =
-                  (yas <= 3)
-                      ? 16370
-                      : (yas <= 6)
-                      ? 12801
-                      : (yas <= 11)
-                      ? 7523
-                      : (yas <= 15)
-                      ? 4589
-                      : 1777;
-            } else {
-              _mtv =
-                  (yas <= 3)
-                      ? 17866
-                      : (yas <= 6)
-                      ? 13956
-                      : (yas <= 11)
-                      ? 8218
-                      : (yas <= 15)
-                      ? 5014
-                      : 1940;
-            }
-          }
-        } else if (motorHacmi <= 2000) {
-          if (_tesciltarihi == 'Öncesi') {
+                    ? 3077
+                    : 1181;
+          } else if (motorHacmi <= 1800) {
             _mtv =
                 (yas <= 3)
-                    ? 23454
+                    ? 17705
                     : (yas <= 6)
-                    ? 18057
+                    ? 13829
                     : (yas <= 11)
-                    ? 10613
+                    ? 8145
                     : (yas <= 15)
-                    ? 6314
-                    : 2487;
-          } else {
-            if (tasitDegeri <= 651700) {
-              _mtv =
-                  (yas <= 3)
-                      ? 25792
-                      : (yas <= 6)
-                      ? 19862
-                      : (yas <= 11)
-                      ? 11674
-                      : (yas <= 15)
-                      ? 6948
-                      : 2731;
-            } else {
-              _mtv =
-                  (yas <= 3)
-                      ? 28142
-                      : (yas <= 6)
-                      ? 21677
-                      : (yas <= 11)
-                      ? 12734
-                      : (yas <= 15)
-                      ? 7577
-                      : 2982;
-            }
-          }
-        } else if (motorHacmi <= 2500) {
-          if (_tesciltarihi == 'Öncesi') {
+                    ? 4957
+                    : 1917;
+          } else if (motorHacmi <= 2000) {
             _mtv =
                 (yas <= 3)
-                    ? 35175
+                    ? 27898
                     : (yas <= 6)
-                    ? 25534
+                    ? 21478
                     : (yas <= 11)
-                    ? 15954
+                    ? 12624
                     : (yas <= 15)
-                    ? 9528
-                    : 3766;
-          } else {
-            if (tasitDegeri <= 813900) {
-              _mtv =
-                  (yas <= 3)
-                      ? 38695
-                      : (yas <= 6)
-                      ? 28090
-                      : (yas <= 11)
-                      ? 17549
-                      : (yas <= 15)
-                      ? 10480
-                      : 4145;
-            } else {
-              _mtv =
-                  (yas <= 3)
-                      ? 42217
-                      : (yas <= 6)
-                      ? 30642
-                      : (yas <= 11)
-                      ? 19141
-                      : (yas <= 15)
-                      ? 11439
-                      : 4522;
-            }
-          }
-        } else if (motorHacmi <= 3000) {
-          if (_tesciltarihi == 'Öncesi') {
+                    ? 7510
+                    : 2958;
+          } else if (motorHacmi <= 2500) {
             _mtv =
                 (yas <= 3)
-                    ? 49052
+                    ? 41840
                     : (yas <= 6)
-                    ? 42669
+                    ? 30372
                     : (yas <= 11)
-                    ? 26654
+                    ? 18977
                     : (yas <= 15)
-                    ? 14329
-                    : 5259;
-          } else {
-            if (tasitDegeri <= 1628900) {
-              _mtv =
-                  (yas <= 3)
-                      ? 53952
-                      : (yas <= 6)
-                      ? 46942
-                      : (yas <= 11)
-                      ? 29322
-                      : (yas <= 15)
-                      ? 15770
-                      : 5780;
-            } else {
-              _mtv =
-                  (yas <= 3)
-                      ? 58864
-                      : (yas <= 6)
-                      ? 51203
-                      : (yas <= 11)
-                      ? 31991
-                      : (yas <= 15)
-                      ? 17206
-                      : 6308;
-            }
-          }
-        } else if (motorHacmi <= 3500) {
-          if (_tesciltarihi == 'Öncesi') {
+                    ? 11333
+                    : 4479;
+          } else if (motorHacmi <= 3000) {
             _mtv =
                 (yas <= 3)
-                    ? 74703
+                    ? 58347
                     : (yas <= 6)
-                    ? 67218
+                    ? 50754
                     : (yas <= 11)
-                    ? 40486
+                    ? 31704
                     : (yas <= 15)
-                    ? 20203
-                    : 7409;
-          } else {
-            if (tasitDegeri <= 1628900) {
-              _mtv =
-                  (yas <= 3)
-                      ? 82173
-                      : (yas <= 6)
-                      ? 73942
-                      : (yas <= 11)
-                      ? 44537
-                      : (yas <= 15)
-                      ? 22231
-                      : 8142;
-            } else {
-              _mtv =
-                  (yas <= 3)
-                      ? 89652
-                      : (yas <= 6)
-                      ? 80656
-                      : (yas <= 11)
-                      ? 48585
-                      : (yas <= 15)
-                      ? 24245
-                      : 8893;
-            }
-          }
-        } else if (motorHacmi <= 4000) {
-          if (_tesciltarihi == 'Öncesi') {
+                    ? 17044
+                    : 6255;
+          } else if (motorHacmi <= 3500) {
             _mtv =
                 (yas <= 3)
-                    ? 117462
+                    ? 88859
                     : (yas <= 6)
-                    ? 101427
+                    ? 79955
                     : (yas <= 11)
-                    ? 59730
+                    ? 48158
                     : (yas <= 15)
-                    ? 26654
-                    : 10613;
+                    ? 24031
+                    : 8813;
+          } else if (motorHacmi <= 4000) {
+            _mtv =
+                (yas <= 3)
+                    ? 139721
+                    : (yas <= 6)
+                    ? 120647
+                    : (yas <= 11)
+                    ? 71048
+                    : (yas <= 15)
+                    ? 31704
+                    : 12624;
           } else {
-            if (tasitDegeri <= 2607700) {
-              _mtv =
-                  (yas <= 3)
-                      ? 129201
-                      : (yas <= 6)
-                      ? 111570
-                      : (yas <= 11)
-                      ? 65702
-                      : (yas <= 15)
-                      ? 29322
-                      : 11674;
-            } else {
-              _mtv =
-                  (yas <= 3)
-                      ? 140960
-                      : (yas <= 6)
-                      ? 121707
-                      : (yas <= 11)
-                      ? 71687
-                      : (yas <= 15)
-                      ? 31991
-                      : 12734;
-            }
+            _mtv =
+                (yas <= 3)
+                    ? 228681
+                    : (yas <= 6)
+                    ? 171485
+                    : (yas <= 11)
+                    ? 101555
+                    : (yas <= 15)
+                    ? 45632
+                    : 17705;
           }
         } else {
-          if (_tesciltarihi == 'Öncesi') {
-            _mtv =
-                (yas <= 3)
-                    ? 192250
-                    : (yas <= 6)
-                    ? 144166
-                    : (yas <= 11)
-                    ? 85377
-                    : (yas <= 15)
-                    ? 38363
-                    : 14885;
-          } else {
-            if (tasitDegeri <= 3096500) {
+          // (I) Sayılı Tarife - 1/1/2018 sonrası tesciller
+          if (motorHacmi <= 1300) {
+            if (tasitDegeri <= 309100) {
               _mtv =
                   (yas <= 3)
-                      ? 211479
+                      ? 5750
                       : (yas <= 6)
-                      ? 158577
+                      ? 4010
                       : (yas <= 11)
-                      ? 93917
+                      ? 2238
                       : (yas <= 15)
-                      ? 42208
-                      : 16370;
+                      ? 1689
+                      : 593;
+            } else if (tasitDegeri <= 541500) {
+              _mtv =
+                  (yas <= 3)
+                      ? 6319
+                      : (yas <= 6)
+                      ? 4409
+                      : (yas <= 11)
+                      ? 2459
+                      : (yas <= 15)
+                      ? 1861
+                      : 655;
             } else {
               _mtv =
                   (yas <= 3)
-                      ? 230698
+                      ? 6902
                       : (yas <= 6)
-                      ? 172998
+                      ? 4807
                       : (yas <= 11)
-                      ? 102458
+                      ? 2693
                       : (yas <= 15)
-                      ? 46044
-                      : 17866;
+                      ? 2032
+                      : 706;
+            }
+          } else if (motorHacmi <= 1600) {
+            if (tasitDegeri <= 309100) {
+              _mtv =
+                  (yas <= 3)
+                      ? 10016
+                      : (yas <= 6)
+                      ? 7510
+                      : (yas <= 11)
+                      ? 4354
+                      : (yas <= 15)
+                      ? 3077
+                      : 1181;
+            } else if (tasitDegeri <= 541500) {
+              _mtv =
+                  (yas <= 3)
+                      ? 11023
+                      : (yas <= 6)
+                      ? 8264
+                      : (yas <= 11)
+                      ? 4794
+                      : (yas <= 15)
+                      ? 3375
+                      : 1290;
+            } else {
+              _mtv =
+                  (yas <= 3)
+                      ? 12028
+                      : (yas <= 6)
+                      ? 9012
+                      : (yas <= 11)
+                      ? 5220
+                      : (yas <= 15)
+                      ? 3685
+                      : 1408;
+            }
+          } else if (motorHacmi <= 1800) {
+            if (tasitDegeri <= 775100) {
+              _mtv =
+                  (yas <= 3)
+                      ? 19472
+                      : (yas <= 6)
+                      ? 15226
+                      : (yas <= 11)
+                      ? 8948
+                      : (yas <= 15)
+                      ? 5458
+                      : 2113;
+            } else {
+              _mtv =
+                  (yas <= 3)
+                      ? 21251
+                      : (yas <= 6)
+                      ? 16600
+                      : (yas <= 11)
+                      ? 9775
+                      : (yas <= 15)
+                      ? 5964
+                      : 2307;
+            }
+          } else if (motorHacmi <= 2000) {
+            if (tasitDegeri <= 775100) {
+              _mtv =
+                  (yas <= 3)
+                      ? 30679
+                      : (yas <= 6)
+                      ? 23625
+                      : (yas <= 11)
+                      ? 13886
+                      : (yas <= 15)
+                      ? 8264
+                      : 3248;
+            } else {
+              _mtv =
+                  (yas <= 3)
+                      ? 33474
+                      : (yas <= 6)
+                      ? 25784
+                      : (yas <= 11)
+                      ? 15147
+                      : (yas <= 15)
+                      ? 9012
+                      : 3547;
+            }
+          } else if (motorHacmi <= 2500) {
+            if (tasitDegeri <= 968100) {
+              _mtv =
+                  (yas <= 3)
+                      ? 46027
+                      : (yas <= 6)
+                      ? 33413
+                      : (yas <= 11)
+                      ? 20874
+                      : (yas <= 15)
+                      ? 12465
+                      : 4930;
+            } else {
+              _mtv =
+                  (yas <= 3)
+                      ? 50217
+                      : (yas <= 6)
+                      ? 36448
+                      : (yas <= 11)
+                      ? 22768
+                      : (yas <= 15)
+                      ? 13606
+                      : 5378;
+            }
+          } else if (motorHacmi <= 3000) {
+            if (tasitDegeri <= 1937500) {
+              _mtv =
+                  (yas <= 3)
+                      ? 64175
+                      : (yas <= 6)
+                      ? 55837
+                      : (yas <= 11)
+                      ? 34878
+                      : (yas <= 15)
+                      ? 18758
+                      : 6875;
+            } else {
+              _mtv =
+                  (yas <= 3)
+                      ? 70018
+                      : (yas <= 6)
+                      ? 60905
+                      : (yas <= 11)
+                      ? 38053
+                      : (yas <= 15)
+                      ? 20466
+                      : 7503;
+            }
+          } else if (motorHacmi <= 3500) {
+            if (tasitDegeri <= 1937500) {
+              _mtv =
+                  (yas <= 3)
+                      ? 97744
+                      : (yas <= 6)
+                      ? 87954
+                      : (yas <= 11)
+                      ? 52976
+                      : (yas <= 15)
+                      ? 26443
+                      : 9684;
+            } else {
+              _mtv =
+                  (yas <= 3)
+                      ? 106641
+                      : (yas <= 6)
+                      ? 95940
+                      : (yas <= 11)
+                      ? 57791
+                      : (yas <= 15)
+                      ? 28839
+                      : 10578;
+            }
+          } else if (motorHacmi <= 4000) {
+            if (tasitDegeri <= 3101800) {
+              _mtv =
+                  (yas <= 3)
+                      ? 153684
+                      : (yas <= 6)
+                      ? 132712
+                      : (yas <= 11)
+                      ? 78152
+                      : (yas <= 15)
+                      ? 34878
+                      : 13886;
+            } else {
+              _mtv =
+                  (yas <= 3)
+                      ? 167671
+                      : (yas <= 6)
+                      ? 144770
+                      : (yas <= 11)
+                      ? 85271
+                      : (yas <= 15)
+                      ? 38053
+                      : 15147;
+            }
+          } else {
+            if (tasitDegeri <= 3683200) {
+              _mtv =
+                  (yas <= 3)
+                      ? 251554
+                      : (yas <= 6)
+                      ? 188627
+                      : (yas <= 11)
+                      ? 111714
+                      : (yas <= 15)
+                      ? 50206
+                      : 19472;
+            } else {
+              _mtv =
+                  (yas <= 3)
+                      ? 274415
+                      : (yas <= 6)
+                      ? 205781
+                      : (yas <= 11)
+                      ? 121873
+                      : (yas <= 15)
+                      ? 54769
+                      : 21251;
             }
           }
         }
-      }
-      if (elektrik == "Evet") {
-        // Elektrikli araç için MTV hesaplama
+      } else if (elektrik == "Evet") {
+        // Elektrikli araçlar için %25 oranı uygulanır
+        double baseMtv = 0;
+
+        // Elektrikli araçlar için motor gücüne göre baz fiyat belirleme
         if (motorHacmi <= 70) {
-          if (tasitDegeri <= 114000) {
-            _mtv = (yas <= 3) ? 1207 : 840;
-          } else if (tasitDegeri <= 199700) {
-            _mtv = (yas <= 3) ? 1324 : 926;
-          } else {
-            _mtv = (yas <= 3) ? 1449 : 1011;
-          }
+          baseMtv = 5750; // 70 kW ve altı için temel fiyat
         } else if (motorHacmi <= 85) {
-          if (tasitDegeri <= 114000) {
-            _mtv = (yas <= 3) ? 2104 : 1577;
-          } else if (tasitDegeri <= 199700) {
-            _mtv = (yas <= 3) ? 2314 : 2314;
-          } else {
-            _mtv = (yas <= 3) ? 2528 : 1894;
-          }
+          baseMtv = 10016; // 71-85 kW için temel fiyat
         } else if (motorHacmi <= 105) {
-          if (tasitDegeri <= 285800) {
-            _mtv = (yas <= 3) ? 4090 : 3199;
-          } else {
-            _mtv = (yas <= 3) ? 4463 : 3491;
-          }
+          baseMtv = 19472; // 86-105 kW için temel fiyat
         } else if (motorHacmi <= 120) {
-          if (tasitDegeri <= 285800) {
-            _mtv = (yas <= 3) ? 6446 : 4964;
-          } else {
-            _mtv = (yas <= 3) ? 7032 : 5420;
-          }
+          baseMtv = 30679; // 106-120 kW için temel fiyat
         } else if (motorHacmi <= 150) {
-          if (tasitDegeri <= 356900) {
-            _mtv = (yas <= 3) ? 9673 : 7020;
-          } else {
-            _mtv = (yas <= 3) ? 10554 : 7659;
-          }
+          baseMtv = 46027; // 121-150 kW için temel fiyat
         } else if (motorHacmi <= 180) {
-          if (tasitDegeri <= 714300) {
-            _mtv = (yas <= 3) ? 13487 : 11733;
-          } else {
-            _mtv = (yas <= 3) ? 14716 : 12801;
-          }
+          baseMtv = 64175; // 151-180 kW için temel fiyat
         } else if (motorHacmi <= 210) {
-          if (tasitDegeri <= 714300) {
-            _mtv = (yas <= 3) ? 20537 : 18484;
-          } else {
-            _mtv = (yas <= 3) ? 22411 : 18797;
-          }
+          baseMtv = 97744; // 181-210 kW için temel fiyat
         } else if (motorHacmi <= 240) {
-          if (tasitDegeri <= 1143000) {
-            _mtv = (yas <= 3) ? 32300 : 27892;
-          } else {
-            _mtv = (yas <= 3) ? 35241 : 30426;
-          }
+          baseMtv = 153684; // 211-240 kW için temel fiyat
         } else {
-          if (tasitDegeri <= 1357700) {
-            _mtv = (yas <= 3) ? 52868 : 39642;
-          } else {
-            _mtv = (yas <= 3) ? 57671 : 43248;
-          }
+          baseMtv = 251554; // 241 kW ve üzeri için temel fiyat
+        }
+
+        // Yaşa göre ayarlama (basitleştirilmiş)
+        if (yas <= 3) {
+          _mtv = baseMtv * 0.25;
+        } else if (yas <= 6) {
+          _mtv = baseMtv * 0.7 * 0.25;
+        } else if (yas <= 11) {
+          _mtv = baseMtv * 0.4 * 0.25;
+        } else if (yas <= 15) {
+          _mtv = baseMtv * 0.2 * 0.25;
+        } else {
+          _mtv = baseMtv * 0.08 * 0.25;
         }
       }
-    }
-    if (arac == 'Motosiklet') {
+    } else if (arac == 'Motosiklet') {
       if (elektrik == "Hayır") {
         _mtv =
-            (motorHacmi <= 99)
-                ? 0
-                : (motorHacmi <= 250)
+            (motorHacmi <= 250)
                 ? (yas <= 3
-                    ? 899
+                    ? 1069
                     : yas <= 6
-                    ? 672
+                    ? 799
                     : yas <= 11
-                    ? 496
+                    ? 589
                     : yas <= 15
-                    ? 305
-                    : 115)
+                    ? 362
+                    : 136)
                 : (motorHacmi <= 650)
                 ? (yas <= 3
-                    ? 1862
+                    ? 2214
                     : yas <= 6
-                    ? 1409
+                    ? 1676
                     : yas <= 11
-                    ? 899
+                    ? 1069
                     : yas <= 15
-                    ? 496
-                    : 305)
+                    ? 589
+                    : 362)
                 : (motorHacmi <= 1200)
                 ? (yas <= 3
-                    ? 4808
+                    ? 5719
                     : yas <= 6
-                    ? 2857
+                    ? 3398
                     : yas <= 11
-                    ? 1409
+                    ? 1676
                     : yas <= 15
-                    ? 899
-                    : 496)
+                    ? 1069
+                    : 589)
                 : (yas <= 3
-                    ? 11666
+                    ? 13876
                     : yas <= 6
-                    ? 7707
+                    ? 9167
                     : yas <= 11
-                    ? 4808
+                    ? 5719
                     : yas <= 15
-                    ? 3817
-                    : 1862);
+                    ? 4540
+                    : 2214);
       } else if (elektrik == "Evet") {
-        _mtv =
-            (motorHacmi >= 6 && motorHacmi <= 15)
-                ? (yas <= 3
-                    ? 449
-                    : yas <= 6
-                    ? 336
-                    : yas <= 11
-                    ? 248
-                    : yas <= 15
-                    ? 152
-                    : 57)
-                : (motorHacmi <= 40)
-                ? (yas <= 3
-                    ? 931
-                    : yas <= 6
-                    ? 704
-                    : yas <= 11
-                    ? 449
-                    : yas <= 15
-                    ? 248
-                    : 152)
-                : (motorHacmi <= 60)
-                ? (yas <= 3
-                    ? 2404
-                    : yas <= 6
-                    ? 1428
-                    : yas <= 11
-                    ? 704
-                    : yas <= 15
-                    ? 449
-                    : 248)
-                : (yas <= 3
-                    ? 5833
-                    : yas <= 6
-                    ? 3853
-                    : yas <= 11
-                    ? 2404
-                    : yas <= 15
-                    ? 1908
-                    : 931);
+        // Elektrikli motosikletler için %25 oranı
+        if (motorHacmi >= 6 && motorHacmi <= 15) {
+          _mtv =
+              (yas <= 3
+                  ? 1069
+                  : yas <= 6
+                  ? 799
+                  : yas <= 11
+                  ? 589
+                  : yas <= 15
+                  ? 362
+                  : 136) *
+              0.25;
+        } else if (motorHacmi <= 40) {
+          _mtv =
+              (yas <= 3
+                  ? 2214
+                  : yas <= 6
+                  ? 1676
+                  : yas <= 11
+                  ? 1069
+                  : yas <= 15
+                  ? 589
+                  : 362) *
+              0.25;
+        } else if (motorHacmi <= 60) {
+          _mtv =
+              (yas <= 3
+                  ? 5719
+                  : yas <= 6
+                  ? 3398
+                  : yas <= 11
+                  ? 1676
+                  : yas <= 15
+                  ? 1069
+                  : 589) *
+              0.25;
+        } else {
+          _mtv =
+              (yas <= 3
+                  ? 13876
+                  : yas <= 6
+                  ? 9167
+                  : yas <= 11
+                  ? 5719
+                  : yas <= 15
+                  ? 4540
+                  : 2214) *
+              0.25;
+        }
       }
     } else if (arac == 'Minibüs') {
-      _mtv =
-          (elektrik == "Hayır")
-              ? (yas <= 6
-                  ? 5780
-                  : yas <= 15
-                  ? 3817
-                  : 1862)
-              : (elektrik == "Evet")
-              ? (yas <= 6
-                  ? 1445
-                  : yas <= 15
-                  ? 954
-                  : 465)
-              : _mtv;
+      double baseMtv =
+          (yas <= 6)
+              ? 6875
+              : (yas <= 15)
+              ? 4540
+              : 2214;
+      _mtv = (elektrik == "Hayır") ? baseMtv : baseMtv * 0.25;
     } else if (arac == 'Panelvan') {
-      _mtv =
-          (elektrik == "Hayır")
-              ? (motorHacmi <= 1900)
-                  ? (yas <= 6
-                      ? 7707
-                      : yas <= 15
-                      ? 4808
-                      : 2857)
-                  : (yas <= 6
-                      ? 11666
-                      : yas <= 15
-                      ? 7707
-                      : 4808)
-              : (elektrik == "Evet")
-              ? (motorHacmi <= 1900)
-                  ? (yas <= 6
-                      ? 1926
-                      : yas <= 15
-                      ? 1202
-                      : 714)
-                  : (yas <= 6
-                      ? 2916
-                      : yas <= 15
-                      ? 1926
-                      : 1202)
-              : _mtv;
+      double baseMtv;
+      if (motorHacmi <= 1900) {
+        baseMtv =
+            (yas <= 6)
+                ? 9167
+                : (yas <= 15)
+                ? 5719
+                : 3398;
+      } else {
+        baseMtv =
+            (yas <= 6)
+                ? 13876
+                : (yas <= 15)
+                ? 9167
+                : 5719;
+      }
+      _mtv = (elektrik == "Hayır") ? baseMtv : baseMtv * 0.25;
     } else if (arac == 'Otobüs') {
-      _mtv =
-          (elektrik == "Hayır")
-              ? (motorHacmi <= 25)
-                  ? (yas <= 6
-                      ? 14603
-                      : yas <= 15
-                      ? 8720
-                      : 3817)
-                  : (motorHacmi <= 35)
-                  ? (yas <= 6
-                      ? 17513
-                      : yas <= 15
-                      ? 14603
-                      : 5780)
-                  : (motorHacmi <= 45)
-                  ? (yas <= 6
-                      ? 19489
-                      : yas <= 15
-                      ? 16530
-                      : 7707)
-                  : (yas <= 6
-                      ? 23381
-                      : yas <= 15
-                      ? 19489
-                      : 11666)
-              : (elektrik == "Evet")
-              ? (motorHacmi <= 25)
-                  ? (yas <= 6
-                      ? 3650
-                      : yas <= 15
-                      ? 2180
-                      : 954)
-                  : (motorHacmi <= 35)
-                  ? (yas <= 6
-                      ? 4378
-                      : yas <= 15
-                      ? 3650
-                      : 1445)
-                  : (motorHacmi <= 45)
-                  ? (yas <= 6
-                      ? 4872
-                      : yas <= 15
-                      ? 4132
-                      : 1926)
-                  : (yas <= 6
-                      ? 5845
-                      : yas <= 15
-                      ? 4872
-                      : 2916)
-              : _mtv;
+      double baseMtv;
+      if (motorHacmi <= 25) {
+        baseMtv =
+            (yas <= 6)
+                ? 17370
+                : (yas <= 15)
+                ? 10372
+                : 4540;
+      } else if (motorHacmi <= 35) {
+        baseMtv =
+            (yas <= 6)
+                ? 20831
+                : (yas <= 15)
+                ? 17370
+                : 6875;
+      } else if (motorHacmi <= 45) {
+        baseMtv =
+            (yas <= 6)
+                ? 23182
+                : (yas <= 15)
+                ? 19662
+                : 9167;
+      } else {
+        baseMtv =
+            (yas <= 6)
+                ? 27811
+                : (yas <= 15)
+                ? 23182
+                : 13876;
+      }
+      _mtv = (elektrik == "Hayır") ? baseMtv : baseMtv * 0.25;
     } else if (arac == 'Kamyonet') {
-      _mtv =
-          (elektrik == "Hayır")
-              ? (motorHacmi <= 1500)
-                  ? (yas <= 6
-                      ? 5182
-                      : yas <= 15
-                      ? 3442
-                      : 1685)
-                  : (motorHacmi <= 3500)
-                  ? (yas <= 6
-                      ? 10499
-                      : yas <= 15
-                      ? 6082
-                      : 3442)
-                  : (motorHacmi <= 5000)
-                  ? (yas <= 6
-                      ? 15774
-                      : yas <= 15
-                      ? 13129
-                      : 5182)
-                  : (motorHacmi <= 10000)
-                  ? (yas <= 6
-                      ? 17513
-                      : yas <= 15
-                      ? 14872
-                      : 6971)
-                  : (motorHacmi <= 20000)
-                  ? (yas <= 6
-                      ? 21048
-                      : yas <= 15
-                      ? 17513
-                      : 10499)
-                  : (yas <= 6
-                      ? 26327
-                      : yas <= 15
-                      ? 21048
-                      : 12231)
-              : (elektrik == "Evet")
-              ? (motorHacmi <= 1500)
-                  ? (yas <= 6
-                      ? 1295
-                      : yas <= 15
-                      ? 860
-                      : 421)
-                  : (motorHacmi <= 3500)
-                  ? (yas <= 6
-                      ? 2624
-                      : yas <= 15
-                      ? 1520
-                      : 860)
-                  : (motorHacmi <= 5000)
-                  ? (yas <= 6
-                      ? 3943
-                      : yas <= 15
-                      ? 3282
-                      : 1295)
-                  : (motorHacmi <= 10000)
-                  ? (yas <= 6
-                      ? 4378
-                      : yas <= 15
-                      ? 3718
-                      : 1742)
-                  : (motorHacmi <= 20000)
-                  ? (yas <= 6
-                      ? 5262
-                      : yas <= 15
-                      ? 4378
-                      : 2624)
-                  : (yas <= 6
-                      ? 6581
-                      : yas <= 15
-                      ? 5262
-                      : 3057)
-              : _mtv;
+      double baseMtv;
+      if (motorHacmi <= 1500) {
+        baseMtv =
+            (yas <= 6)
+                ? 6163
+                : (yas <= 15)
+                ? 4094
+                : 2004;
+      } else if (motorHacmi <= 3500) {
+        baseMtv =
+            (yas <= 6)
+                ? 12488
+                : (yas <= 15)
+                ? 7234
+                : 4094;
+      } else if (motorHacmi <= 5000) {
+        baseMtv =
+            (yas <= 6)
+                ? 18763
+                : (yas <= 15)
+                ? 15616
+                : 6163;
+      } else if (motorHacmi <= 10000) {
+        baseMtv =
+            (yas <= 6)
+                ? 20831
+                : (yas <= 15)
+                ? 17690
+                : 8292;
+      } else if (motorHacmi <= 20000) {
+        baseMtv =
+            (yas <= 6)
+                ? 25036
+                : (yas <= 15)
+                ? 20831
+                : 12488;
+      } else {
+        baseMtv =
+            (yas <= 6)
+                ? 31315
+                : (yas <= 15)
+                ? 25036
+                : 14548;
+      }
+      _mtv = (elektrik == "Hayır") ? baseMtv : baseMtv * 0.25;
     }
+
+    // MTV'yi tam sayıya yuvarla
+    int mtvInt = _mtv.round();
+
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -1251,9 +1226,9 @@ class _MTVhesaplaState extends State<MTVhesapla> {
               mtv3: yas.toString(),
               mtv4: motorHacmi.toString(),
               mtv5: tasitDegeri.toString(),
-              mtv6: _mtv.toString(),
-              mtv7: (_mtv / 2).toString(),
-              mtv8: (_mtv / 2).toString(),
+              mtv6: mtvInt.toString(),
+              mtv7: (mtvInt / 2).round().toString(),
+              mtv8: (mtvInt / 2).round().toString(),
             ),
       ),
     );
@@ -1291,7 +1266,7 @@ class _MTVhesaplaState extends State<MTVhesapla> {
           style: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w500,
-            color: Renk.koyuMavi,
+            color: Renk.pastelKoyuMavi,
           ),
         ),
         const SizedBox(height: 10),

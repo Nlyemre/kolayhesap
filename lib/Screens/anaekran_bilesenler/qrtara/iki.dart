@@ -82,7 +82,7 @@ class _TaramaState extends State<Tarama> {
       child: Scaffold(
         key: _uyariMesajQr,
         appBar: AppBar(
-          leading: const BackButton(color: Renk.koyuMavi),
+          leading: const BackButton(color: Renk.pastelKoyuMavi),
 
           title: const Text("Qr Kod Tarama"),
         ),

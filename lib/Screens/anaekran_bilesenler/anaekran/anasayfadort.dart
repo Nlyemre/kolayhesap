@@ -172,7 +172,7 @@ class _AltdortState extends State<Altdort> {
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 24,
-              color: Renk.koyuMavi,
+              color: Renk.pastelKoyuMavi,
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -198,7 +198,7 @@ class _AltdortState extends State<Altdort> {
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 24,
-            color: Renk.koyuMavi,
+            color: Renk.pastelKoyuMavi,
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -233,7 +233,7 @@ class _AltdortState extends State<Altdort> {
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 20,
-            color: Renk.koyuMavi,
+            color: Renk.pastelKoyuMavi,
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -248,7 +248,7 @@ class _AltdortState extends State<Altdort> {
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 20,
-            color: Renk.koyuMavi,
+            color: Renk.pastelKoyuMavi,
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -263,7 +263,7 @@ class _AltdortState extends State<Altdort> {
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 20,
-            color: Renk.koyuMavi,
+            color: Renk.pastelKoyuMavi,
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -278,7 +278,7 @@ class _AltdortState extends State<Altdort> {
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 20,
-            color: Renk.koyuMavi,
+            color: Renk.pastelKoyuMavi,
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -319,7 +319,7 @@ class _AltdortState extends State<Altdort> {
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 24,
-              color: Renk.koyuMavi,
+              color: Renk.pastelKoyuMavi,
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -388,7 +388,7 @@ class _AltdortState extends State<Altdort> {
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 25,
-            color: Renk.koyuMavi,
+            color: Renk.pastelKoyuMavi,
             fontWeight: FontWeight.w500,
           ),
         ),

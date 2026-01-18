@@ -49,7 +49,7 @@ class _SonDakikaState extends State<SonDakika> {
     final int itemCount = _haberveri.length + (_haberveri.length > 4 ? 1 : 0);
     return Scaffold(
       appBar: AppBar(
-        leading: const BackButton(color: Renk.koyuMavi),
+        leading: const BackButton(color: Renk.pastelKoyuMavi),
 
         title: const Text("Son Dakika Haber"),
       ),

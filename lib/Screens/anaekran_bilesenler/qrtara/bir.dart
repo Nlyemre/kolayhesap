@@ -46,7 +46,7 @@ class _Buton extends State<QrGiris> {
       },
       child: Scaffold(
         appBar: AppBar(
-          leading: const BackButton(color: Renk.koyuMavi),
+          leading: const BackButton(color: Renk.pastelKoyuMavi),
 
           title: const Text("Qr Kod Tarama"),
         ),
@@ -71,7 +71,7 @@ class _Buton extends State<QrGiris> {
                   'Tarama Butonuna Basarak Tarama İşlemine Başlayabilirsiniz.',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    color: Color.fromARGB(255, 77, 77, 77),
+                    color: Renk.pastelKoyuMavi,
                     fontSize: 16,
                     fontWeight: FontWeight.w400,
                   ),
@@ -137,14 +137,14 @@ class _Buton extends State<QrGiris> {
   Widget _qrListeBaslik() {
     return Container(
       height: 40,
-      color: Renk.koyuMavi.withValues(alpha: 0.06),
+      color: Renk.pastelKoyuMavi.withValues(alpha: 0.06),
       child: const Align(
         alignment: Alignment.center,
         child: Text(
           "Kayıtlı Tarama Listesi",
           style: TextStyle(
             fontSize: 16,
-            color: Renk.koyuMavi,
+            color: Renk.pastelKoyuMavi,
             fontWeight: FontWeight.w500,
           ),
         ),

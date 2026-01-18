@@ -3,17 +3,18 @@ import 'dart:io';
 
 import 'package:app/Screens/anaekran_bilesenler/anaekran/anagiris.dart';
 import 'package:app/Screens/anaekran_bilesenler/anaekran/anasayfadort.dart';
-import 'package:app/Screens/anaekran_bilesenler/anaekran/anasayfaiki.dart';
 import 'package:app/Screens/anaekran_bilesenler/ayarlar/ayarlaralt.dart';
+import 'package:app/Screens/anaekran_bilesenler/kazanclar/kazanclar_ana.dart';
 import 'package:app/Screens/anaekran_bilesenler/reklam/girisreklam.dart';
 import 'package:app/Screens/anaekran_bilesenler/veriler/degiskenler.dart';
 import 'package:app/Screens/yanmenu_bilesenleri/altin.dart';
-import 'package:app/Screens/yanmenu_bilesenleri/dolar.dart';
+import 'package:app/Screens/yanmenu_bilesenleri/doviz.dart';
 import 'package:app/Screens/yanmenu_bilesenleri/eczane.dart';
+import 'package:app/Screens/yanmenu_bilesenleri/emtia.dart';
 import 'package:app/Screens/yanmenu_bilesenleri/enflasyon.dart';
 import 'package:app/Screens/yanmenu_bilesenleri/gizlilik.dart';
 import 'package:app/Screens/yanmenu_bilesenleri/hava.dart';
-import 'package:app/Screens/yanmenu_bilesenleri/sanal.dart';
+import 'package:app/Screens/yanmenu_bilesenleri/kripto.dart';
 import 'package:app/Screens/yanmenu_bilesenleri/sondakika.dart';
 import 'package:app/Screens/yanmenu_bilesenleri/teknoloji_al.dart';
 import 'package:app/main.dart';
@@ -251,7 +252,7 @@ class _AnasayfaState extends State<Anasayfa> {
                   'Bilgilendirme;',
                   style: TextStyle(
                     fontSize: 18,
-                    color: Renk.koyuMavi,
+                    color: Renk.pastelKoyuMavi,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
@@ -469,7 +470,7 @@ class AppDrawer extends StatelessWidget {
     return Drawer(
       backgroundColor: Colors.white,
       child: ListView(
-        padding: const EdgeInsets.only(top: 30),
+        padding: const EdgeInsets.only(top: 20),
         children: [
           _buildLogoItem(logo),
           _buildKard(
@@ -485,9 +486,30 @@ class AppDrawer extends StatelessWidget {
             () => const Teknoloji(),
           ),
           _buildKard(context, 'Enflasyon', enflasyon, () => const Enflasyon()),
-          _buildKard(context, 'Döviz Fiyatları', altin, () => const Dolar()),
-          _buildKard(context, 'Altın Fiyatları', altin, () => const Altin()),
-          _buildKard(context, 'Coin Fiyatları', sanal, () => const Sanal()),
+          _buildKard(
+            context,
+            'Döviz Fiyatları',
+            altin,
+            () => const DovizSayfasi(),
+          ),
+          _buildKard(
+            context,
+            'Altın Fiyatları',
+            altin,
+            () => const AltinSayfasi(),
+          ),
+          _buildKard(
+            context,
+            'Kripto Fiyatları',
+            sanal,
+            () => const KriptoSayfasi(),
+          ),
+          _buildKard(
+            context,
+            'Emtia Fiyatları',
+            sanal,
+            () => const EmtiaSayfasi(),
+          ),
           _buildKard(context, 'Nöbetçi Eczane', eczane, () => const Eczane()),
           _buildKard(context, 'Hava Durumu', hava, () => const Hava()),
           const SizedBox(height: 20),
@@ -517,7 +539,7 @@ class AppDrawer extends StatelessWidget {
     Widget Function() targetScreenBuilder,
   ) {
     return Padding(
-      padding: const EdgeInsets.only(left: 9, right: 9, top: 9),
+      padding: const EdgeInsets.only(left: 9, right: 9, top: 7),
       child: CizgiliCerceve(
         golge: 5,
         child: ListTile(

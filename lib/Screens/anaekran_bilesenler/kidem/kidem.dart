@@ -91,11 +91,15 @@ class _KidemState extends State<Kidem> {
                   paylasMetin: _paylas,
                 );
               },
-              icon: const Icon(Icons.share, size: 20.0, color: Renk.koyuMavi),
+              icon: const Icon(
+                Icons.share,
+                size: 20.0,
+                color: Renk.pastelKoyuMavi,
+              ),
             ),
           ),
         ],
-        leading: const BackButton(color: Renk.koyuMavi),
+        leading: const BackButton(color: Renk.pastelKoyuMavi),
 
         title: const Text("Kıdem Tazminat Sonuçları"),
       ),
@@ -131,7 +135,7 @@ class _KidemState extends State<Kidem> {
                           width: 20,
                           padding: const EdgeInsets.all(8.0),
                           decoration: const BoxDecoration(
-                            color: Renk.koyuMavi,
+                            color: Renk.pastelKoyuMavi,
                             boxShadow: [
                               BoxShadow(
                                 color: Color.fromRGBO(0, 0, 0, 0.2),
@@ -160,7 +164,7 @@ class _KidemState extends State<Kidem> {
                               style: const TextStyle(
                                 fontSize: 15,
                                 fontWeight: FontWeight.bold,
-                                color: Renk.koyuMavi,
+                                color: Renk.pastelKoyuMavi,
                               ),
                             ),
                           ),
@@ -183,7 +187,7 @@ class _KidemState extends State<Kidem> {
                           width: 20,
                           padding: const EdgeInsets.all(8.0),
                           decoration: const BoxDecoration(
-                            color: Renk.acikMavi,
+                            color: Renk.pastelAcikMavi,
                             boxShadow: [
                               BoxShadow(
                                 color: Color.fromRGBO(0, 0, 0, 0.2),
@@ -223,7 +227,7 @@ class _KidemState extends State<Kidem> {
                               style: const TextStyle(
                                 fontSize: 15,
                                 fontWeight: FontWeight.bold,
-                                color: Renk.koyuMavi,
+                                color: Renk.pastelKoyuMavi,
                               ),
                             ),
                           ),
@@ -237,7 +241,7 @@ class _KidemState extends State<Kidem> {
                     child: Yansatirikili.satir(
                       'Toplam Tazminat',
                       '${NumberFormat("#,##0.00", "tr_TR").format(double.parse(toplama(widget.kidemveri4, widget.kidemveri9)))} TL',
-                      Renk.koyuMavi,
+                      Renk.pastelKoyuMavi,
                     ),
                   ),
                   const Padding(
@@ -247,7 +251,7 @@ class _KidemState extends State<Kidem> {
                   Container(
                     width: double.infinity,
                     padding: const EdgeInsets.symmetric(vertical: 10.0),
-                    color: Renk.koyuMavi.withValues(alpha: 0.1),
+                    color: Renk.pastelKoyuMavi.withValues(alpha: 0.1),
                     child: const Padding(
                       padding: EdgeInsets.only(left: 15),
                       child: Text(
@@ -255,7 +259,7 @@ class _KidemState extends State<Kidem> {
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w400,
-                          color: Renk.koyuMavi,
+                          color: Renk.pastelKoyuMavi,
                         ),
                       ),
                     ),
@@ -264,19 +268,19 @@ class _KidemState extends State<Kidem> {
                   Yansatirikili.satir(
                     'Hesaplamaya Esas Gün',
                     '${widget.kidemveri0} GÜN',
-                    Renk.koyuMavi,
+                    Renk.pastelKoyuMavi,
                   ),
                   Dekor.cizgi15,
                   Yansatirikili.satir(
                     'Kıdem Esas Ücret',
                     '${NumberFormat("#,##0.00", "tr_TR").format(double.parse(widget.kidemveri1))} TL',
-                    Renk.koyuMavi,
+                    Renk.pastelKoyuMavi,
                   ),
                   Dekor.cizgi15,
                   Yansatirikili.satir(
                     'Kıdem Tazminatı Brüt',
                     '${NumberFormat("#,##0.00", "tr_TR").format(double.parse(widget.kidemveri2))} TL',
-                    Renk.koyuMavi,
+                    Renk.pastelKoyuMavi,
                   ),
                   Dekor.cizgi15,
                   Yansatirikili.satir(
@@ -288,12 +292,12 @@ class _KidemState extends State<Kidem> {
                   Yansatirikili.satir(
                     'Net Kıdem Tazminatı',
                     '${NumberFormat("#,##0.00", "tr_TR").format(double.parse(widget.kidemveri4))} TL',
-                    Renk.koyuMavi,
+                    Renk.pastelKoyuMavi,
                   ),
                   Container(
                     width: double.infinity,
                     padding: const EdgeInsets.symmetric(vertical: 10.0),
-                    color: Renk.koyuMavi.withValues(alpha: 0.1),
+                    color: Renk.pastelKoyuMavi.withValues(alpha: 0.1),
                     child: const Padding(
                       padding: EdgeInsets.only(left: 15),
                       child: Text(
@@ -301,7 +305,7 @@ class _KidemState extends State<Kidem> {
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w400,
-                          color: Renk.koyuMavi,
+                          color: Renk.pastelKoyuMavi,
                         ),
                       ),
                     ),
@@ -311,24 +315,24 @@ class _KidemState extends State<Kidem> {
                       ? Yansatirikili.satir(
                         'İhbar Gün',
                         '${widget.kidemveri5} GÜN',
-                        Renk.koyuMavi,
+                        Renk.pastelKoyuMavi,
                       )
                       : Yansatirikili.satir(
                         'İhbar Gün',
                         '${widget.kidemveri5} + ${widget.kidemveri13} GÜN',
-                        Renk.koyuMavi,
+                        Renk.pastelKoyuMavi,
                       ),
                   Dekor.cizgi15,
                   Yansatirikili.satir(
                     'İzin Gün',
                     '${widget.kidemveri14.toString()} GÜN',
-                    Renk.koyuMavi,
+                    Renk.pastelKoyuMavi,
                   ),
                   Dekor.cizgi15,
                   Yansatirikili.satir(
                     'İhbar Brüt',
                     '${NumberFormat("#,##0.00", "tr_TR").format(double.parse(widget.kidemveri6))} TL',
-                    Renk.koyuMavi,
+                    Renk.pastelKoyuMavi,
                   ),
                   Dekor.cizgi15,
                   Yansatirikili.satir(
@@ -346,7 +350,7 @@ class _KidemState extends State<Kidem> {
                   Yansatirikili.satir(
                     'Net İhbar Tazminatı',
                     '${NumberFormat("#,##0.00", "tr_TR").format(double.parse(widget.kidemveri9))} TL',
-                    Renk.koyuMavi,
+                    Renk.pastelKoyuMavi,
                   ),
                   Dekor.cizgi15,
                   ValueListenableBuilder<bool>(

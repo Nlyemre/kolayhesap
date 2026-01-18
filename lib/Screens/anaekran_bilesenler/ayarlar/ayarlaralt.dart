@@ -112,7 +112,7 @@ class _AyarlarState extends State<Ayarlar> {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(vertical: 10.0),
-      color: Renk.koyuMavi.withValues(alpha: 0.1),
+      color: Renk.pastelKoyuMavi.withValues(alpha: 0.1),
       child: Padding(
         padding: const EdgeInsets.only(left: 15),
         child: Text(
@@ -120,7 +120,7 @@ class _AyarlarState extends State<Ayarlar> {
           style: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w400,
-            color: Renk.koyuMavi,
+            color: Renk.pastelKoyuMavi,
           ),
         ),
       ),

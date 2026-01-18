@@ -637,7 +637,7 @@ class _ZamGirisState extends State<ZamGiris> {
       },
       child: Scaffold(
         appBar: AppBar(
-          leading: const BackButton(color: Renk.koyuMavi),
+          leading: const BackButton(color: Renk.pastelKoyuMavi),
           backgroundColor: Colors.white,
 
           title: const Text(
@@ -646,45 +646,55 @@ class _ZamGirisState extends State<ZamGiris> {
             textScaler: TextScaler.noScaling,
           ),
         ),
-        body: Center(
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(
-                  top: 5,
-                  left: 8,
-                  bottom: 10,
-                  right: 8,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: List.generate(isSelected.length, (index) {
-                    return Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 4, right: 4),
-                        child: ButonlarRawChip(
-                          isSelected: isSelected[index],
-                          text: butonyazi[index],
-                          onSelected: () {
-                            setState(() {
-                              _selectedIndex = index;
-                              for (int i = 0; i < isSelected.length; i++) {
-                                isSelected[i] = i == index;
-                              }
-                            });
-                          },
-                          maxLines: 2,
-                          height: 45,
-                          fontSize: 12,
+        body: GestureDetector(
+          onTap: () {
+            // Tüm ekranda klavye kontrolü
+            FocusScopeNode currentFocus = FocusScope.of(context);
+            if (!currentFocus.hasPrimaryFocus &&
+                currentFocus.focusedChild != null) {
+              currentFocus.focusedChild!.unfocus();
+            }
+          },
+          child: Center(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(
+                    top: 5,
+                    left: 8,
+                    bottom: 10,
+                    right: 8,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: List.generate(isSelected.length, (index) {
+                      return Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 4, right: 4),
+                          child: ButonlarRawChip(
+                            isSelected: isSelected[index],
+                            text: butonyazi[index],
+                            onSelected: () {
+                              setState(() {
+                                _selectedIndex = index;
+                                for (int i = 0; i < isSelected.length; i++) {
+                                  isSelected[i] = i == index;
+                                }
+                              });
+                            },
+                            maxLines: 2,
+                            height: 45,
+                            fontSize: 12,
+                          ),
                         ),
-                      ),
-                    );
-                  }),
+                      );
+                    }),
+                  ),
                 ),
-              ),
-              Expanded(child: ortasayfalar(_selectedIndex)),
-              const RepaintBoundary(child: BannerReklam()),
-            ],
+                Expanded(child: ortasayfalar(_selectedIndex)),
+                const RepaintBoundary(child: BannerReklam()),
+              ],
+            ),
           ),
         ),
       ),
@@ -879,7 +889,7 @@ class _ZamGirisState extends State<ZamGiris> {
           padding: const EdgeInsets.only(bottom: 8, top: 5),
           child: Container(
             height: 45,
-            color: Renk.koyuMavi.withValues(alpha: 0.06),
+            color: Renk.pastelKoyuMavi.withValues(alpha: 0.06),
             child: Padding(
               padding: const EdgeInsets.only(left: 13),
               child: Row(
@@ -1055,7 +1065,7 @@ class _ZamGirisState extends State<ZamGiris> {
           padding: const EdgeInsets.only(bottom: 8, top: 5),
           child: Container(
             height: 45,
-            color: Renk.koyuMavi.withValues(alpha: 0.06),
+            color: Renk.pastelKoyuMavi.withValues(alpha: 0.06),
             child: Padding(
               padding: const EdgeInsets.only(left: 13),
               child: Row(
@@ -1159,7 +1169,7 @@ class _ZamGirisState extends State<ZamGiris> {
           padding: const EdgeInsets.only(bottom: 8, top: 5),
           child: Container(
             height: 45,
-            color: Renk.koyuMavi.withValues(alpha: 0.06),
+            color: Renk.pastelKoyuMavi.withValues(alpha: 0.06),
             child: Padding(
               padding: const EdgeInsets.only(left: 13),
               child: Row(
@@ -1297,7 +1307,7 @@ class _ZamGirisState extends State<ZamGiris> {
           padding: const EdgeInsets.only(bottom: 8, top: 5),
           child: Container(
             height: 45,
-            color: Renk.koyuMavi.withValues(alpha: 0.06),
+            color: Renk.pastelKoyuMavi.withValues(alpha: 0.06),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -1353,7 +1363,7 @@ class _ZamGirisState extends State<ZamGiris> {
                       child: Text(
                         "Tümünü Temizle",
                         style: TextStyle(
-                          color: Renk.koyuMavi,
+                          color: Renk.pastelKoyuMavi,
                           fontSize: 12,
                           fontWeight: FontWeight.w400,
                         ),
@@ -1561,7 +1571,7 @@ class _ZamGirisState extends State<ZamGiris> {
                             child: Text(
                               "Tümünü Temizle",
                               style: TextStyle(
-                                color: Renk.koyuMavi,
+                                color: Renk.pastelKoyuMavi,
                                 fontSize: 13,
                                 fontWeight: FontWeight.w400,
                               ),
@@ -2076,7 +2086,7 @@ class _ZamGirisState extends State<ZamGiris> {
                             child: Text(
                               "Ay'ın Gün Sayısına Ayarla",
                               style: TextStyle(
-                                color: Renk.koyuMavi,
+                                color: Renk.pastelKoyuMavi,
                                 fontSize: 13,
                                 fontWeight: FontWeight.w400,
                               ),
@@ -2103,7 +2113,7 @@ class _ZamGirisState extends State<ZamGiris> {
                             child: Text(
                               "Tümünü Temizle",
                               style: TextStyle(
-                                color: Renk.koyuMavi,
+                                color: Renk.pastelKoyuMavi,
                                 fontSize: 13,
                                 fontWeight: FontWeight.w400,
                               ),
@@ -2196,7 +2206,7 @@ class _ZamGirisState extends State<ZamGiris> {
                           icon: const Icon(
                             Icons.arrow_back_ios,
                             size: 20,
-                            color: Renk.koyuMavi,
+                            color: Renk.pastelKoyuMavi,
                           ),
                           onPressed: () {
                             setState(() {
@@ -2224,7 +2234,7 @@ class _ZamGirisState extends State<ZamGiris> {
                           icon: const Icon(
                             Icons.arrow_forward_ios,
                             size: 20,
-                            color: Renk.koyuMavi,
+                            color: Renk.pastelKoyuMavi,
                           ),
                           onPressed: () {
                             setState(() {
@@ -2261,7 +2271,7 @@ class _ZamGirisState extends State<ZamGiris> {
                           icon: const Icon(
                             Icons.arrow_back_ios,
                             size: 20,
-                            color: Renk.koyuMavi,
+                            color: Renk.pastelKoyuMavi,
                           ),
                           onPressed: () {
                             setState(() {
@@ -2286,7 +2296,7 @@ class _ZamGirisState extends State<ZamGiris> {
                           icon: const Icon(
                             Icons.arrow_forward_ios,
                             size: 20,
-                            color: Renk.koyuMavi,
+                            color: Renk.pastelKoyuMavi,
                           ),
                           onPressed: () {
                             setState(() {
@@ -2320,7 +2330,7 @@ class _ZamGirisState extends State<ZamGiris> {
                           icon: const Icon(
                             Icons.arrow_back_ios,
                             size: 20,
-                            color: Renk.koyuMavi,
+                            color: Renk.pastelKoyuMavi,
                           ),
                           onPressed: () {
                             setState(() {
@@ -2347,7 +2357,7 @@ class _ZamGirisState extends State<ZamGiris> {
                           icon: const Icon(
                             Icons.arrow_forward_ios,
                             size: 20,
-                            color: Renk.koyuMavi,
+                            color: Renk.pastelKoyuMavi,
                           ),
                           onPressed: () {
                             setState(() {
@@ -2383,7 +2393,7 @@ class _ZamGirisState extends State<ZamGiris> {
                           icon: const Icon(
                             Icons.arrow_back_ios,
                             size: 20,
-                            color: Renk.koyuMavi,
+                            color: Renk.pastelKoyuMavi,
                           ),
                           onPressed: () {
                             setState(() {
@@ -2410,7 +2420,7 @@ class _ZamGirisState extends State<ZamGiris> {
                           icon: const Icon(
                             Icons.arrow_forward_ios,
                             size: 20,
-                            color: Renk.koyuMavi,
+                            color: Renk.pastelKoyuMavi,
                           ),
                           onPressed: () {
                             setState(() {
@@ -2508,7 +2518,7 @@ class _ZamGirisState extends State<ZamGiris> {
               child: Text(
                 " Ödeme Satırı Kaldır ",
                 style: TextStyle(
-                  color: Renk.koyuMavi,
+                  color: Renk.pastelKoyuMavi,
                   fontSize: 13,
                   fontWeight: FontWeight.w400,
                 ),
@@ -2600,7 +2610,7 @@ class _ZamGirisState extends State<ZamGiris> {
               child: Text(
                 " Ödeme Satırı Ekle ",
                 style: TextStyle(
-                  color: Renk.koyuMavi,
+                  color: Renk.pastelKoyuMavi,
                   fontSize: 13,
                   fontWeight: FontWeight.w400,
                 ),
@@ -3037,7 +3047,7 @@ class _ZamGirisState extends State<ZamGiris> {
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w500,
-              color: Renk.koyuMavi,
+              color: Renk.pastelKoyuMavi,
             ),
           ),
           SizedBox(height: 10),
@@ -3052,7 +3062,7 @@ class _ZamGirisState extends State<ZamGiris> {
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w500,
-              color: Renk.koyuMavi,
+              color: Renk.pastelKoyuMavi,
             ),
           ),
           SizedBox(height: 10),
@@ -3067,7 +3077,7 @@ class _ZamGirisState extends State<ZamGiris> {
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w500,
-              color: Renk.koyuMavi,
+              color: Renk.pastelKoyuMavi,
             ),
           ),
           SizedBox(height: 10),
@@ -3082,7 +3092,7 @@ class _ZamGirisState extends State<ZamGiris> {
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w500,
-              color: Renk.koyuMavi,
+              color: Renk.pastelKoyuMavi,
             ),
           ),
           SizedBox(height: 10),
@@ -3097,7 +3107,7 @@ class _ZamGirisState extends State<ZamGiris> {
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w500,
-              color: Renk.koyuMavi,
+              color: Renk.pastelKoyuMavi,
             ),
           ),
           SizedBox(height: 10),
@@ -3112,7 +3122,7 @@ class _ZamGirisState extends State<ZamGiris> {
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w500,
-              color: Renk.koyuMavi,
+              color: Renk.pastelKoyuMavi,
             ),
           ),
           SizedBox(height: 10),
@@ -3126,7 +3136,7 @@ class _ZamGirisState extends State<ZamGiris> {
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w500,
-              color: Renk.koyuMavi,
+              color: Renk.pastelKoyuMavi,
             ),
           ),
           SizedBox(height: 10),
@@ -3141,7 +3151,7 @@ class _ZamGirisState extends State<ZamGiris> {
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w500,
-              color: Renk.koyuMavi,
+              color: Renk.pastelKoyuMavi,
             ),
           ),
           SizedBox(height: 10),
@@ -3156,7 +3166,7 @@ class _ZamGirisState extends State<ZamGiris> {
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w500,
-              color: Renk.koyuMavi,
+              color: Renk.pastelKoyuMavi,
             ),
           ),
           SizedBox(height: 10),
@@ -3196,7 +3206,7 @@ class _ZamGirisState extends State<ZamGiris> {
       },
       child: const Padding(
         padding: EdgeInsets.only(left: 10, right: 5),
-        child: Icon(Icons.info_outline, size: 18, color: Renk.koyuMavi),
+        child: Icon(Icons.info_outline, size: 18, color: Renk.pastelKoyuMavi),
       ),
     );
   }

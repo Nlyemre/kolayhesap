@@ -65,11 +65,15 @@ class _MtvState extends State<MtvSon> {
                   paylasMetin: _paylas,
                 );
               },
-              icon: const Icon(Icons.share, size: 20.0, color: Renk.koyuMavi),
+              icon: const Icon(
+                Icons.share,
+                size: 20.0,
+                color: Renk.pastelKoyuMavi,
+              ),
             ),
           ),
         ],
-        leading: const BackButton(color: Renk.koyuMavi),
+        leading: const BackButton(color: Renk.pastelKoyuMavi),
 
         title: const Text("Araç MTV Sonuçları"),
       ),
@@ -87,7 +91,7 @@ class _MtvState extends State<MtvSon> {
                   Container(
                     width: double.infinity,
                     padding: const EdgeInsets.symmetric(vertical: 10.0),
-                    color: Renk.koyuMavi.withValues(alpha: 0.1),
+                    color: Renk.pastelKoyuMavi.withValues(alpha: 0.1),
                     child: const Padding(
                       padding: EdgeInsets.only(left: 15),
                       child: Text(
@@ -95,7 +99,7 @@ class _MtvState extends State<MtvSon> {
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w400,
-                          color: Renk.koyuMavi,
+                          color: Renk.pastelKoyuMavi,
                         ),
                       ),
                     ),
@@ -105,25 +109,25 @@ class _MtvState extends State<MtvSon> {
                     child: Yansatirikili.satir(
                       'Yıllık MTV Tutarı',
                       '${NumberFormat("#,##0.00", "tr_TR").format(double.parse(widget.mtv6))} TL',
-                      Renk.koyuMavi,
+                      Renk.pastelKoyuMavi,
                     ),
                   ),
                   Dekor.cizgi15,
                   Yansatirikili.satir(
                     'İlk Altı Aylık Tutar',
                     '${NumberFormat("#,##0.00", "tr_TR").format(double.parse(widget.mtv7))} TL',
-                    Renk.koyuMavi,
+                    Renk.pastelKoyuMavi,
                   ),
                   Dekor.cizgi15,
                   Yansatirikili.satir(
                     'İkinci Altı Aylık Tutar',
                     '${NumberFormat("#,##0.00", "tr_TR").format(double.parse(widget.mtv8))} TL',
-                    Renk.koyuMavi,
+                    Renk.pastelKoyuMavi,
                   ),
                   Container(
                     width: double.infinity,
                     padding: const EdgeInsets.symmetric(vertical: 10.0),
-                    color: Renk.koyuMavi.withValues(alpha: 0.1),
+                    color: Renk.pastelKoyuMavi.withValues(alpha: 0.1),
                     child: const Padding(
                       padding: EdgeInsets.only(left: 15),
                       child: Text(
@@ -131,7 +135,7 @@ class _MtvState extends State<MtvSon> {
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w400,
-                          color: Colors.white,
+                          color: Renk.pastelKoyuMavi,
                         ),
                       ),
                     ),
@@ -141,30 +145,38 @@ class _MtvState extends State<MtvSon> {
                     child: Yansatirikili.satir(
                       'Araç Tipi',
                       widget.mtv0,
-                      Renk.koyuMavi,
+                      Renk.pastelKoyuMavi,
                     ),
                   ),
                   Dekor.cizgi15,
                   Yansatirikili.satir(
                     'Yakıt Tipi ( % 100 Elektrikli mi? )',
                     widget.mtv1,
-                    Renk.koyuMavi,
+                    Renk.pastelKoyuMavi,
                   ),
                   Dekor.cizgi15,
                   Yansatirikili.satir(
                     'Tescil Tarihi ( 01/01/2018 )',
                     widget.mtv2,
-                    Renk.koyuMavi,
+                    Renk.pastelKoyuMavi,
                   ),
                   Dekor.cizgi15,
-                  Yansatirikili.satir('Araç Yaşı', widget.mtv3, Renk.koyuMavi),
+                  Yansatirikili.satir(
+                    'Araç Yaşı',
+                    widget.mtv3,
+                    Renk.pastelKoyuMavi,
+                  ),
                   Dekor.cizgi15,
-                  Yansatirikili.satir('Motor Gücü', widget.mtv4, Renk.koyuMavi),
+                  Yansatirikili.satir(
+                    'Motor Gücü',
+                    widget.mtv4,
+                    Renk.pastelKoyuMavi,
+                  ),
                   Dekor.cizgi15,
                   Yansatirikili.satir(
                     'Taşıt Değeri',
                     '${NumberFormat("#,##0.00", "tr_TR").format(double.parse(widget.mtv5))} TL',
-                    Renk.koyuMavi,
+                    Renk.pastelKoyuMavi,
                   ),
                   const SizedBox(height: 20),
                   const Padding(
@@ -181,12 +193,12 @@ class _MtvState extends State<MtvSon> {
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
-                            color: Renk.koyuMavi,
+                            color: Renk.pastelKoyuMavi,
                           ),
                         ),
                         SizedBox(height: 10),
                         Text(
-                          "2025 yılı için yeniden değerleme oranı % 43.93 olarak belirlenmiştir. Aşağıdaki sonuçlarda % 43.93 artış oranıyla ortaya çıkan ve Resmi Gazete'de yayınlanarak kesinleşen vergi tutarları sunulmaktadır.",
+                          "2026 yılı için yeniden değerleme oranı % 18,95 olarak belirlenmiştir. Aşağıdaki sonuçlarda % 18,95 artış oranıyla ortaya çıkan ve Resmi Gazete'de yayınlanarak kesinleşen vergi tutarları sunulmaktadır.",
                           style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.w400,

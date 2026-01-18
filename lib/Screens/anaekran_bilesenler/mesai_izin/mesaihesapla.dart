@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:app/Screens/anaekran_bilesenler/kazanclar/merkezi_hesaplama_servisi.dart';
 import 'package:app/Screens/anaekran_bilesenler/mesai_izin/mesailer.dart';
 import 'package:app/Screens/anaekran_bilesenler/veriler/degiskenler.dart';
 import 'package:excel/excel.dart' hide Border;
@@ -270,61 +271,97 @@ class MesaiHesaplama {
   }
 
   void listeyiGuncelle({required String islem, int? index}) {
-    saatgunhangisi = selectedIndex.value == 0 ? "Saat" : "Gün";
-
-    String yuzdeAyikla(String ayiklaBir) {
-      if (ayiklaBir.isEmpty || ayiklaBir.length < 2) return '';
-      return ayiklaBir.startsWith('%')
-          ? ayiklaBir.replaceAll('%', '').trim()
-          : ayiklaBir;
+    // 1. Yardımcı fonksiyon
+    double yuzdeAyikla(String text) {
+      if (text.isEmpty || text.length < 2) return 0;
+      String clean = text.replaceAll('%', '').trim();
+      return double.tryParse(clean) ?? 0;
     }
 
-    double ms = double.parse(saatMesaiAyikla(secilenMesaiSaat));
-    double mk = double.parse(yuzdeAyikla(kdvSec.text));
-    double sm = double.parse(yuzdeAyikla(mesaiSec.text));
+    double getUcretDegeri() {
+      if (selectedIndex.value == 0) {
+        return double.tryParse(saatUcretiSec.text) ?? 0;
+      } else if (selectedIndex.value == 1) {
+        return double.tryParse(gunlukUcretiSec.text) ?? 0;
+      } else {
+        return double.tryParse(aylikUcretiSec.text) ?? 0;
+      }
+    }
 
-    double su =
-        selectedIndex.value == 0
-            ? double.tryParse(saatUcretiSec.text) ?? 0
-            : selectedIndex.value == 1
-            ? double.tryParse(gunlukUcretiSec.text) ?? 0
-            : (double.tryParse(aylikUcretiSec.text) ?? 0) / 30;
+    saatgunhangisi = selectedIndex.value == 0 ? "Saat" : "Gün";
 
-    saatUcreti = su;
-    mesaiSaat = ms;
-    mesaiKdv = mk;
-    mesaiSaatYuzde = sm;
+    // 2. Değerleri al
+    double mesaiSaati = double.parse(saatMesaiAyikla(secilenMesaiSaat));
+    double vergiOrani = yuzdeAyikla(kdvSec.text);
+    double mesaiYuzdesi = yuzdeAyikla(mesaiSec.text);
+    double ucret = getUcretDegeri();
 
-    mesaiBurut = saatUcreti + saatUcreti * (mesaiSaatYuzde / 100);
-    mesaiSgkEmekliKesintiOrani =
-        calisanTipi == 'Normal'
-            ? 15
-            : calisanTipi == 'Emekli'
-            ? 7.5
-            : 0.0;
-    double saatburuthesap = mesaiBurut * mesaiSaat;
+    // 3. Mevcut değişkenlere ata (geri uyumluluk için)
+    saatUcreti = ucret;
+    mesaiSaat = mesaiSaati;
+    mesaiKdv = vergiOrani;
+    mesaiSaatYuzde = mesaiYuzdesi;
 
-    final sgkkes =
-        saatburuthesap - ((saatburuthesap / 100) * mesaiSgkEmekliKesintiOrani);
-    final damga = (saatburuthesap * 0.00759);
-    final vergiorani = (sgkkes / 100) * mesaiKdv;
-    final vergkes = mesaiKdv == 0 ? sgkkes : sgkkes - (vergiorani + damga);
-    double netHesap = vergkes;
+    // 4. MERKEZİ SERVİSİ KULLAN
+    final merkeziServis = MerkeziHesaplamaServisi();
 
+    // 4a. MESAI BRUT'Ü MERKEZİ SERVİSLE HESAPLA
+    double mesaiBrut = merkeziServis.mesaiBrutHesapla(
+      mesaiSaati: mesaiSaati,
+      kaydedilenIndex: selectedIndex.value,
+      kaydedilenUcret: ucret,
+      mesaiYuzde: mesaiYuzdesi,
+    );
+
+    // Geri uyumluluk için eski değişkenleri güncelle
+    mesaiBurut = ucret + ucret * (mesaiYuzdesi / 100); // 1 saatlik mesai ücreti
+    double saatburuthesap = mesaiBrut; // Toplam brut artık merkezi servisten
+
+    // 4b. TARİHİ PARSE ET
+    DateTime tarih;
+    try {
+      tarih = DateFormat('dd-MM-yyyy').parse(tarihMesai);
+    } catch (e) {
+      tarih = DateTime.now();
+    }
+
+    // 4c. BORDROYU MERKEZİ SERVİSLE HESAPLA
+    Map<String, double> bordro = merkeziServis.hesapBordro(
+      brut: mesaiBrut,
+      calisanTipi: calisanTipi,
+      vergiOrani: vergiOrani,
+      tarih: tarih,
+      calismaGunSayisi: 1, // Mesai tek gün olarak hesaplanıyor
+    );
+
+    // 5. NET HESAPLA (merkezi servisten)
+    double netHesap = bordro['net'] ?? 0;
+
+    // SGK ve diğer detayları merkezi servisten al (isteğe bağlı)
+    double sgkKesintisi = bordro['sgk'] ?? 0;
+    double issizlikKesintisi = bordro['issizlik'] ?? 0;
+    double gelirVergisi = bordro['vergi'] ?? 0;
+    double damgaVergisi = bordro['damga'] ?? 0;
+    double agiIstisnasi = bordro['agi'] ?? 0;
+    double damgaIstisnasi = bordro['damgaIstisnasi'] ?? 0;
+
+    // 6. METİN OLUŞTUR (eski format korunsun)
     String metin =
-        "- ${tarihMesai.toString()} Tarihinde ${mesaiSaat.toString()} $saatgunhangisi ${mesaiSec.text} Mesai";
+        "- ${tarihMesai.toString()} Tarihinde ${mesaiSaati.toString()} $saatgunhangisi %${mesaiYuzdesi.toStringAsFixed(0)} Mesai";
 
+    // 7. LİSTELERİ GÜNCELLE
     final tempList = List<String>.from(mesaiMetinListe.value);
     final tempNotList = List<String>.from(mesaiNotListe);
+
     if (islem == "ekle") {
-      mesaiSaatListe.insert(0, mesaiSaat);
-      mesaiBurutListe.insert(0, saatburuthesap);
+      mesaiSaatListe.insert(0, mesaiSaati);
+      mesaiBurutListe.insert(0, saatburuthesap); // mesaiBrut kullan
       mesaiNetListe.insert(0, netHesap);
       tempList.insert(0, metin);
       tempNotList.insert(0, notController.text);
     } else if (islem == "duzenle" && index != null) {
-      mesaiSaatListe[index] = mesaiSaat;
-      mesaiBurutListe[index] = saatburuthesap;
+      mesaiSaatListe[index] = mesaiSaati;
+      mesaiBurutListe[index] = saatburuthesap; // mesaiBrut kullan
       mesaiNetListe[index] = netHesap;
       tempList[index] = metin;
       tempNotList[index] = notController.text;
@@ -335,11 +372,26 @@ class MesaiHesaplama {
       tempList.removeAt(index);
       tempNotList.removeAt(index);
     }
+
     mesaiMetinListe.value = tempList;
     mesaiNotListe = tempNotList;
     veriDegisti = true;
     mesaiListeKaydet();
     notController.clear();
+
+    // DEBUG: Hesaplamaları kontrol et
+    debugPrint('=== MERKEZİ SERVİS HESAPLAMA ===');
+    debugPrint('Mesai Saati: $mesaiSaati');
+    debugPrint('Ücret: $ucret');
+    debugPrint('Mesai Yüzdesi: %$mesaiYuzdesi');
+    debugPrint('Brüt (Merkezi): $mesaiBrut');
+    debugPrint('Net (Merkezi): $netHesap');
+    debugPrint('SGK: $sgkKesintisi');
+    debugPrint('İşsizlik: $issizlikKesintisi');
+    debugPrint('Gelir Vergisi: $gelirVergisi');
+    debugPrint('Damga Vergisi: $damgaVergisi');
+    debugPrint('AGİ İstisnası: $agiIstisnasi');
+    debugPrint('Damga İstisnası: $damgaIstisnasi');
   }
 
   void hesaplaToplamlar() {
@@ -448,7 +500,7 @@ class MesaiHesaplama {
           prefs.getInt(
             '${selectedIndex.value}-$secilenYil-$secilenAy-mesaiKdv',
           ) ??
-          20;
+          15;
       mesaiYuzde =
           prefs.getInt(
             '${selectedIndex.value}-$secilenYil-$secilenAy-mesaiYüzde',
@@ -464,7 +516,7 @@ class MesaiHesaplama {
           prefs.getInt(
             '${selectedIndex.value}-$simdikiYil-$simdikiAy-mesaiKdv',
           ) ??
-          20;
+          15;
       mesaiYuzde =
           prefs.getInt(
             '${selectedIndex.value}-$simdikiYil-$simdikiAy-mesaiYüzde',
@@ -554,12 +606,33 @@ class MesaiHesaplama {
     hesaplaToplamlar();
   }
 
+  bool mesaiTarihZatenVarMi(String tarih) {
+    for (final metin in mesaiMetinListe.value) {
+      final parts = metin.split(' ');
+      if (parts.length > 1 && parts[1] == tarih) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /// Mesai tarih listesini getirir
+  List<String> getMesaiTarihListe() {
+    final List<String> tarihler = [];
+    for (final metin in mesaiMetinListe.value) {
+      final parts = metin.split(' ');
+      if (parts.length > 1) tarihler.add(parts[1]);
+    }
+    return tarihler;
+  }
+
   Future<void> mesaiEkleDialog(
     BuildContext context, {
     required VoidCallback onUpdate,
-    required bool isEksik, // Yeni parametre: Eksik giriş mi?
+    required bool isEksik,
   }) async {
     _klavyeyiKapat();
+
     if (selectedIndex.value == 0 && saatUcretiSec.text.isEmpty) {
       Mesaj.altmesaj(context, 'Lütfen Saat Ücretini Giriniz.', Colors.red);
     } else if (selectedIndex.value == 1 && gunlukUcretiSec.text.isEmpty) {
@@ -581,7 +654,7 @@ class MesaiHesaplama {
     required VoidCallback onUpdate,
     required bool isEksik,
   }) async {
-    tarihController.text = DateFormat('dd-MM-yyyy').format(DateTime.now());
+    // Tarih kontrolünü BURADAN KALDIRIYORUZ
     await AcilanPencere.show(
       context: context,
       title: isEksik ? 'Eksik Saat Seçiniz' : 'Mesai Saati Seçiniz',
@@ -590,10 +663,25 @@ class MesaiHesaplama {
         tarihController: tarihController,
         notController: notController,
         items: isEksik ? mesaiSaatEksikListe : mesaiSaatSecimListe,
-        onSelected: (index) {
-          secilenMesaiSaat =
+        onSelected: (index) async {
+          // async yapıyoruz
+          final secilenTarih = tarihController.text;
+          final secilenSaat =
               isEksik ? mesaiSaatEksikListe[index] : mesaiSaatSecimListe[index];
-          tarihMesai = tarihController.text;
+
+          // Tarih kontrolünü BURADA YAPIYORUZ
+          if (mesaiTarihZatenVarMi(secilenTarih)) {
+            Mesaj.altmesaj(
+              context,
+              '$secilenTarih tarihinde zaten mesai kaydı var! '
+              'Lütfen mevcut kaydı düzenleyin veya farklı bir tarih seçin.',
+              Colors.red,
+            );
+            return; // İşlemi durduruyoruz
+          }
+
+          secilenMesaiSaat = secilenSaat;
+          tarihMesai = secilenTarih;
           listeyiGuncelle(islem: "ekle");
           Mesaj.altmesaj(
             context,
@@ -614,7 +702,6 @@ class MesaiHesaplama {
     required VoidCallback onUpdate,
     required bool isEksik,
   }) async {
-    tarihController.text = DateFormat('dd-MM-yyyy').format(DateTime.now());
     await AcilanPencere.show(
       context: context,
       title: isEksik ? 'Eksik Gün Seçiniz' : 'Mesai Gün Seçiniz',
@@ -623,10 +710,25 @@ class MesaiHesaplama {
         tarihController: tarihController,
         notController: notController,
         items: isEksik ? mesaiGunEksikListe : mesaiGunSecimListe,
-        onSelected: (index) {
-          secilenMesaiSaat =
+        onSelected: (index) async {
+          // async yapıyoruz
+          final secilenTarih = tarihController.text;
+          final secilenGun =
               isEksik ? mesaiGunEksikListe[index] : mesaiGunSecimListe[index];
-          tarihMesai = tarihController.text;
+
+          // Tarih kontrolünü BURADA YAPIYORUZ
+          if (mesaiTarihZatenVarMi(secilenTarih)) {
+            Mesaj.altmesaj(
+              context,
+              '$secilenTarih tarihinde zaten mesai kaydı var! '
+              'Lütfen mevcut kaydı düzenleyin veya farklı bir tarih seçin.',
+              Colors.red,
+            );
+            return; // İşlemi durduruyoruz
+          }
+
+          secilenMesaiSaat = secilenGun;
+          tarihMesai = secilenTarih;
           listeyiGuncelle(islem: "ekle");
           Mesaj.altmesaj(
             context,
@@ -652,6 +754,7 @@ class MesaiHesaplama {
     notController.text =
         mesaiNotListe.length > index ? mesaiNotListe[index] : "";
     final isEksik = mesaiSaatListe[index] < 0;
+
     await AcilanPencere.show(
       context: context,
       title:
@@ -674,8 +777,22 @@ class MesaiHesaplama {
                 : isEksik
                 ? mesaiGunEksikListe
                 : mesaiGunSecimListe,
-        onSelected: (listIndex) {
-          tarihMesai = tarihController.text;
+        onSelected: (listIndex) async {
+          // async yapıyoruz
+          final yeniTarih = tarihController.text;
+
+          // Eğer tarih değişmişse ve yeni tarihte zaten mesai varsa
+          if (yeniTarih != eskitarih && mesaiTarihZatenVarMi(yeniTarih)) {
+            Mesaj.altmesaj(
+              context,
+              '$yeniTarih tarihinde zaten mesai kaydı var! '
+              'Farklı bir tarih seçin veya mevcut kaydı silin.',
+              Colors.red,
+            );
+            return; // İşlemi durduruyoruz
+          }
+
+          tarihMesai = yeniTarih;
           secilenMesaiSaat =
               selectedIndex.value == 0
                   ? isEksik

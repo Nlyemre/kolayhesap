@@ -46,7 +46,7 @@ class _DynamicTableState extends State<DynamicTable> {
                                     decoration: BoxDecoration(
                                       color:
                                           i.isEven
-                                              ? Renk.koyuMavi.withValues(
+                                              ? Renk.pastelKoyuMavi.withValues(
                                                 alpha: 0.06,
                                               )
                                               : Colors.white,
@@ -60,7 +60,7 @@ class _DynamicTableState extends State<DynamicTable> {
                                         overflow: TextOverflow.ellipsis,
                                         style: const TextStyle(
                                           fontSize: 13,
-                                          color: Renk.koyuMavi,
+                                          color: Renk.pastelKoyuMavi,
                                           fontWeight: FontWeight.w500,
                                         ),
                                       ),
@@ -98,9 +98,8 @@ class _DynamicTableState extends State<DynamicTable> {
                                         TableCell(
                                           child: Container(
                                             decoration: BoxDecoration(
-                                              color: Renk.koyuMavi.withValues(
-                                                alpha: 0.06,
-                                              ),
+                                              color: Renk.pastelKoyuMavi
+                                                  .withValues(alpha: 0.06),
                                             ),
                                             height: 45,
                                             alignment: Alignment.center,
@@ -118,7 +117,7 @@ class _DynamicTableState extends State<DynamicTable> {
                                                   softWrap: true,
                                                   textAlign: TextAlign.center,
                                                   style: const TextStyle(
-                                                    color: Renk.koyuMavi,
+                                                    color: Renk.pastelKoyuMavi,
                                                     fontSize: 12,
                                                     fontWeight: FontWeight.w500,
                                                   ),
@@ -148,7 +147,7 @@ class _DynamicTableState extends State<DynamicTable> {
                                                 255,
                                                 255,
                                               )
-                                              : Renk.koyuMavi.withValues(
+                                              : Renk.pastelKoyuMavi.withValues(
                                                 alpha: 0.06,
                                               ),
                                     ),
