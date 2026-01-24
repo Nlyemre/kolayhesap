@@ -527,6 +527,12 @@ class IsciTakvimWidgetState extends State<IsciTakvimWidget> {
       onUpdate: () async {
         await uyarilariKaydet();
         await _guncelleTakvimVerileri();
+        if (mounted) {
+          FocusScope.of(context).unfocus();
+          await Future.delayed(Duration(milliseconds: 100));
+          // ignore: use_build_context_synchronously
+          FocusScope.of(context).requestFocus(FocusNode());
+        }
       },
       kdvOrani: _kdvOrani,
       calisanTipi: _calisanTipi,
@@ -723,13 +729,17 @@ class IsciTakvimWidgetState extends State<IsciTakvimWidget> {
           final item = haftalikListe[index];
           if (item == null) return Container();
           final gun = item;
-          Color kartRengi = Colors.red.shade50;
+          Color kartRengi = Renk.pastelKirmizi; // varsayılan
+
           if (gun.calistiMi && gun.mesaiVar) {
-            kartRengi = Colors.blue.shade50;
+            kartRengi = Renk.pastelMavi;
           } else if (gun.calistiMi) {
-            kartRengi = Colors.green.shade50;
+            kartRengi = Renk.pastelYesil;
           } else if (gun.mesaiVar) {
-            kartRengi = Colors.blue.shade50;
+            kartRengi =
+                gun.mesaiSaati >= 0
+                    ? Renk.pastelMavi
+                    : Colors.red.shade50; // eksikse açık kırmızı ton
           }
           String notlar = '';
           if (gun.calismaNotu != null && gun.calismaNotu!.isNotEmpty) {
@@ -832,13 +842,17 @@ class IsciTakvimWidgetState extends State<IsciTakvimWidget> {
       valueListenable: selectedIndex,
       builder: (context, currentIndex, _) {
         final birim = currentIndex == 0 ? "saat" : "gün";
-        Color kartRengi = Renk.pastelKirmizi;
+        Color kartRengi = Renk.pastelKirmizi; // varsayılan
+
         if (gun.calistiMi && gun.mesaiVar) {
           kartRengi = Renk.pastelMavi;
         } else if (gun.calistiMi) {
           kartRengi = Renk.pastelYesil;
         } else if (gun.mesaiVar) {
-          kartRengi = Renk.pastelMavi;
+          kartRengi =
+              gun.mesaiSaati >= 0
+                  ? Renk.pastelMavi
+                  : Colors.red.shade50; // eksikse açık kırmızı ton
         }
         // NOTLAR
         String notlar = '';
@@ -968,8 +982,10 @@ class IsciTakvimWidgetState extends State<IsciTakvimWidget> {
                       if (gun.calistiMi || gun.mesaiVar)
                         Column(
                           children: [
-                            const Text(
-                              'Toplam Kazanç',
+                            Text(
+                              gun.mesaiSaati < 0
+                                  ? 'Toplam Kesinti'
+                                  : 'Toplam Kazanç',
                               style: TextStyle(
                                 fontSize: 10,
                                 fontWeight: FontWeight.w500,

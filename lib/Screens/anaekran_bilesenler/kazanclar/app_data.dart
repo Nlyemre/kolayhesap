@@ -110,7 +110,7 @@ class AppData {
               calismaBrut: 0,
               calismaNet: 0,
               calismaNotu: null,
-              mesaiVar: mesaiSaati != 0, // EKSİ İÇİN DE TRUE (satır 76)
+              mesaiVar: mesaiSaati != 0,
               mesaiSaati: mesaiSaati,
               mesaiBrut: mesaiBrut,
               mesaiNet: mesaiNet,

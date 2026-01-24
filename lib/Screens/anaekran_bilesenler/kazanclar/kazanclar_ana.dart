@@ -176,7 +176,9 @@ class _AnagrafikState extends State<Anagrafik>
   Widget build(BuildContext context) {
     return Scaffold(
       body: GestureDetector(
-        onTapDown: (_) => FocusScope.of(context).unfocus(),
+        onTap: () {
+          FocusManager.instance.primaryFocus?.unfocus();
+        },
         behavior: HitTestBehavior.opaque,
         child: LayoutBuilder(
           builder: (context, constraints) {

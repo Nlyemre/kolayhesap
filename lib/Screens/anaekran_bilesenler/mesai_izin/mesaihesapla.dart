@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:app/Screens/anaekran_bilesenler/kazanclar/merkezi_hesaplama_servisi.dart';
 import 'package:app/Screens/anaekran_bilesenler/mesai_izin/mesailer.dart';
 import 'package:app/Screens/anaekran_bilesenler/veriler/degiskenler.dart';
 import 'package:excel/excel.dart' hide Border;
@@ -271,89 +270,60 @@ class MesaiHesaplama {
   }
 
   void listeyiGuncelle({required String islem, int? index}) {
-    // 1. Yardımcı fonksiyon
-    double yuzdeAyikla(String text) {
-      if (text.isEmpty || text.length < 2) return 0;
-      String clean = text.replaceAll('%', '').trim();
-      return double.tryParse(clean) ?? 0;
-    }
-
-    double getUcretDegeri() {
-      if (selectedIndex.value == 0) {
-        return double.tryParse(saatUcretiSec.text) ?? 0;
-      } else if (selectedIndex.value == 1) {
-        return double.tryParse(gunlukUcretiSec.text) ?? 0;
-      } else {
-        return double.tryParse(aylikUcretiSec.text) ?? 0;
-      }
-    }
-
     saatgunhangisi = selectedIndex.value == 0 ? "Saat" : "Gün";
 
-    // 2. Değerleri al
-    double mesaiSaati = double.parse(saatMesaiAyikla(secilenMesaiSaat));
-    double vergiOrani = yuzdeAyikla(kdvSec.text);
-    double mesaiYuzdesi = yuzdeAyikla(mesaiSec.text);
-    double ucret = getUcretDegeri();
-
-    // 3. Mevcut değişkenlere ata (geri uyumluluk için)
-    saatUcreti = ucret;
-    mesaiSaat = mesaiSaati;
-    mesaiKdv = vergiOrani;
-    mesaiSaatYuzde = mesaiYuzdesi;
-
-    // 4. MERKEZİ SERVİSİ KULLAN
-    final merkeziServis = MerkeziHesaplamaServisi();
-
-    // 4a. MESAI BRUT'Ü MERKEZİ SERVİSLE HESAPLA
-    double mesaiBrut = merkeziServis.mesaiBrutHesapla(
-      mesaiSaati: mesaiSaati,
-      kaydedilenIndex: selectedIndex.value,
-      kaydedilenUcret: ucret,
-      mesaiYuzde: mesaiYuzdesi,
-    );
-
-    // Geri uyumluluk için eski değişkenleri güncelle
-    mesaiBurut = ucret + ucret * (mesaiYuzdesi / 100); // 1 saatlik mesai ücreti
-    double saatburuthesap = mesaiBrut; // Toplam brut artık merkezi servisten
-
-    // 4b. TARİHİ PARSE ET
-    DateTime tarih;
-    try {
-      tarih = DateFormat('dd-MM-yyyy').parse(tarihMesai);
-    } catch (e) {
-      tarih = DateTime.now();
+    String yuzdeAyikla(String ayiklaBir) {
+      if (ayiklaBir.isEmpty || ayiklaBir.length < 2) return '';
+      return ayiklaBir.startsWith('%')
+          ? ayiklaBir.replaceAll('%', '').trim()
+          : ayiklaBir;
     }
 
-    // 4c. BORDROYU MERKEZİ SERVİSLE HESAPLA
-    Map<String, double> bordro = merkeziServis.hesapBordro(
-      brut: mesaiBrut,
-      calisanTipi: calisanTipi,
-      vergiOrani: vergiOrani,
-      tarih: tarih,
-      calismaGunSayisi: 1, // Mesai tek gün olarak hesaplanıyor
-    );
+    double ms = double.parse(saatMesaiAyikla(secilenMesaiSaat));
+    double mk = double.parse(yuzdeAyikla(kdvSec.text));
+    double sm = double.parse(yuzdeAyikla(mesaiSec.text));
 
-    // 5. NET HESAPLA (merkezi servisten)
-    double netHesap = bordro['net'] ?? 0;
+    double su =
+        selectedIndex.value == 0
+            ? double.tryParse(saatUcretiSec.text) ?? 0
+            : selectedIndex.value == 1
+            ? double.tryParse(gunlukUcretiSec.text) ?? 0
+            : (double.tryParse(aylikUcretiSec.text) ?? 0) / 30;
 
-    // 6. METİN OLUŞTUR (eski format korunsun)
+    saatUcreti = su;
+    mesaiSaat = ms;
+    mesaiKdv = mk;
+    mesaiSaatYuzde = sm;
+
+    mesaiBurut = saatUcreti + saatUcreti * (mesaiSaatYuzde / 100);
+    mesaiSgkEmekliKesintiOrani =
+        calisanTipi == 'Normal'
+            ? 15
+            : calisanTipi == 'Emekli'
+            ? 7.5
+            : 0.0;
+    double saatburuthesap = mesaiBurut * mesaiSaat;
+
+    final sgkkes =
+        saatburuthesap - ((saatburuthesap / 100) * mesaiSgkEmekliKesintiOrani);
+    final vergkes =
+        mesaiKdv == 0 ? sgkkes : sgkkes - ((sgkkes / 100) * mesaiKdv);
+    double netHesap = vergkes - (saatburuthesap * 0.00759);
+
     String metin =
-        "- ${tarihMesai.toString()} Tarihinde ${mesaiSaati.toString()} $saatgunhangisi %${mesaiYuzdesi.toStringAsFixed(0)} Mesai";
+        "- ${tarihMesai.toString()} Tarihinde ${mesaiSaat.toString()} $saatgunhangisi ${mesaiSec.text} Mesai";
 
-    // 7. LİSTELERİ GÜNCELLE
     final tempList = List<String>.from(mesaiMetinListe.value);
     final tempNotList = List<String>.from(mesaiNotListe);
-
     if (islem == "ekle") {
-      mesaiSaatListe.insert(0, mesaiSaati);
-      mesaiBurutListe.insert(0, saatburuthesap); // mesaiBrut kullan
+      mesaiSaatListe.insert(0, mesaiSaat);
+      mesaiBurutListe.insert(0, saatburuthesap);
       mesaiNetListe.insert(0, netHesap);
       tempList.insert(0, metin);
       tempNotList.insert(0, notController.text);
     } else if (islem == "duzenle" && index != null) {
-      mesaiSaatListe[index] = mesaiSaati;
-      mesaiBurutListe[index] = saatburuthesap; // mesaiBrut kullan
+      mesaiSaatListe[index] = mesaiSaat;
+      mesaiBurutListe[index] = saatburuthesap;
       mesaiNetListe[index] = netHesap;
       tempList[index] = metin;
       tempNotList[index] = notController.text;
@@ -364,7 +334,6 @@ class MesaiHesaplama {
       tempList.removeAt(index);
       tempNotList.removeAt(index);
     }
-
     mesaiMetinListe.value = tempList;
     mesaiNotListe = tempNotList;
     veriDegisti = true;
