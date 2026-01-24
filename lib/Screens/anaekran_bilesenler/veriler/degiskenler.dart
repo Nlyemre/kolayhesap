@@ -106,6 +106,10 @@ class _MetinKutusuState extends State<MetinKutusu> {
           child: TextField(
             textAlignVertical: TextAlignVertical.bottom,
             controller: widget.controller,
+            textInputAction: TextInputAction.done,
+            onEditingComplete: () {
+              FocusScope.of(context).unfocus();
+            },
             decoration: InputDecoration(
               labelText: widget.labelText,
               hintText: widget.hintText,

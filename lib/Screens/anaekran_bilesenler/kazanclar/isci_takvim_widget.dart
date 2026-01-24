@@ -806,7 +806,7 @@ class IsciTakvimWidgetState extends State<IsciTakvimWidget> {
                           ),
                           const SizedBox(width: 2),
                           Text(
-                            gun.mesaiSaati.abs().toStringAsFixed(1),
+                            gun.mesaiSaati.toStringAsFixed(1),
                             style: TextStyle(
                               fontSize: 8,
                               color:
@@ -942,9 +942,7 @@ class IsciTakvimWidgetState extends State<IsciTakvimWidget> {
                               ),
                             ),
                             Text(
-                              gun.mesaiSaati > 0
-                                  ? '+ ${gun.mesaiSaati.toStringAsFixed(1)} saat'
-                                  : '- ${gun.mesaiSaati.toStringAsFixed(1)} saat',
+                              '${gun.mesaiSaati.toStringAsFixed(1)} saat',
                               style: const TextStyle(
                                 fontSize: 9,
                                 fontWeight: FontWeight.bold,

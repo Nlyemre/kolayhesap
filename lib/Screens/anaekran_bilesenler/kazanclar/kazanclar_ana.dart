@@ -176,7 +176,7 @@ class _AnagrafikState extends State<Anagrafik>
   Widget build(BuildContext context) {
     return Scaffold(
       body: GestureDetector(
-        onTap: () => FocusScope.of(context).unfocus(),
+        onTapDown: (_) => FocusScope.of(context).unfocus(),
         behavior: HitTestBehavior.opaque,
         child: LayoutBuilder(
           builder: (context, constraints) {
@@ -379,7 +379,7 @@ class _AnagrafikState extends State<Anagrafik>
     await AcilanPencere.show(
       context: context,
       title: 'Avans Miktarı',
-      height: 0.5,
+      height: 0.9,
       content: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(

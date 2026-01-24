@@ -110,7 +110,7 @@ class AppData {
               calismaBrut: 0,
               calismaNet: 0,
               calismaNotu: null,
-              mesaiVar: true,
+              mesaiVar: mesaiSaati != 0, // EKSİ İÇİN DE TRUE (satır 76)
               mesaiSaati: mesaiSaati,
               mesaiBrut: mesaiBrut,
               mesaiNet: mesaiNet,
@@ -182,8 +182,12 @@ class AppData {
 
     if (mevcutIndex != -1) {
       final mevcut = liste[mevcutIndex];
+
+      // EKSİ MESAI İÇİN DE MESAI VAR = TRUE (satır 108-120)
+      bool yeniMesaiVar = mesaiGunu.mesaiSaati != 0;
+
       liste[mevcutIndex] = mevcut.copyWith(
-        mesaiVar: mesaiGunu.mesaiVar || mevcut.mesaiVar,
+        mesaiVar: yeniMesaiVar || mevcut.mesaiVar, // Eksi için de true
         mesaiSaati: mesaiGunu.mesaiSaati + mevcut.mesaiSaati,
         mesaiBrut: mesaiGunu.mesaiBrut + mevcut.mesaiBrut,
         mesaiNet: mesaiGunu.mesaiNet + mevcut.mesaiNet,
@@ -193,7 +197,11 @@ class AppData {
         toplamBrut: mevcut.toplamBrut + mesaiGunu.toplamBrut,
       );
     } else {
-      liste.add(mesaiGunu);
+      // Yeni mesai eklerken eksi için de mesaiVar = true (satır 123-125)
+      final yeniGun = mesaiGunu.copyWith(
+        mesaiVar: mesaiGunu.mesaiSaati != 0, // Eksi için true
+      );
+      liste.add(yeniGun);
     }
 
     liste.sort((a, b) => a.tarih.compareTo(b.tarih));
@@ -228,7 +236,7 @@ class AppData {
 
   int aylikMesaiGunSayisi(int yil, int ay) {
     final gunler = ayaGoreGetir(yil, ay);
-    return gunler.where((g) => g.mesaiVar && g.mesaiSaati.abs() > 0).length;
+    return gunler.where((g) => g.mesaiVar).length;
   }
 
   Set<int> aylikBenzersizCalismaGunleri(int yil, int ay) {
