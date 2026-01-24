@@ -426,7 +426,7 @@ class _AcilanPencereState extends State<AcilanPencere>
                             style: const TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.w500,
-                              color: Color(0xFF1A237E),
+                              color: Renk.pastelKoyuMavi,
                             ),
                           ),
                           IconButton(
@@ -571,6 +571,7 @@ class BilgiDialog {
 
 class AbonelikDialog {
   static Future<void> abonegit(BuildContext context) async {
+    FocusScope.of(context).unfocus();
     await AcilanPencere.show(
       context: context,
       title: 'Bilgilendirme',
@@ -848,7 +849,7 @@ class CemberKart {
               backgroundColor: Colors.white,
               padding: const EdgeInsets.all(12.0),
               nameTextStyle: const TextStyle(
-                color: Colors.blueAccent,
+                color: Color.fromARGB(255, 68, 138, 255),
                 fontWeight: FontWeight.bold,
                 fontSize: 12.0,
               ),

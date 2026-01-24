@@ -584,12 +584,12 @@ class AylikMesaiBolumu extends StatelessWidget {
           [
             ChartGroupPieDataItem(
               amount: brutMesai,
-              color: Renk.pastelKoyuMavi,
+              color: const Color.fromARGB(255, 63, 116, 174),
               label: "Brüt Mesai",
             ),
             ChartGroupPieDataItem(
               amount: netMesai,
-              color: Renk.pastelAcikMavi,
+              color: const Color.fromARGB(255, 127, 218, 219),
               label: "Net Mesai",
             ),
           ],
@@ -842,7 +842,7 @@ class YillikMesaiBolumu extends StatelessWidget {
                         const SizedBox(height: 12),
                         Expanded(
                           child: MenuKarti(
-                            baslik: "Bürüt Maaşınızın Net\nTutarını Hesaplayın",
+                            baslik: "Brüt Maaşınızın Net\nTutarını Hesaplayın",
                             image: const Image(
                               image: AppImages.bruttenNet,
                               width: 120,

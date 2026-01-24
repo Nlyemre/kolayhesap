@@ -149,36 +149,40 @@ class _IssizlikState extends State<Issizlik> {
 
         title: const Text("İşsizlik Maaşı Hesapla"),
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: SingleChildScrollView(
-              physics: const BouncingScrollPhysics(),
-              child: Column(
-                children: [
-                  _ustbaslik(),
+      body: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        behavior: HitTestBehavior.opaque,
+        child: Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
+                child: Column(
+                  children: [
+                    _ustbaslik(),
 
-                  const Padding(
-                    padding: EdgeInsets.only(left: 10, right: 10),
-                    child: RepaintBoundary(child: YerelReklambes()),
-                  ),
-                  _brutsatir(),
+                    const Padding(
+                      padding: EdgeInsets.only(left: 10, right: 10),
+                      child: RepaintBoundary(child: YerelReklambes()),
+                    ),
+                    _brutsatir(),
 
-                  _ceksatirlari(),
-                  _hesaplabuton(),
-                  const SizedBox(height: 30),
-                  const Padding(
-                    padding: EdgeInsets.all(10.0),
-                    child: RepaintBoundary(child: YerelReklamuc()),
-                  ),
-                  _bilgilendirme(),
-                  const SizedBox(height: 80),
-                ],
+                    _ceksatirlari(),
+                    _hesaplabuton(),
+                    const SizedBox(height: 30),
+                    const Padding(
+                      padding: EdgeInsets.all(10.0),
+                      child: RepaintBoundary(child: YerelReklamuc()),
+                    ),
+                    _bilgilendirme(),
+                    const SizedBox(height: 80),
+                  ],
+                ),
               ),
             ),
-          ),
-          const RepaintBoundary(child: BannerReklamiki()),
-        ],
+            const RepaintBoundary(child: BannerReklamiki()),
+          ],
+        ),
       ),
     );
   }

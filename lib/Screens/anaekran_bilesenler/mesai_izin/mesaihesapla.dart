@@ -337,14 +337,6 @@ class MesaiHesaplama {
     // 5. NET HESAPLA (merkezi servisten)
     double netHesap = bordro['net'] ?? 0;
 
-    // SGK ve diğer detayları merkezi servisten al (isteğe bağlı)
-    double sgkKesintisi = bordro['sgk'] ?? 0;
-    double issizlikKesintisi = bordro['issizlik'] ?? 0;
-    double gelirVergisi = bordro['vergi'] ?? 0;
-    double damgaVergisi = bordro['damga'] ?? 0;
-    double agiIstisnasi = bordro['agi'] ?? 0;
-    double damgaIstisnasi = bordro['damgaIstisnasi'] ?? 0;
-
     // 6. METİN OLUŞTUR (eski format korunsun)
     String metin =
         "- ${tarihMesai.toString()} Tarihinde ${mesaiSaati.toString()} $saatgunhangisi %${mesaiYuzdesi.toStringAsFixed(0)} Mesai";
@@ -378,20 +370,6 @@ class MesaiHesaplama {
     veriDegisti = true;
     mesaiListeKaydet();
     notController.clear();
-
-    // DEBUG: Hesaplamaları kontrol et
-    debugPrint('=== MERKEZİ SERVİS HESAPLAMA ===');
-    debugPrint('Mesai Saati: $mesaiSaati');
-    debugPrint('Ücret: $ucret');
-    debugPrint('Mesai Yüzdesi: %$mesaiYuzdesi');
-    debugPrint('Brüt (Merkezi): $mesaiBrut');
-    debugPrint('Net (Merkezi): $netHesap');
-    debugPrint('SGK: $sgkKesintisi');
-    debugPrint('İşsizlik: $issizlikKesintisi');
-    debugPrint('Gelir Vergisi: $gelirVergisi');
-    debugPrint('Damga Vergisi: $damgaVergisi');
-    debugPrint('AGİ İstisnası: $agiIstisnasi');
-    debugPrint('Damga İstisnası: $damgaIstisnasi');
   }
 
   void hesaplaToplamlar() {
@@ -633,19 +611,64 @@ class MesaiHesaplama {
   }) async {
     _klavyeyiKapat();
 
+    // Yardımcı fonksiyon: Ücret değerini kontrol et
+    double getUcretDegeri() {
+      if (selectedIndex.value == 0) {
+        return double.tryParse(saatUcretiSec.text) ?? 0;
+      } else if (selectedIndex.value == 1) {
+        return double.tryParse(gunlukUcretiSec.text) ?? 0;
+      } else {
+        return double.tryParse(aylikUcretiSec.text) ?? 0;
+      }
+    }
+
+    final ucret = getUcretDegeri();
+
+    // 1. Boş kontrolü
     if (selectedIndex.value == 0 && saatUcretiSec.text.isEmpty) {
       Mesaj.altmesaj(context, 'Lütfen Saat Ücretini Giriniz.', Colors.red);
+      return;
     } else if (selectedIndex.value == 1 && gunlukUcretiSec.text.isEmpty) {
       Mesaj.altmesaj(context, 'Lütfen Günlük Ücretini Giriniz.', Colors.red);
+      return;
     } else if (selectedIndex.value == 2 && aylikUcretiSec.text.isEmpty) {
       Mesaj.altmesaj(context, 'Lütfen Aylık Ücretini Giriniz.', Colors.red);
+      return;
+    }
+
+    // 2. 0 veya negatif kontrolü
+    if (ucret <= 0) {
+      final birim =
+          selectedIndex.value == 0
+              ? "Saat"
+              : selectedIndex.value == 1
+              ? "Günlük"
+              : "Aylık";
+
+      Mesaj.altmesaj(
+        context,
+        'Lütfen geçerli bir $birim ücreti giriniz.',
+        Colors.red,
+      );
+      return;
+    }
+
+    // 3. Geçerli bir sayı kontrolü
+    if (ucret.isNaN || !ucret.isFinite) {
+      Mesaj.altmesaj(
+        context,
+        'Lütfen geçerli bir ücret değeri giriniz.',
+        Colors.red,
+      );
+      return;
+    }
+
+    // Tüm kontroller geçerse devam et
+    notController.clear();
+    if (selectedIndex.value == 0) {
+      await mesaiSaatSecDialog(context, onUpdate: onUpdate, isEksik: isEksik);
     } else {
-      notController.clear();
-      if (selectedIndex.value == 0) {
-        await mesaiSaatSecDialog(context, onUpdate: onUpdate, isEksik: isEksik);
-      } else {
-        await mesaiGunSecDialog(context, onUpdate: onUpdate, isEksik: isEksik);
-      }
+      await mesaiGunSecDialog(context, onUpdate: onUpdate, isEksik: isEksik);
     }
   }
 
@@ -693,6 +716,7 @@ class MesaiHesaplama {
           onUpdate();
         },
         onUpdate: () => mesaiListeKaydet(),
+        mesaiHesaplama: this,
       ),
     );
   }
@@ -740,6 +764,7 @@ class MesaiHesaplama {
           onUpdate();
         },
         onUpdate: () => mesaiListeKaydet(),
+        mesaiHesaplama: this,
       ),
     );
   }
@@ -806,6 +831,7 @@ class MesaiHesaplama {
           onUpdate();
         },
         onUpdate: () => mesaiListeKaydet(),
+        mesaiHesaplama: this,
       ),
     );
   }

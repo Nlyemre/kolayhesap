@@ -1,9 +1,9 @@
-// lib/Screens/anaekran_bilesenler/kazanclar/app_data.dart
+import 'package:app/Screens/anaekran_bilesenler/kazanclar/calisma_gun_model.dart';
 import 'package:app/Screens/anaekran_bilesenler/kazanclar/calisma_hesapla.dart';
-import 'package:app/Screens/anaekran_bilesenler/kazanclar/calisma_model.dart';
-import 'package:app/Screens/anaekran_bilesenler/mesai_izin/mesaihesapla.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
+import '../mesai_izin/mesaihesapla.dart';
 
 class AppData {
   // Aylık gruplanmış veriler (ana depolama)
@@ -11,6 +11,9 @@ class AppData {
 
   // Veri değişiklik dinleyicileri
   final List<VoidCallback> _veriDegisiklikDinleyicileri = [];
+
+  // Çalışma şekli değişiklik dinleyicileri
+  final List<VoidCallback> _calismaSekliDinleyicileri = [];
 
   // Hesaplama referansları
   final CalismaHesaplama? calismaHesaplama;
@@ -25,20 +28,26 @@ class AppData {
     double? besOrani,
     bool besAktif = false,
     bool mesaiVerileriniDahilEt = true,
+    int? filterByIndex, // YENİ: Sadece belirli index'i göster
   }) async {
-    debugPrint('=== VERİLER BİRLEŞTİRİLİYOR ===');
+    debugPrint('=== VERİLER BİRLEŞTİRİLİYOR (Filter: $filterByIndex) ===');
 
     // 1. Mevcut verileri temizle
     _aylikVeriler.clear();
 
-    // 2. Çalışma günlerini ekle
+    // 2. Çalışma günlerini ekle - FİLTRE UYGULA
     if (calismaHesaplama != null) {
+      // Eğer filterByIndex null ise, tüm çalışma kayıtlarını göster
+      // Eğer filterByIndex belirtilmişse, sadece o index'e ait kayıtları göster
       for (var gun in calismaHesaplama!.calismaGunleri) {
+        if (filterByIndex != null && gun.kaydedilenIndex != filterByIndex) {
+          continue; // Filtre uygulanıyorsa ve index eşleşmiyorsa atla
+        }
         await _ekleVeyaGuncelleCalismaGunu(gun);
       }
     }
 
-    // 3. Mesai günlerini ekle
+    // 3. Mesai günlerini ekle (mesailer index'e bağlı değil, hepsini göster)
     if (mesaiVerileriniDahilEt && mesaiHesaplama != null) {
       await _mesaiVerileriniEkle();
     }
@@ -49,6 +58,27 @@ class AppData {
 
     // 4. Dinleyicileri uyar
     _veriDegisiklikleriniYay();
+  }
+
+  /// Sadece seçili index'e ait verileri birleştir
+  Future<void> verileriBirlestirFiltreli({
+    required String calisanTipi,
+    required double kdvOrani,
+    double? besOrani,
+    bool besAktif = false,
+    bool mesaiVerileriniDahilEt = true,
+    required int selectedIndex, // ZORUNLU: Hangi index'i göstereceğiz
+  }) async {
+    debugPrint('=== FİLTRELİ VERİ BİRLEŞTİRME (Index: $selectedIndex) ===');
+
+    await verileriBirlestir(
+      calisanTipi: calisanTipi,
+      kdvOrani: kdvOrani,
+      besOrani: besOrani,
+      besAktif: besAktif,
+      mesaiVerileriniDahilEt: mesaiVerileriniDahilEt,
+      filterByIndex: selectedIndex, // Filtreyi uygula
+    );
   }
 
   /// Mesai verilerini ekler
@@ -237,9 +267,46 @@ class AppData {
     }
   }
 
+  // ==================== ÇALIŞMA ŞEKLİ DİNLEYİCİLERİ ====================
+
+  void calismaSekliDegisti() {
+    debugPrint('Çalışma şekli değişti, dinleyiciler uyarılıyor...');
+    for (var dinleyici in _calismaSekliDinleyicileri) {
+      try {
+        dinleyici();
+      } catch (e) {
+        debugPrint('Çalışma şekli dinleyici hatası: $e');
+      }
+    }
+  }
+
+  void calismaSekliDinleyiciEkle(VoidCallback callback) {
+    if (!_calismaSekliDinleyicileri.contains(callback)) {
+      _calismaSekliDinleyicileri.add(callback);
+    }
+  }
+
+  void calismaSekliDinleyiciKaldir(VoidCallback callback) {
+    _calismaSekliDinleyicileri.remove(callback);
+  }
+
+  // ==================== VERİ TEMİZLEME ====================
+
   /// Verileri tamamen temizle
   void temizle() {
     _aylikVeriler.clear();
     _veriDegisiklikDinleyicileri.clear();
+    _calismaSekliDinleyicileri.clear();
+  }
+
+  /// Belirli bir index'e ait verileri temizle
+  void indexVerileriniTemizle(int index, int yil, int ay) {
+    final key = '$yil-$ay';
+    if (_aylikVeriler.containsKey(key)) {
+      _aylikVeriler[key]!.removeWhere((gun) => gun.kaydedilenIndex == index);
+      if (_aylikVeriler[key]!.isEmpty) {
+        _aylikVeriler.remove(key);
+      }
+    }
   }
 }

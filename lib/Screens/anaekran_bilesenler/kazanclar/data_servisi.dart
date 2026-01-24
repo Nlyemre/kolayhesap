@@ -1,166 +1,20 @@
-// lib/Screens/anaekran_bilesenler/kazanclar/data_servisi.dart
 import 'dart:async';
 
-import 'package:app/Screens/anaekran_bilesenler/kazanclar/calisma_model.dart';
+import 'package:app/Screens/anaekran_bilesenler/kazanclar/app_data.dart';
+import 'package:app/Screens/anaekran_bilesenler/kazanclar/aylik_veri_model.dart';
+import 'package:app/Screens/anaekran_bilesenler/kazanclar/calisma_gun_model.dart';
+import 'package:app/Screens/anaekran_bilesenler/kazanclar/calisma_hesapla.dart';
 import 'package:app/Screens/anaekran_bilesenler/kazanclar/merkezi_hesaplama_servisi.dart';
-import 'package:app/Screens/anaekran_bilesenler/kazanclar/veri_senkronizasyonu.dart';
 import 'package:app/Screens/anaekran_bilesenler/mesai_izin/mesaihesapla.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import 'app_data.dart';
-import 'calisma_hesapla.dart';
-
-// ==================== MODEL SINIFLARI ====================
-
-class AylikVeri {
-  final double brutKazanc;
-  final double netKazanc;
-  final int calismaGunSayisi;
-  final int mesaiGunSayisi;
-  final int efektifGunSayisi;
-  final double toplamCalismaSaati;
-  final double toplamMesaiSaati;
-  final KesintiDetaylari kesintiDetaylari;
-  final String seciliAyIsmi;
-
-  const AylikVeri({
-    required this.brutKazanc,
-    required this.netKazanc,
-    required this.calismaGunSayisi,
-    required this.mesaiGunSayisi,
-    required this.efektifGunSayisi,
-    required this.toplamCalismaSaati,
-    required this.toplamMesaiSaati,
-    required this.kesintiDetaylari,
-    required this.seciliAyIsmi,
-  });
-
-  factory AylikVeri.bos() => AylikVeri(
-    brutKazanc: 0.0,
-    netKazanc: 0.0,
-    calismaGunSayisi: 0,
-    mesaiGunSayisi: 0,
-    efektifGunSayisi: 0,
-    toplamCalismaSaati: 0.0,
-    toplamMesaiSaati: 0.0,
-    kesintiDetaylari: KesintiDetaylari.bos(),
-    seciliAyIsmi: '',
-  );
-}
-
-class KesintiDetaylari {
-  final double brut;
-  final double net;
-  final double sgk;
-  final double sgkYuzde;
-  final double issizlik;
-  final double issizlikYuzde;
-  final double vergi;
-  final double damga;
-  final double uygulananVergi;
-  final double uygulananVergiYuzde;
-  final double uygulananDamga;
-  final double uygulananDamgaYuzde;
-  final double agi;
-  final double damgaIstisnasi;
-  final double bes;
-  final double avans;
-
-  const KesintiDetaylari({
-    required this.brut,
-    required this.net,
-    required this.sgk,
-    required this.sgkYuzde,
-    required this.issizlik,
-    required this.issizlikYuzde,
-    required this.vergi,
-    required this.damga,
-    required this.uygulananVergi,
-    required this.uygulananVergiYuzde,
-    required this.uygulananDamga,
-    required this.uygulananDamgaYuzde,
-    required this.agi,
-    required this.damgaIstisnasi,
-    required this.bes,
-    this.avans = 0.0,
-  });
-
-  factory KesintiDetaylari.bos() => const KesintiDetaylari(
-    brut: 0.0,
-    net: 0.0,
-    sgk: 0.0,
-    sgkYuzde: 0.0,
-    issizlik: 0.0,
-    issizlikYuzde: 0.0,
-    vergi: 0.0,
-    damga: 0.0,
-    uygulananVergi: 0.0,
-    uygulananVergiYuzde: 0.0,
-    uygulananDamga: 0.0,
-    uygulananDamgaYuzde: 0.0,
-    agi: 0.0,
-    damgaIstisnasi: 0.0,
-    bes: 0.0,
-    avans: 0.0,
-  );
-
-  KesintiDetaylari copyWith({
-    double? brut,
-    double? net,
-    double? sgk,
-    double? sgkYuzde,
-    double? issizlik,
-    double? issizlikYuzde,
-    double? vergi,
-    double? damga,
-    double? uygulananVergi,
-    double? uygulananVergiYuzde,
-    double? uygulananDamga,
-    double? uygulananDamgaYuzde,
-    double? agi,
-    double? damgaIstisnasi,
-    double? bes,
-    double? avans,
-  }) {
-    return KesintiDetaylari(
-      brut: brut ?? this.brut,
-      net: net ?? this.net,
-      sgk: sgk ?? this.sgk,
-      sgkYuzde: sgkYuzde ?? this.sgkYuzde,
-      issizlik: issizlik ?? this.issizlik,
-      issizlikYuzde: issizlikYuzde ?? this.issizlikYuzde,
-      vergi: vergi ?? this.vergi,
-      damga: damga ?? this.damga,
-      uygulananVergi: uygulananVergi ?? this.uygulananVergi,
-      uygulananVergiYuzde: uygulananVergiYuzde ?? this.uygulananVergiYuzde,
-      uygulananDamga: uygulananDamga ?? this.uygulananDamga,
-      uygulananDamgaYuzde: uygulananDamgaYuzde ?? this.uygulananDamgaYuzde,
-      agi: agi ?? this.agi,
-      damgaIstisnasi: damgaIstisnasi ?? this.damgaIstisnasi,
-      bes: bes ?? this.bes,
-      avans: avans ?? this.avans,
-    );
-  }
-}
-
-class YuzdeVeri {
-  final String ad;
-  final double tutar;
-  final Color renk;
-
-  const YuzdeVeri(this.ad, this.tutar, this.renk);
-}
 
 class DataServisi {
   // ==================== HESAPLAMA SINIFLARI ====================
   late CalismaHesaplama calismaHesaplama;
   late MesaiHesaplama mesaiHesaplama;
   late AppData appData;
-
-  // ==================== MERKEZİ VERİ YÖNETİCİSİ ====================
-  final VeriYoneticisi veriYoneticisi = VeriYoneticisi();
 
   // ==================== AYARLAR ====================
   String calisanTipi = "Normal";
@@ -187,7 +41,6 @@ class DataServisi {
     calismaHesaplama.dispose();
     mesaiHesaplama.dispose();
     appData.temizle();
-    veriYoneticisi.temizle();
   }
 
   // ==================== AYARLARI YÜKLE ====================
@@ -196,6 +49,12 @@ class DataServisi {
 
     prefs = await SharedPreferences.getInstance();
 
+    final savedIndex = prefs?.getInt('index') ?? 0;
+
+    // TÜM SINIFLARA AYNI INDEX'I ATA
+    calismaHesaplama.selectedIndex.value = savedIndex;
+    mesaiHesaplama.selectedIndex.value = savedIndex;
+
     // SINIFLARI BAŞLAT
     await calismaHesaplama.init();
     await mesaiHesaplama.init();
@@ -203,9 +62,6 @@ class DataServisi {
     // BES AYARLARINI YÜKLE
     besAktif = prefs?.getBool('besAktif') ?? false;
     besOrani = prefs?.getDouble('besOrani') ?? 3.0;
-
-    // VERİLERİ GÜNCELLE
-    await veriYoneticisi.tumVerileriGuncelle();
 
     debugPrint('Ayarlar yüklendi');
   }
@@ -217,9 +73,6 @@ class DataServisi {
     await prefs?.setDouble('avans-$yil-$ayIndex', miktar);
 
     debugPrint('Avans kaydedildi: $miktar TL (${ay.year}-${ay.month})');
-
-    // VERİYİ GÜNCELLE
-    await veriYoneticisi.tumVerileriGuncelle();
   }
 
   Future<double> avansMiktariniYukle(DateTime ay) async {
@@ -236,9 +89,6 @@ class DataServisi {
     await prefs?.setDouble('besOrani', oran);
 
     debugPrint('BES ayarları kaydedildi: aktif=$aktif, oran=$oran');
-
-    // VERİYİ GÜNCELLE
-    await veriYoneticisi.tumVerileriGuncelle();
   }
 
   // ==================== AYLIK VERİ HESAPLA ====================
@@ -310,7 +160,6 @@ class DataServisi {
   }
 
   // ==================== KESİNTİ DETAYLARINI HESAPLA ====================
-
   Future<KesintiDetaylari> _kesintiDetaylariniHesapla({
     required List<CalismaGunModel> gunler,
     required int efektifGunSayisi,
@@ -324,84 +173,46 @@ class DataServisi {
     debugPrint('=== KESİNTİ HESAPLANIYOR (GÜN BAZLI) ===');
     debugPrint('Toplam Gün: ${gunler.length}');
 
-    // Her gün için ayrı ayrı hesapla ve topla
-    double toplamSgk = 0;
-    double toplamIssizlik = 0;
-    double toplamVergi = 0;
-    double toplamDamga = 0;
-    double toplamAgi = 0;
-    double toplamDamgaIstisnasi = 0;
+    // 1. Günlük brüt listesi oluştur
+    final List<double> brutListesi = gunler.map((g) => g.toplamBrut).toList();
 
-    for (var gun in gunler) {
-      if (gun.toplamBrut <= 0) continue;
-
-      // Her gün için bordro hesapla
-      final gunBordro = MerkeziHesaplamaServisi().hesapBordro(
-        brut: gun.toplamBrut,
-        calisanTipi: gun.kaydedilenCalisanTipi ?? calisanTipi,
-        vergiOrani: gun.kaydedilenKdvOrani ?? calismaHesaplama.calismaKdv,
-        tarih: gun.tarih,
-        calismaGunSayisi: 1, // Her gün 1 gün olarak hesaplanıyor
-      );
-
-      toplamSgk += gunBordro['sgk'] ?? 0;
-      toplamIssizlik += gunBordro['issizlik'] ?? 0;
-      toplamVergi += gunBordro['vergi'] ?? 0;
-      toplamDamga += gunBordro['damga'] ?? 0;
-      toplamAgi += gunBordro['agi'] ?? 0;
-      toplamDamgaIstisnasi += gunBordro['damgaIstisnasi'] ?? 0;
-    }
-
-    // Uygulanan vergiler
-    double uygulananVergi = (toplamVergi - toplamAgi).clamp(0, toplamVergi);
-    double uygulananDamga = (toplamDamga - toplamDamgaIstisnasi).clamp(
-      0,
-      toplamDamga,
+    // 2. Toplu bordro hesapla (istisnalar tek seferde prorata)
+    final bordroSonuc = MerkeziHesaplamaServisi().gunlukTopluBordro(
+      brutListesi: brutListesi,
+      calisanTipi: calisanTipi,
+      vergiOrani: calismaHesaplama.calismaKdv,
+      ayTarihi: seciliAy,
+      efektifGunSayisi: efektifGunSayisi,
     );
 
-    // BES kesintisi
+    // 3. BES kesintisi (toplam brüt üzerinden)
     double besKesintisi = MerkeziHesaplamaServisi().besKesintisiHesapla(
       brut: toplamBrut,
       besAktif: besAktif,
       besOrani: besOrani,
     );
 
-    // Net hesapla
-    double toplamKesinti =
-        toplamSgk +
-        toplamIssizlik +
-        uygulananVergi +
-        uygulananDamga +
-        besKesintisi;
-    double net = toplamBrut - toplamKesinti;
+    // 4. Net hesapla (BES dahil)
+    double net = (bordroSonuc['net'] ?? 0.0) - besKesintisi;
 
-    // SGK yüzdesi
-    double sgkYuzde = switch (calisanTipi) {
-      'Normal' => 14.0,
-      'Emekli' => 7.5,
-      'SGK Yok' => 0.0,
-      _ => 14.0,
-    };
-
+    // 5. Sonuçları KesintiDetaylari'na aktar
     return KesintiDetaylari(
       brut: toplamBrut,
       net: net,
-      sgk: toplamSgk,
-      sgkYuzde: sgkYuzde,
-      issizlik: toplamIssizlik,
-      issizlikYuzde: calisanTipi == 'Normal' ? 1.0 : 0.0,
-      vergi: toplamVergi,
-      damga: toplamDamga,
-      uygulananVergi: uygulananVergi,
-      uygulananVergiYuzde:
-          toplamBrut > 0 ? (uygulananVergi / toplamBrut) * 100 : 0.0,
-      uygulananDamga: uygulananDamga,
-      uygulananDamgaYuzde:
-          toplamBrut > 0 ? (uygulananDamga / toplamBrut) * 100 : 0.0,
-      agi: toplamAgi,
-      damgaIstisnasi: toplamDamgaIstisnasi,
+      sgk: bordroSonuc['sgk'] ?? 0.0,
+      sgkYuzde: bordroSonuc['sgk_yuzde'] ?? 0.0,
+      issizlik: bordroSonuc['issizlik'] ?? 0.0,
+      issizlikYuzde: bordroSonuc['issizlik_yuzde'] ?? 0.0,
+      vergi: bordroSonuc['vergi'] ?? 0.0,
+      damga: bordroSonuc['damga'] ?? 0.0,
+      uygulananVergi: bordroSonuc['uygulananVergi'] ?? 0.0,
+      uygulananVergiYuzde: bordroSonuc['uygulananVergiYuzde'] ?? 0.0,
+      uygulananDamga: bordroSonuc['uygulananDamga'] ?? 0.0,
+      uygulananDamgaYuzde: bordroSonuc['uygulananDamgaYuzde'] ?? 0.0,
+      agi: bordroSonuc['agi'] ?? 0.0,
+      damgaIstisnasi: bordroSonuc['damgaIstisnasi'] ?? 0.0,
       bes: besKesintisi,
-      avans: 0,
+      avans: 0.0,
     );
   }
 

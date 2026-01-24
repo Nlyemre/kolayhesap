@@ -1073,9 +1073,9 @@ class _ZamGirisState extends State<ZamGiris> {
                 children: [
                   Text(
                     widget.id == 1
-                        ? "Bürüt Ücret Zam Hesapla"
+                        ? "Brüt Ücret Zam Hesapla"
                         : widget.id == 2
-                        ? "Bürüt Ücret Hesaplama"
+                        ? "Brüt Ücret Hesaplama"
                         : widget.grafikid == 1
                         ? "Brüt Ücret Zam Karşılaştırma"
                         : widget.grafikid == 4

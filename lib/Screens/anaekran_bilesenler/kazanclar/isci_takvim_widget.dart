@@ -2,10 +2,9 @@
 import 'dart:async';
 
 import 'package:app/Screens/anaekran_bilesenler/kazanclar/app_data.dart';
+import 'package:app/Screens/anaekran_bilesenler/kazanclar/calisma_gun_model.dart';
 import 'package:app/Screens/anaekran_bilesenler/kazanclar/calisma_hesapla.dart';
-import 'package:app/Screens/anaekran_bilesenler/kazanclar/calisma_model.dart';
 import 'package:app/Screens/anaekran_bilesenler/kazanclar/data_servisi.dart';
-import 'package:app/Screens/anaekran_bilesenler/kazanclar/veri_senkronizasyonu.dart';
 import 'package:app/Screens/anaekran_bilesenler/mesai_izin/mesaihesapla.dart';
 import 'package:app/Screens/anaekran_bilesenler/veriler/degiskenler.dart';
 import 'package:flutter/material.dart';
@@ -52,9 +51,6 @@ class IsciTakvimWidgetState extends State<IsciTakvimWidget> {
   bool get _besAktif => _dataServisi.besAktif;
   double get _besOrani => _dataServisi.besOrani;
 
-  // MERKEZİ VERİ YÖNETİCİSİ
-  final VeriYoneticisi _veriYoneticisi = VeriYoneticisi();
-
   @override
   void initState() {
     super.initState();
@@ -77,29 +73,20 @@ class IsciTakvimWidgetState extends State<IsciTakvimWidget> {
         calismaHesaplama = widget.dataServisi!.calismaHesaplama;
         mesaiHesaplama = widget.dataServisi!.mesaiHesaplama;
 
-        // CALISMA GUNLERINI HEMEN YÜKLE!
+        // === ÇALIŞMA VE MESAI VERİLERİNİ HEMEN YÜKLE! ===
         await calismaHesaplama.calismaListeCagir();
+        await mesaiHesaplama.init();
+        await uyarilariYukle();
+
         debugPrint(
           'CalismaGunleri yüklendi: ${calismaHesaplama.calismaGunleri.length} kayıt',
         );
-
-        // BAĞLANTILARI SADECE BİR KEZ KUR - KONTROL EKLE
-        if (!_veriYoneticisi.baglantilarKurulduMu()) {
-          _veriYoneticisi.baglantilariKur(
-            calismaHesaplama: calismaHesaplama,
-            mesaiHesaplama: mesaiHesaplama,
-            appData: appData,
-            dataServisi: _dataServisi,
-          );
-        } else {
-          debugPrint('Bağlantılar zaten kurulu, tekrar kurulmuyor');
-        }
+        debugPrint(
+          'Mesai kayıtları yüklendi: ${mesaiHesaplama.mesaiMetinListe.value.length} kayıt',
+        );
       }
 
-      // DİNLEYİCİYİ SADECE BİR KEZ EKLE
-      _veriYoneticisi.dinleyiciEkle(_onVeriDegisti);
-
-      // 500ms BEKLE SONRA GÜNCELLE (DİĞER İNİT İŞLEMLERİ BİTSİN)
+      // 500ms BEKLE SONRA GÜNCELLE
       await Future.delayed(const Duration(milliseconds: 500));
       await _guncelleTakvimVerileri();
 
@@ -107,12 +94,6 @@ class IsciTakvimWidgetState extends State<IsciTakvimWidget> {
         setState(() {
           veriYuklendi = true;
         });
-
-        /*WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (mounted) {
-            bugunuOrtala();
-          }
-        });*/
 
         debugPrint(
           "Tüm başlangıç işlemleri bitti → grafik şimdi TEK KEZ çağrılıyor",
@@ -131,20 +112,8 @@ class IsciTakvimWidgetState extends State<IsciTakvimWidget> {
     }
   }
 
-  void _onVeriDegisti() {
-    if (mounted) {
-      _guncelleTakvimVerileri().then((_) {
-        setState(() {});
-        // widget.onKazancChanged?.call();
-      });
-    }
-  }
-
   @override
   void dispose() {
-    // DİNLEYİCİLERİ KALDIR
-    _veriYoneticisi.dinleyiciKaldir(_onVeriDegisti);
-    debugPrint('=== İŞÇİ TAKVİM WIDGET DİSPOSE EDİLİYOR ===');
     gunlerNotifier.dispose();
     selectedIndex.dispose();
     pageController.dispose();
@@ -154,16 +123,21 @@ class IsciTakvimWidgetState extends State<IsciTakvimWidget> {
   // TAKVİM VERİLERİNİ GÜNCELLE
   Future<void> _guncelleTakvimVerileri() async {
     try {
-      debugPrint(
-        'Takvim verileri güncelleniyor: ${seciliAy.month}/${seciliAy.year}',
+      debugPrint('Takvim verileri güncelleniyor: ${selectedIndex.value}');
+
+      await mesaiHesaplama.mesaiListeCagir();
+
+      // ✅ FİLTRELİ KULLANIM - SADECE SEÇİLİ INDEX'İ GÖSTER
+      await appData.verileriBirlestirFiltreli(
+        calisanTipi: calisanTipi,
+        kdvOrani: calismaHesaplama.calismaKdv,
+        besOrani: _besOrani,
+        besAktif: _besAktif,
+        mesaiVerileriniDahilEt: true,
+        selectedIndex: selectedIndex.value, // SADECE BU INDEX
       );
 
-      // VERİLERİ GÜNCELLE
-      await _veriYoneticisi.tumVerileriGuncelle();
-
       await ayiYukle();
-
-      debugPrint('Takvim verileri güncellendi');
     } catch (e) {
       debugPrint('!!! Takvim güncelleme hatası: $e');
     }
@@ -216,9 +190,6 @@ class IsciTakvimWidgetState extends State<IsciTakvimWidget> {
         CalismaHesaplama.kdvListe[calismaHesaplama.kdvSayi];
 
     prefs.setString('calisanTipi', calisanTipi);
-
-    // VERİLERİ GÜNCELLE
-    await _veriYoneticisi.tumVerileriGuncelle();
   }
 
   Future<void> ayiYukle() async {
@@ -277,7 +248,7 @@ class IsciTakvimWidgetState extends State<IsciTakvimWidget> {
     // 1. CONTROLLER KONTROLÜ
     if (!pageController.hasClients) {
       debugPrint('PageController clients yok');
-      Future.delayed(const Duration(milliseconds: 300), () => bugunuOrtala());
+      Future.delayed(const Duration(milliseconds: 500), () => bugunuOrtala());
       return;
     }
 
@@ -339,123 +310,32 @@ class IsciTakvimWidgetState extends State<IsciTakvimWidget> {
     await AcilanPencere.show(
       context: context,
       title: DateFormat('EEEE dd MMMM yyyy', 'tr_TR').format(gun.tarih),
-      height: 0.8,
+      height: 0.9,
       content: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
         behavior: HitTestBehavior.opaque,
         child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.only(left: 10, right: 10),
+          physics: const BouncingScrollPhysics(),
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
             child: Column(
-              mainAxisSize: MainAxisSize.min,
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 5),
-                  child: Text(
-                    'Çalışma İşlemleri',
-                    style: TextStyle(fontSize: 18, color: Renk.pastelKoyuMavi),
-                  ),
+                _buildIslemGrubu(
+                  title: 'ÇALIŞMA İŞLEMLERİ',
+                  icon: Icons.work_outline,
+                  color: Renk.pastelKoyuMavi,
+                  children: _buildCalismaIslemleri(gun),
                 ),
+                const SizedBox(height: 20),
 
-                if (gun.calistiMi && gun.calismaSaati > 0) ...[
-                  ListTile(
-                    title: const Text(
-                      'Çalışma Düzenle',
-                      style: TextStyle(fontSize: 16),
-                    ),
-                    trailing: Icon(Icons.edit, color: Renk.pastelKoyuMavi),
-                    onTap: () async {
-                      Navigator.pop(context);
-                      await duzenleCalismaDialog(gun);
-                    },
-                  ),
-                  Dekor.cizgi15,
-                  ListTile(
-                    title: const Text(
-                      'Çalışma Sil',
-                      style: TextStyle(fontSize: 16),
-                    ),
-                    trailing: const Icon(Icons.delete, color: Colors.red),
-                    onTap: () async {
-                      Navigator.pop(context);
-                      await silCalismaDialog(gun);
-                    },
-                  ),
-                  Dekor.cizgi15,
-                ] else ...[
-                  ListTile(
-                    title: const Text(
-                      'Çalışma Ekle',
-                      style: TextStyle(fontSize: 16),
-                    ),
-                    trailing: Icon(Icons.add, color: Renk.pastelKoyuMavi),
-                    onTap: () async {
-                      Navigator.pop(context);
-                      await calismaEkleDialog(gun);
-                    },
-                  ),
-                  Dekor.cizgi15,
-                ],
-
-                Padding(
-                  padding: const EdgeInsets.only(top: 10, bottom: 5),
-                  child: Text(
-                    'Mesai İşlemleri',
-                    style: TextStyle(fontSize: 18, color: Renk.pastelKoyuMavi),
-                  ),
+                // MESAI İŞLEMLERİ
+                _buildIslemGrubu(
+                  title: 'MESAI İŞLEMLERİ',
+                  icon: Icons.access_time,
+                  color: Renk.pastelKoyuMavi,
+                  children: _buildMesaiIslemleri(gun),
                 ),
-
-                if (gun.mesaiVar && gun.mesaiSaati != 0) ...[
-                  ListTile(
-                    title: const Text(
-                      'Mesai Düzenle',
-                      style: TextStyle(fontSize: 16),
-                    ),
-                    trailing: Icon(Icons.edit, color: Renk.pastelKoyuMavi),
-                    onTap: () async {
-                      Navigator.pop(context);
-                      await duzenleMesaiDialog(gun);
-                    },
-                  ),
-                  Dekor.cizgi15,
-                  ListTile(
-                    title: const Text(
-                      'Mesai Sil',
-                      style: TextStyle(fontSize: 16),
-                    ),
-                    trailing: Icon(Icons.delete, color: Renk.kirmizi),
-                    onTap: () async {
-                      Navigator.pop(context);
-                      await silMesaiDialog(gun);
-                    },
-                  ),
-                  Dekor.cizgi15,
-                ],
-
-                ListTile(
-                  title: const Text(
-                    'Mesai Ekle',
-                    style: TextStyle(fontSize: 16),
-                  ),
-                  trailing: Icon(Icons.add, color: Renk.pastelKoyuMavi),
-                  onTap: () async {
-                    Navigator.pop(context);
-                    await mesaiEkleDialog(gun, isEksik: false);
-                  },
-                ),
-                Dekor.cizgi15,
-
-                ListTile(
-                  title: const Text(
-                    'Eksik Saat Veya Mesai Ekle',
-                    style: TextStyle(fontSize: 16),
-                  ),
-                  trailing: const Icon(Icons.remove, color: Colors.red),
-                  onTap: () async {
-                    Navigator.pop(context);
-                    await mesaiEkleDialog(gun, isEksik: true);
-                  },
-                ),
+                const SizedBox(height: 30),
               ],
             ),
           ),
@@ -464,37 +344,198 @@ class IsciTakvimWidgetState extends State<IsciTakvimWidget> {
     );
   }
 
-  Future<void> calismaEkleDialog(CalismaGunModel gun) async {
-    debugPrint('=== ÇALIŞMA EKLE DIALOG BAŞLIYOR ===');
+  Widget _buildIslemGrubu({
+    required String title,
+    required IconData icon,
+    required Color color,
+    required List<Widget> children,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 8, bottom: 8),
+          child: Row(
+            children: [
+              Icon(icon, color: color, size: 18),
+              const SizedBox(width: 8),
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                  color: color,
+                  letterSpacing: 0.5,
+                ),
+              ),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8),
+          child: Column(children: children),
+        ),
+      ],
+    );
+  }
 
+  List<Widget> _buildCalismaIslemleri(CalismaGunModel gun) {
+    bool calismaVar = gun.calistiMi && gun.calismaSaati > 0;
+
+    return [
+      if (calismaVar) ...[
+        _buildIslemTile(
+          title: 'Çalışma Düzenle',
+          subtitle:
+              selectedIndex.value == 0
+                  ? '${gun.calismaSaati.toStringAsFixed(1)} saat çalışmayı düzenle'
+                  : '${gun.calismaSaati.toStringAsFixed(1)} gün çalışmayı düzenle',
+          icon: Icons.edit,
+          iconColor: Renk.pastelKoyuMavi,
+          onTap: () async {
+            Navigator.pop(context);
+            await duzenleCalismaDialog(gun);
+          },
+        ),
+        _buildIslemTile(
+          title: 'Çalışma Sil',
+          subtitle: 'Bu günün çalışma kaydını sil',
+          icon: Icons.delete_outline,
+          iconColor: Renk.kirmizi,
+          onTap: () async {
+            Navigator.pop(context);
+            await silCalismaDialog(gun);
+          },
+        ),
+      ] else ...[
+        _buildIslemTile(
+          title: 'Çalışma Ekle',
+          subtitle: 'Bu güne çalışma kaydı ekle',
+          icon: Icons.add_circle_outline,
+          iconColor: Renk.pastelAcikMavi,
+          onTap: () async {
+            Navigator.pop(context);
+            await calismaEkleDialog(gun);
+          },
+        ),
+      ],
+    ];
+  }
+
+  List<Widget> _buildMesaiIslemleri(CalismaGunModel gun) {
+    bool mesaiVar = gun.mesaiVar && gun.mesaiSaati != 0;
+
+    return [
+      if (mesaiVar) ...[
+        _buildIslemTile(
+          title: 'Mesai Düzenle',
+          subtitle:
+              selectedIndex.value == 0
+                  ? '${gun.mesaiSaati.toStringAsFixed(1)} saat mesaiyi düzenle'
+                  : '${gun.mesaiSaati.toStringAsFixed(1)} gün mesaiyi düzenle',
+          icon: Icons.edit,
+          iconColor: Renk.pastelKoyuMavi,
+          onTap: () async {
+            Navigator.pop(context);
+            await duzenleMesaiDialog(gun);
+          },
+        ),
+        _buildIslemTile(
+          title: 'Mesai Sil',
+          subtitle: 'Bu günün mesai kaydını sil',
+          icon: Icons.delete_outline,
+          iconColor: Renk.kirmizi,
+          onTap: () async {
+            Navigator.pop(context);
+            await silMesaiDialog(gun);
+          },
+        ),
+      ],
+      _buildIslemTile(
+        title: 'Mesai Ekle',
+        subtitle: 'Bu güne normal mesai ekle',
+        icon: Icons.add_circle_outline,
+        iconColor: Renk.pastelAcikMavi,
+        onTap: () async {
+          Navigator.pop(context);
+          await mesaiEkleDialog(gun, isEksik: false);
+        },
+      ),
+      _buildIslemTile(
+        title: 'Eksik Saat/Mesai Ekle',
+        subtitle: 'Eksik saat veya negatif mesai ekle',
+        icon: Icons.remove_circle_outline,
+        iconColor: Renk.kirmizi,
+        onTap: () async {
+          Navigator.pop(context);
+          await mesaiEkleDialog(gun, isEksik: true);
+        },
+      ),
+    ];
+  }
+
+  Widget _buildIslemTile({
+    required String title,
+    required String subtitle,
+    required IconData icon,
+    required Color iconColor,
+    required VoidCallback onTap,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 5),
+      child: CizgiliCerceve(
+        golge: 5,
+        child: ListTile(
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 15,
+            vertical: 2,
+          ),
+          leading: Container(
+            width: 44,
+            height: 44,
+            decoration: BoxDecoration(
+              color: iconColor.withValues(alpha: 0.1),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(icon, color: iconColor, size: 22),
+          ),
+          title: Text(
+            title,
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              color: Colors.grey.shade800,
+            ),
+          ),
+          subtitle: Text(
+            subtitle,
+            style: TextStyle(fontSize: 13, color: Colors.grey.shade600),
+          ),
+          trailing: Icon(Icons.chevron_right, color: Colors.grey.shade400),
+          onTap: onTap,
+        ),
+      ),
+    );
+  }
+
+  Future<void> calismaEkleDialog(CalismaGunModel gun) async {
     final gunTarihStr = DateFormat('dd-MM-yyyy').format(gun.tarih);
     calismaHesaplama.tarihController.text = gunTarihStr;
     calismaHesaplama.tarihCalisma = gunTarihStr;
-
-    debugPrint('Dialog çağrılıyor...');
-
     await calismaHesaplama.calismaEkleDialog(
       context,
       onUpdate: () async {
-        debugPrint('onUpdate callback tetiklendi');
         await uyarilariKaydet();
-        debugPrint('uyarilariKaydet tamamlandı');
         await _guncelleTakvimVerileri();
-        debugPrint('_guncelleTakvimVerileri tamamlandı');
-        debugPrint('=== ÇALIŞMA EKLE TAMAMLANDI ===');
       },
       kdvOrani: _kdvOrani,
       calisanTipi: _calisanTipi,
       besAktif: _besAktif,
       besOrani: _besOrani,
     );
-
-    debugPrint('Dialog kapandı');
   }
 
   Future<void> duzenleCalismaDialog(CalismaGunModel gun) async {
-    debugPrint('Çalışma düzenle dialog açılıyor');
-
     final gunTarihStr = DateFormat('dd-MM-yyyy').format(gun.tarih);
     final index = calismaHesaplama.calismaGunleri.indexWhere(
       (g) => DateFormat('dd-MM-yyyy').format(g.tarih) == gunTarihStr,
@@ -517,8 +558,6 @@ class IsciTakvimWidgetState extends State<IsciTakvimWidget> {
   }
 
   Future<void> silCalismaDialog(CalismaGunModel gun) async {
-    debugPrint('Çalışma sil dialog açılıyor');
-
     final confirm = await BilgiDialog.showConfirmationDialog(
       context: context,
       title: 'Çalışma Bilgisini Sil?',
@@ -555,13 +594,9 @@ class IsciTakvimWidgetState extends State<IsciTakvimWidget> {
     CalismaGunModel gun, {
     required bool isEksik,
   }) async {
-    debugPrint('Mesai ekle dialog açılıyor (eksik: $isEksik)');
-
     final gunTarihStr = DateFormat('dd-MM-yyyy').format(gun.tarih);
-
     mesaiHesaplama.tarihController.text = gunTarihStr;
     mesaiHesaplama.tarihMesai = gunTarihStr;
-
     await mesaiHesaplama.mesaiEkleDialog(
       context,
       onUpdate: () async {
@@ -573,12 +608,9 @@ class IsciTakvimWidgetState extends State<IsciTakvimWidget> {
   }
 
   Future<void> duzenleMesaiDialog(CalismaGunModel gun) async {
-    debugPrint('Mesai düzenle dialog açılıyor');
-
     final gunTarihStr = DateFormat('dd-MM-yyyy').format(gun.tarih);
     final mesaiTarihleri = getMesaiTarihListe();
     final index = mesaiTarihleri.indexOf(gunTarihStr);
-
     if (index != -1) {
       await mesaiHesaplama.duzenleMesaiDialog(
         context,
@@ -592,14 +624,9 @@ class IsciTakvimWidgetState extends State<IsciTakvimWidget> {
   }
 
   Future<void> silMesaiDialog(CalismaGunModel gun) async {
-    debugPrint(
-      'Mesai sil dialog açılıyor: ${DateFormat('dd-MM-yyyy').format(gun.tarih)}',
-    );
-
     final gunTarihStr = DateFormat('dd-MM-yyyy').format(gun.tarih);
     final mesaiTarihleri = mesaiHesaplama.getMesaiTarihListe();
     final index = mesaiTarihleri.indexOf(gunTarihStr);
-
     if (index == -1) {
       // ignore: use_build_context_synchronously
       Mesaj.altmesaj(context, "❌ Mesai kaydı bulunamadı", Colors.red);
@@ -615,13 +642,10 @@ class IsciTakvimWidgetState extends State<IsciTakvimWidget> {
       yesText: 'Evet, Sil',
       noText: 'Hayır',
     );
-
     if (confirm == true) {
       mesaiHesaplama.listeyiGuncelle(islem: "sil", index: index);
-
       await uyarilariKaydet();
       await _guncelleTakvimVerileri();
-
       // ignore: use_build_context_synchronously
       Mesaj.altmesaj(context, "✅ Mesai silindi", Colors.green);
     }
@@ -662,27 +686,18 @@ class IsciTakvimWidgetState extends State<IsciTakvimWidget> {
     List<CalismaGunModel> gunlerList,
   ) {
     final result = <CalismaGunModel?>[];
-
-    // İlk gün
     final firstDayOfMonth = DateTime(seciliAy.year, seciliAy.month, 1);
     final firstWeekday = firstDayOfMonth.weekday;
     final emptyCells = firstWeekday - 1;
-
-    // Boş hücreler
     for (int i = 0; i < emptyCells; i++) {
       result.add(null);
     }
-
-    // Gerçek günler (parametreden)
     result.addAll(gunlerList);
-
-    // Toplam hücre sayısı
     final totalWeeks = ((result.length) / 7).ceil();
     final totalCells = totalWeeks * 7;
     while (result.length < totalCells) {
       result.add(null);
     }
-
     return result;
   }
 
@@ -692,7 +707,6 @@ class IsciTakvimWidgetState extends State<IsciTakvimWidget> {
     final double hucreYuksekligi = 68;
     final double toplamYukseklik =
         (hucreYuksekligi * haftaSayisi) + ((haftaSayisi - 1) * 6) + 20;
-
     return Container(
       height: toplamYukseklik,
       padding: const EdgeInsets.only(left: 10, right: 10, top: 5),
@@ -709,8 +723,6 @@ class IsciTakvimWidgetState extends State<IsciTakvimWidget> {
           final item = haftalikListe[index];
           if (item == null) return Container();
           final gun = item;
-
-          // KART RENGİ
           Color kartRengi = Colors.red.shade50;
           if (gun.calistiMi && gun.mesaiVar) {
             kartRengi = Colors.blue.shade50;
@@ -719,8 +731,6 @@ class IsciTakvimWidgetState extends State<IsciTakvimWidget> {
           } else if (gun.mesaiVar) {
             kartRengi = Colors.blue.shade50;
           }
-
-          // NOTLAR
           String notlar = '';
           if (gun.calismaNotu != null && gun.calismaNotu!.isNotEmpty) {
             notlar += 'Ç: ${gun.calismaNotu!}';
@@ -731,7 +741,6 @@ class IsciTakvimWidgetState extends State<IsciTakvimWidget> {
                     ? '\nM: ${gun.mesaiNotu!}'
                     : 'M: ${gun.mesaiNotu!}';
           }
-
           return GestureDetector(
             onTap: () => showGenisletilmisGunDialog(gun),
             child: Card(
@@ -760,7 +769,6 @@ class IsciTakvimWidgetState extends State<IsciTakvimWidget> {
                           buildInfoIcon(context, notlar, iconSize: 13),
                       ],
                     ),
-
                     if (gun.calistiMi && gun.calismaSaati > 0)
                       Row(
                         children: [
@@ -782,7 +790,6 @@ class IsciTakvimWidgetState extends State<IsciTakvimWidget> {
                           ),
                         ],
                       ),
-
                     if (gun.mesaiVar)
                       Row(
                         children: [
@@ -825,8 +832,6 @@ class IsciTakvimWidgetState extends State<IsciTakvimWidget> {
       valueListenable: selectedIndex,
       builder: (context, currentIndex, _) {
         final birim = currentIndex == 0 ? "saat" : "gün";
-
-        // KART RENGİ
         Color kartRengi = Renk.pastelKirmizi;
         if (gun.calistiMi && gun.mesaiVar) {
           kartRengi = Renk.pastelMavi;
@@ -835,7 +840,6 @@ class IsciTakvimWidgetState extends State<IsciTakvimWidget> {
         } else if (gun.mesaiVar) {
           kartRengi = Renk.pastelMavi;
         }
-
         // NOTLAR
         String notlar = '';
         if (gun.calismaNotu != null && gun.calismaNotu!.isNotEmpty) {
@@ -844,7 +848,6 @@ class IsciTakvimWidgetState extends State<IsciTakvimWidget> {
         if (gun.mesaiNotu != null && gun.mesaiNotu!.isNotEmpty) {
           notlar += 'Mesai Notu: ${gun.mesaiNotu!}';
         }
-
         return Card(
           elevation: 3,
           shape: RoundedRectangleBorder(
@@ -1048,8 +1051,15 @@ class IsciTakvimWidgetState extends State<IsciTakvimWidget> {
                     selectedIndex.value = index;
                     calismaHesaplama.selectedIndex.value = index;
                     mesaiHesaplama.selectedIndex.value = index;
+                    final prefs = await SharedPreferences.getInstance();
+                    await prefs.setInt('index', index);
+
                     await uyarilariYukle();
                     await _guncelleTakvimVerileri();
+
+                    if (mounted) {
+                      setState(() {});
+                    }
                   },
                   onTipDegisti: () async {
                     calisanTipi =

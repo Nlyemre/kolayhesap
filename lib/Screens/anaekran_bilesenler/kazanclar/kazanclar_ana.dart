@@ -2,6 +2,7 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:app/Screens/anaekran_bilesenler/kazanclar/aylik_veri_model.dart';
 import 'package:app/Screens/anaekran_bilesenler/kazanclar/data_servisi.dart';
 import 'package:app/Screens/anaekran_bilesenler/kazanclar/grafik_painter.dart';
 import 'package:app/Screens/anaekran_bilesenler/kazanclar/isci_takvim_widget.dart';
@@ -90,8 +91,8 @@ class _AnagrafikState extends State<Anagrafik>
 
     try {
       final takvimState = _takvimKey.currentState;
-      if (takvimState == null || !mounted) {
-        debugPrint('HATA: Takvim state bulunamadı');
+      if (takvimState == null || !mounted || !takvimState.veriYuklendi) {
+        debugPrint('Grafik atlanıyor: Veri hazır değil');
         return;
       }
 
@@ -704,7 +705,6 @@ class _AnagrafikState extends State<Anagrafik>
 
   Widget _yuzdeGrafikWidget(AylikVeri veri) {
     final brut = veri.brutKazanc;
-    if (brut <= 0) return const SizedBox();
     final double hesaplananVergi = veri.kesintiDetaylari.vergi;
     final double hesaplananDamga = veri.kesintiDetaylari.damga;
 
@@ -750,7 +750,14 @@ class _AnagrafikState extends State<Anagrafik>
     return Column(
       children:
           veriler.map((veriItem) {
-            final double yuzde = (veriItem.tutar / brut) * 100;
+            double yuzde = 0.0;
+            if (brut > 0) {
+              yuzde = (veriItem.tutar / brut) * 100;
+              if (yuzde.isNaN || yuzde.isInfinite) {
+                yuzde = 0.0;
+              }
+            }
+
             String? istisnaBilgisi;
 
             if (veriItem.ad == 'Gelir Vergisi' &&
@@ -833,7 +840,10 @@ class _AnagrafikState extends State<Anagrafik>
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(2),
                     child: LinearProgressIndicator(
-                      value: yuzde / 100,
+                      value:
+                          (brut > 0 && !veriItem.tutar.isNaN)
+                              ? (veriItem.tutar / brut)
+                              : 0.0,
                       backgroundColor: Colors.grey.shade200,
                       valueColor: AlwaysStoppedAnimation<Color>(veriItem.renk),
                       minHeight: 6,
@@ -894,32 +904,6 @@ class _AnagrafikState extends State<Anagrafik>
               '• Tüm veriler cihazınızda yerel olarak saklanır – yedek almayı unutmayın!',
             ],
             color: Colors.red.shade50,
-          ),
-          const SizedBox(height: 20),
-
-          CizgiliCerceve(
-            golge: 5,
-            margin: const EdgeInsets.symmetric(horizontal: 10),
-            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  '📝 Çok Önemli Hatırlatma',
-                  style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  'Bu uygulama sadece tahmini hesaplama yapar. Gerçek bordro, vergi beyannamesi, SGK primleri ve yasal kesintiler için mutlaka muhasebe uzmanınıza veya SGK ya danışınız.\n\n'
-                  'Uygulamada yer alan tüm bilgiler ve hesaplamalar kişisel kullanım içindir. Uygulama hiçbir şekilde yasal veya mali sorumluluk kabul etmez.',
-                  style: TextStyle(
-                    fontSize: 13,
-                    color: Colors.grey.shade800,
-                    height: 1.4,
-                  ),
-                ),
-              ],
-            ),
           ),
         ],
       ),

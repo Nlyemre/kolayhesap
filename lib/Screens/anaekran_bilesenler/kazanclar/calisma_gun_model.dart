@@ -1,4 +1,3 @@
-// lib/Screens/anaekran_bilesenler/anaekran/calisma_model.dart
 import 'package:intl/intl.dart';
 
 class CalismaGunModel {

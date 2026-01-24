@@ -1,7 +1,7 @@
 // lib/Screens/anaekran_bilesenler/kazanclar/calisma_hesapla.dart
 import 'dart:convert';
 
-import 'package:app/Screens/anaekran_bilesenler/kazanclar/calisma_model.dart';
+import 'package:app/Screens/anaekran_bilesenler/kazanclar/calisma_gun_model.dart';
 import 'package:app/Screens/anaekran_bilesenler/kazanclar/merkezi_hesaplama_servisi.dart';
 import 'package:app/Screens/anaekran_bilesenler/veriler/degiskenler.dart';
 import 'package:app/Screens/anaekran_bilesenler/veriler/girisveriler.dart';
@@ -102,6 +102,7 @@ class _CalismaSecimDialogState extends State<CalismaSecimDialog> {
               child: AbsorbPointer(
                 child: TextField(
                   controller: widget.tarihController,
+                  style: TextStyle(fontSize: 14),
                   decoration: const InputDecoration(
                     labelText: 'Tarih',
                     suffixIcon: Icon(Icons.calendar_today),
@@ -109,7 +110,7 @@ class _CalismaSecimDialogState extends State<CalismaSecimDialog> {
                 ),
               ),
             ),
-            const SizedBox(height: 15),
+            const SizedBox(height: 5),
 
             // Çalışan Tipi Seçimi
             Padding(
@@ -177,7 +178,13 @@ class _CalismaSecimDialogState extends State<CalismaSecimDialog> {
                 ],
               ),
             ),
-            Dekor.cizgi15,
+            Divider(
+              color: Renk.cita,
+              height: 5,
+              thickness: 1,
+              indent: 5,
+              endIndent: 5,
+            ),
 
             // KDV Oranı Seçimi
             Padding(
@@ -277,43 +284,65 @@ class _CalismaSecimDialogState extends State<CalismaSecimDialog> {
                 ],
               ),
             ),
-            const SizedBox(height: 15),
+            const SizedBox(height: 5),
 
             // Not Ekle alanı
             TextField(
               controller: widget.notController,
+              style: TextStyle(fontSize: 14),
               decoration: const InputDecoration(
                 labelText: 'Not Ekle',
                 hintText: 'Çalışma detaylarını yazın (isteğe bağlı)',
                 border: OutlineInputBorder(),
               ),
-              maxLines: 2,
+              maxLines: 1,
             ),
-            const SizedBox(height: 15),
+            const SizedBox(height: 5),
 
             // Çalışma saat seçimi listesi
-            SizedBox(
-              height: 400,
-              child: ListView.separated(
+            Container(
+              height: 400, // GridView için uygun yükseklik
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: GridView.builder(
                 shrinkWrap: true,
-                physics: const AlwaysScrollableScrollPhysics(),
+                physics: const BouncingScrollPhysics(),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 4, // Her satırda 3 hücre
+                  crossAxisSpacing: 5,
+                  mainAxisSpacing: 5,
+                  childAspectRatio: 1.7, // Genişlik/Yükseklik oranı
+                ),
                 itemCount: widget.items.length,
-                separatorBuilder:
-                    (context, index) => const Divider(
-                      color: Renk.cita,
-                      height: 1,
-                      thickness: 1,
-                    ),
                 itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text(
-                      widget.items[index],
-                      style: const TextStyle(fontSize: 16),
-                    ),
+                  final item = widget.items[index];
+                  // Örnek: "0.5 Saat Çalışma" -> "0.5 saat" şeklinde kısalt
+                  final parts = item.split(' ');
+                  final deger = parts.isNotEmpty ? parts[0] : '';
+                  final birim = parts.length > 1 ? parts[1].toLowerCase() : '';
+
+                  return GestureDetector(
                     onTap: () {
                       Navigator.pop(context);
                       widget.onSelected(index);
                     },
+                    child: CizgiliCerceve(
+                      golge: 5,
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              deger,
+                              style: const TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            Text(birim, style: TextStyle(fontSize: 11)),
+                          ],
+                        ),
+                      ),
+                    ),
                   );
                 },
               ),
@@ -329,7 +358,6 @@ class _CalismaSecimDialogState extends State<CalismaSecimDialog> {
 class CalismaHesaplama {
   // KONTROLLER
   VoidCallback? onDataChanged;
-  bool veriDegisti = false;
   final tarihController = TextEditingController();
   final notController = TextEditingController();
 
@@ -408,10 +436,7 @@ class CalismaHesaplama {
 
   // BAŞLANGIÇ
   Future<void> init() async {
-    veriDegisti = false;
-    await indexCagir();
     await calismaListeCagir();
-
     if (kdvSec.text.isEmpty) {
       kdvSec.text = kdvListe[kdvSayi];
     }
@@ -467,8 +492,6 @@ class CalismaHesaplama {
     if (islem == "sil" && index != null) {
       if (index >= 0 && index < calismaGunleri.length) {
         calismaGunleri.removeAt(index);
-
-        veriDegisti = true;
         await calismaListeKaydet();
         notController.clear();
         hesaplaToplamlar();
@@ -582,7 +605,6 @@ class CalismaHesaplama {
 
     // 9. KAYDET VE BİLDİR (sadece ekleme ve düzenleme için)
     if (islem != "sil") {
-      veriDegisti = true;
       await calismaListeKaydet();
       notController.clear();
       hesaplaToplamlar();
@@ -650,19 +672,13 @@ class CalismaHesaplama {
     );
   }
 
-  // YÜKLEME METOTLARI
-  Future<void> indexCagir() async {
-    final prefs = await SharedPreferences.getInstance();
-    selectedIndex.value = prefs.getInt('index') ?? 0;
-  }
-
   Future<void> calismaListeCagir() async {
     final prefs = await SharedPreferences.getInstance();
     calisanTipi = prefs.getString('calisanTipi') ?? "Normal";
 
-    final int index = selectedIndex.value;
-
-    // ÜCRET VE AYARLARI YÜKLE
+    final int savedIndex = prefs.getInt('index') ?? 0;
+    selectedIndex.value = savedIndex;
+    final int index = savedIndex;
     double saatUcretiYukle =
         prefs.getDouble('$index-$secilenYil-$secilenAy-saatUcreti') ?? 0.0;
     int kdvSayiValue =
@@ -727,7 +743,6 @@ class CalismaHesaplama {
     required bool besAktif,
     required double besOrani,
   }) async {
-    WidgetsBinding.instance.focusManager.primaryFocus?.unfocus();
     // DETAYLI ÜCRET KONTROLÜ
     String ucretHatasi = '';
 

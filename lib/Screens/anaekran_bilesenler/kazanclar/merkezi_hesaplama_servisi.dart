@@ -1,4 +1,3 @@
-// lib/Screens/anaekran_bilesenler/kazanclar/merkezi_hesaplama_servisi.dart
 import 'package:app/Screens/anaekran_bilesenler/veriler/girisveriler.dart';
 import 'package:flutter/foundation.dart';
 
@@ -26,7 +25,7 @@ class MerkeziHesaplamaServisi {
 
     // DEBUG
     if (kDebugMode) {
-      debugPrint('=== HESAP BORDRO BAŞLANGIÇ (ÇÖZÜM 3) ===');
+      debugPrint('=== HESAP BORDRO BAŞLANGIÇ ===');
       debugPrint('Tarih: $hesaplamaTarihi');
       debugPrint('Brüt: $brut');
       debugPrint('Çalışma gün sayısı: $calismaGunSayisi');
@@ -54,7 +53,7 @@ class MerkeziHesaplamaServisi {
     // 6. Damga Vergisi
     double damgaVergisi = brut * 0.00759;
 
-    // 7. AGİ İstisnası - YILA GÖRE (ÇÖZÜM 3)
+    // 7. AGİ İstisnası - YILA GÖRE
     double agiIstisnasi = 0.0;
     final agiListesi = GirisVerileriManager.gelirVergisiIstisnasi;
 
@@ -62,13 +61,11 @@ class MerkeziHesaplamaServisi {
       double aylikAgi = agiListesi[ayIndex];
 
       if (kDebugMode) {
-        debugPrint('AGİ Hesaplama (ÇÖZÜM 3):');
+        debugPrint('AGİ Hesaplama:');
         debugPrint('  Aylık AGİ: $aylikAgi TL');
       }
 
       if (calismaGunSayisi != null && calismaGunSayisi > 0) {
-        // ÇÖZÜM 3: (aylık × gün) ÷ 30 formülü
-        // Bu formülle 30 gün için tam aylık değer elde edilir
         agiIstisnasi = (aylikAgi * calismaGunSayisi) / 30.0;
 
         if (kDebugMode) {
@@ -93,7 +90,7 @@ class MerkeziHesaplamaServisi {
       }
     }
 
-    // 8. Damga Vergisi İstisnası - YILA GÖRE (ÇÖZÜM 3)
+    // 8. Damga Vergisi İstisnası - YILA GÖRE
     double damgaIstisnasi = 0.0;
     final damgaListesi = GirisVerileriManager.damgaVergisiIstisnasi;
 
@@ -105,7 +102,7 @@ class MerkeziHesaplamaServisi {
         damgaIstisnasi = (aylikDamgaIstisnasi * calismaGunSayisi) / 30.0;
 
         if (kDebugMode) {
-          debugPrint('Damga İstisnası (ÇÖZÜM 3):');
+          debugPrint('Damga İstisnası:');
           debugPrint('  $calismaGunSayisi gün için:');
           debugPrint(
             '    Formül: ($aylikDamgaIstisnasi × $calismaGunSayisi) ÷ 30 = $damgaIstisnasi TL',
@@ -144,7 +141,7 @@ class MerkeziHesaplamaServisi {
     double net = brut - toplamKesinti;
 
     if (kDebugMode) {
-      debugPrint('=== HESAP SONUÇLARI (ÇÖZÜM 3) ===');
+      debugPrint('=== HESAP SONUÇLARI ===');
       debugPrint('AGİ istisnası: $agiIstisnasi TL');
       debugPrint('Damga istisnası: $damgaIstisnasi TL');
       debugPrint('Net: $net TL');
@@ -202,15 +199,14 @@ class MerkeziHesaplamaServisi {
     double aylikDamgaIstisnasi =
         ayIndex < damgaListesi.length ? damgaListesi[ayIndex] : 0.0;
 
-    // ÇÖZÜM 3: Günlere göre oransal hesaplama
-    // Formül: (aylık × gün) ÷ 30
+    // Günlere göre oransal hesaplama
     double uygulanacakAgiIstisnasi =
         (aylikAgiIstisnasi * efektifGunSayisi) / 30.0;
     double uygulanacakDamgaIstisnasi =
         (aylikDamgaIstisnasi * efektifGunSayisi) / 30.0;
 
     if (kDebugMode) {
-      debugPrint('=== GÜNLÜK TOPLU BORDRO (ÇÖZÜM 3) ===');
+      debugPrint('=== GÜNLÜK TOPLU BORDRO ===');
       debugPrint('Etkin gün sayısı: $efektifGunSayisi');
       debugPrint('Aylık AGİ: $aylikAgiIstisnasi TL');
       debugPrint('Aylık Damga: $aylikDamgaIstisnasi TL');
@@ -287,8 +283,7 @@ class MerkeziHesaplamaServisi {
     };
   }
 
-  // ==================== DİĞER METOTLAR (Aynı kalacak) ====================
-
+  // ==================== DİĞER METOTLAR ====================
   double calismaBrutHesapla({
     required double calismaSaati,
     required int kaydedilenIndex,

@@ -103,284 +103,288 @@ class _KidemState extends State<Kidem> {
 
         title: const Text("Kıdem Tazminat Sonuçları"),
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: SingleChildScrollView(
-              controller: _scrollController,
-              physics: const BouncingScrollPhysics(),
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 200,
-                    child: CemberAna(
-                      deger1: double.parse(widget.kidemveri4),
-                      isim1: "Kıdem Tazminatı",
-                      deger2: double.parse(widget.kidemveri9),
-                      isim2: "İhbar Tazminatı",
+      body: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        behavior: HitTestBehavior.opaque,
+        child: Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                controller: _scrollController,
+                physics: const BouncingScrollPhysics(),
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: 200,
+                      child: CemberAna(
+                        deger1: double.parse(widget.kidemveri4),
+                        isim1: "Kıdem Tazminatı",
+                        deger2: double.parse(widget.kidemveri9),
+                        isim2: "İhbar Tazminatı",
+                      ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(
-                      top: 5,
-                      left: 16,
-                      right: 16,
-                      bottom: 10,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Container(
-                          height: 20,
-                          width: 20,
-                          padding: const EdgeInsets.all(8.0),
-                          decoration: const BoxDecoration(
-                            color: Renk.pastelKoyuMavi,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Color.fromRGBO(0, 0, 0, 0.2),
-                                offset: Offset(3, 3),
-                                blurRadius: 5,
-                              ),
-                            ],
-                          ),
-                        ),
-                        const Padding(
-                          padding: EdgeInsets.only(left: 16),
-                          child: Text(
-                            'Kıdem Tazminatı',
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 16),
-                            child: Text(
-                              '${NumberFormat("#,##0.00", "tr_TR").format(double.parse(widget.kidemveri4))} TL',
-                              textAlign: TextAlign.end,
-                              style: const TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold,
-                                color: Renk.pastelKoyuMavi,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(
-                      top: 5,
-                      left: 16,
-                      right: 16,
-                      bottom: 10,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Container(
-                          height: 20,
-                          width: 20,
-                          padding: const EdgeInsets.all(8.0),
-                          decoration: const BoxDecoration(
-                            color: Renk.pastelAcikMavi,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Color.fromRGBO(0, 0, 0, 0.2),
-                                offset: Offset(3, 3),
-                                blurRadius: 5,
-                              ),
-                            ],
-                          ),
-                        ),
-                        widget.kidemveri13 == 0
-                            ? const Padding(
-                              padding: EdgeInsets.only(left: 16),
-                              child: Text(
-                                'İhbar Tazminatı',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w400,
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        top: 5,
+                        left: 16,
+                        right: 16,
+                        bottom: 10,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Container(
+                            height: 20,
+                            width: 20,
+                            padding: const EdgeInsets.all(8.0),
+                            decoration: const BoxDecoration(
+                              color: Renk.pastelKoyuMavi,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Color.fromRGBO(0, 0, 0, 0.2),
+                                  offset: Offset(3, 3),
+                                  blurRadius: 5,
                                 ),
+                              ],
+                            ),
+                          ),
+                          const Padding(
+                            padding: EdgeInsets.only(left: 16),
+                            child: Text(
+                              'Kıdem Tazminatı',
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w400,
                               ),
-                            )
-                            : Padding(
+                            ),
+                          ),
+                          Expanded(
+                            child: Padding(
                               padding: const EdgeInsets.only(left: 16),
                               child: Text(
-                                'İhbar Tazminatı + ${widget.kidemveri12}',
+                                '${NumberFormat("#,##0.00", "tr_TR").format(double.parse(widget.kidemveri4))} TL',
+                                textAlign: TextAlign.end,
                                 style: const TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w400,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                  color: Renk.pastelKoyuMavi,
                                 ),
                               ),
                             ),
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 16),
-                            child: Text(
-                              '${NumberFormat("#,##0.00", "tr_TR").format(double.parse(widget.kidemveri9))} TL',
-                              textAlign: TextAlign.end,
-                              style: const TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold,
-                                color: Renk.pastelKoyuMavi,
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        top: 5,
+                        left: 16,
+                        right: 16,
+                        bottom: 10,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Container(
+                            height: 20,
+                            width: 20,
+                            padding: const EdgeInsets.all(8.0),
+                            decoration: const BoxDecoration(
+                              color: Renk.pastelAcikMavi,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Color.fromRGBO(0, 0, 0, 0.2),
+                                  offset: Offset(3, 3),
+                                  blurRadius: 5,
+                                ),
+                              ],
+                            ),
+                          ),
+                          widget.kidemveri13 == 0
+                              ? const Padding(
+                                padding: EdgeInsets.only(left: 16),
+                                child: Text(
+                                  'İhbar Tazminatı',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                              )
+                              : Padding(
+                                padding: const EdgeInsets.only(left: 16),
+                                child: Text(
+                                  'İhbar Tazminatı + ${widget.kidemveri12}',
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                              ),
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 16),
+                              child: Text(
+                                '${NumberFormat("#,##0.00", "tr_TR").format(double.parse(widget.kidemveri9))} TL',
+                                textAlign: TextAlign.end,
+                                style: const TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                  color: Renk.pastelKoyuMavi,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                  Dekor.cizgi15,
-                  Padding(
-                    padding: const EdgeInsets.only(left: 6, bottom: 10),
-                    child: Yansatirikili.satir(
-                      'Toplam Tazminat',
-                      '${NumberFormat("#,##0.00", "tr_TR").format(double.parse(toplama(widget.kidemveri4, widget.kidemveri9)))} TL',
+                    Dekor.cizgi15,
+                    Padding(
+                      padding: const EdgeInsets.only(left: 6, bottom: 10),
+                      child: Yansatirikili.satir(
+                        'Toplam Tazminat',
+                        '${NumberFormat("#,##0.00", "tr_TR").format(double.parse(toplama(widget.kidemveri4, widget.kidemveri9)))} TL',
+                        Renk.pastelKoyuMavi,
+                      ),
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.only(left: 10, right: 10),
+                      child: RepaintBoundary(child: YerelReklam()),
+                    ),
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(vertical: 10.0),
+                      color: Renk.pastelKoyuMavi.withValues(alpha: 0.1),
+                      child: const Padding(
+                        padding: EdgeInsets.only(left: 15),
+                        child: Text(
+                          "KIDEM TAZMİNATI",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w400,
+                            color: Renk.pastelKoyuMavi,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Yansatirikili.satir(
+                      'Hesaplamaya Esas Gün',
+                      '${widget.kidemveri0} GÜN',
                       Renk.pastelKoyuMavi,
                     ),
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.only(left: 10, right: 10),
-                    child: RepaintBoundary(child: YerelReklam()),
-                  ),
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.symmetric(vertical: 10.0),
-                    color: Renk.pastelKoyuMavi.withValues(alpha: 0.1),
-                    child: const Padding(
-                      padding: EdgeInsets.only(left: 15),
-                      child: Text(
-                        "KIDEM TAZMİNATI",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w400,
-                          color: Renk.pastelKoyuMavi,
+                    Dekor.cizgi15,
+                    Yansatirikili.satir(
+                      'Kıdem Esas Ücret',
+                      '${NumberFormat("#,##0.00", "tr_TR").format(double.parse(widget.kidemveri1))} TL',
+                      Renk.pastelKoyuMavi,
+                    ),
+                    Dekor.cizgi15,
+                    Yansatirikili.satir(
+                      'Kıdem Tazminatı Brüt',
+                      '${NumberFormat("#,##0.00", "tr_TR").format(double.parse(widget.kidemveri2))} TL',
+                      Renk.pastelKoyuMavi,
+                    ),
+                    Dekor.cizgi15,
+                    Yansatirikili.satir(
+                      'Damga Vergi Kesintisi',
+                      '- ${NumberFormat("#,##0.00", "tr_TR").format(double.parse(widget.kidemveri3))} TL',
+                      Renk.kirmizi,
+                    ),
+                    Dekor.cizgi15,
+                    Yansatirikili.satir(
+                      'Net Kıdem Tazminatı',
+                      '${NumberFormat("#,##0.00", "tr_TR").format(double.parse(widget.kidemveri4))} TL',
+                      Renk.pastelKoyuMavi,
+                    ),
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(vertical: 10.0),
+                      color: Renk.pastelKoyuMavi.withValues(alpha: 0.1),
+                      child: const Padding(
+                        padding: EdgeInsets.only(left: 15),
+                        child: Text(
+                          "İHBAR TAZMİNATI",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w400,
+                            color: Renk.pastelKoyuMavi,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 10),
-                  Yansatirikili.satir(
-                    'Hesaplamaya Esas Gün',
-                    '${widget.kidemveri0} GÜN',
-                    Renk.pastelKoyuMavi,
-                  ),
-                  Dekor.cizgi15,
-                  Yansatirikili.satir(
-                    'Kıdem Esas Ücret',
-                    '${NumberFormat("#,##0.00", "tr_TR").format(double.parse(widget.kidemveri1))} TL',
-                    Renk.pastelKoyuMavi,
-                  ),
-                  Dekor.cizgi15,
-                  Yansatirikili.satir(
-                    'Kıdem Tazminatı Brüt',
-                    '${NumberFormat("#,##0.00", "tr_TR").format(double.parse(widget.kidemveri2))} TL',
-                    Renk.pastelKoyuMavi,
-                  ),
-                  Dekor.cizgi15,
-                  Yansatirikili.satir(
-                    'Damga Vergi Kesintisi',
-                    '- ${NumberFormat("#,##0.00", "tr_TR").format(double.parse(widget.kidemveri3))} TL',
-                    Renk.kirmizi,
-                  ),
-                  Dekor.cizgi15,
-                  Yansatirikili.satir(
-                    'Net Kıdem Tazminatı',
-                    '${NumberFormat("#,##0.00", "tr_TR").format(double.parse(widget.kidemveri4))} TL',
-                    Renk.pastelKoyuMavi,
-                  ),
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.symmetric(vertical: 10.0),
-                    color: Renk.pastelKoyuMavi.withValues(alpha: 0.1),
-                    child: const Padding(
-                      padding: EdgeInsets.only(left: 15),
+                    const SizedBox(height: 10),
+                    widget.kidemveri13 == 0
+                        ? Yansatirikili.satir(
+                          'İhbar Gün',
+                          '${widget.kidemveri5} GÜN',
+                          Renk.pastelKoyuMavi,
+                        )
+                        : Yansatirikili.satir(
+                          'İhbar Gün',
+                          '${widget.kidemveri5} + ${widget.kidemveri13} GÜN',
+                          Renk.pastelKoyuMavi,
+                        ),
+                    Dekor.cizgi15,
+                    Yansatirikili.satir(
+                      'İzin Gün',
+                      '${widget.kidemveri14.toString()} GÜN',
+                      Renk.pastelKoyuMavi,
+                    ),
+                    Dekor.cizgi15,
+                    Yansatirikili.satir(
+                      'İhbar Brüt',
+                      '${NumberFormat("#,##0.00", "tr_TR").format(double.parse(widget.kidemveri6))} TL',
+                      Renk.pastelKoyuMavi,
+                    ),
+                    Dekor.cizgi15,
+                    Yansatirikili.satir(
+                      'Gelir Vergi Kesintisi ${kdvListe[widget.kidemveri11]}',
+                      '- ${NumberFormat("#,##0.00", "tr_TR").format(double.parse(widget.kidemveri7))} TL',
+                      Renk.kirmizi,
+                    ),
+                    Dekor.cizgi15,
+                    Yansatirikili.satir(
+                      'Damga Vergi Kesintisi % 0,759',
+                      '- ${NumberFormat("#,##0.00", "tr_TR").format(double.parse(widget.kidemveri8))} TL',
+                      Renk.kirmizi,
+                    ),
+                    Dekor.cizgi15,
+                    Yansatirikili.satir(
+                      'Net İhbar Tazminatı',
+                      '${NumberFormat("#,##0.00", "tr_TR").format(double.parse(widget.kidemveri9))} TL',
+                      Renk.pastelKoyuMavi,
+                    ),
+                    Dekor.cizgi15,
+                    ValueListenableBuilder<bool>(
+                      valueListenable: _showAdNotifier,
+                      builder: (context, showAd, child) {
+                        return showAd
+                            ? const Padding(
+                              padding: EdgeInsets.all(10.0),
+                              child: RepaintBoundary(child: YerelReklamiki()),
+                            )
+                            : const SizedBox.shrink();
+                      },
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.all(15.0),
                       child: Text(
-                        "İHBAR TAZMİNATI",
+                        ' Hesaplama ve hesaplatma için bu uygulamadaki veriler yasal olarak bağlayıcı değildir.Kullanıcı bu uygulamada verilen bilgileri hesaplatma sonuçlarını kendi hesaplamalarına veya kullanımlarına temel almadan önce doğrulatması gerekir.Bu sebepten dolayı bu uygulamada verilen bilgilerin ve elde edilen hesaplatma sonuçlarının doğruluna ilişkin olarak Kolay Hesap Uygulaması sorumluluk veya garanti üstlenmez.',
                         style: TextStyle(
-                          fontSize: 16,
+                          fontSize: 15,
                           fontWeight: FontWeight.w400,
-                          color: Renk.pastelKoyuMavi,
                         ),
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 10),
-                  widget.kidemveri13 == 0
-                      ? Yansatirikili.satir(
-                        'İhbar Gün',
-                        '${widget.kidemveri5} GÜN',
-                        Renk.pastelKoyuMavi,
-                      )
-                      : Yansatirikili.satir(
-                        'İhbar Gün',
-                        '${widget.kidemveri5} + ${widget.kidemveri13} GÜN',
-                        Renk.pastelKoyuMavi,
-                      ),
-                  Dekor.cizgi15,
-                  Yansatirikili.satir(
-                    'İzin Gün',
-                    '${widget.kidemveri14.toString()} GÜN',
-                    Renk.pastelKoyuMavi,
-                  ),
-                  Dekor.cizgi15,
-                  Yansatirikili.satir(
-                    'İhbar Brüt',
-                    '${NumberFormat("#,##0.00", "tr_TR").format(double.parse(widget.kidemveri6))} TL',
-                    Renk.pastelKoyuMavi,
-                  ),
-                  Dekor.cizgi15,
-                  Yansatirikili.satir(
-                    'Gelir Vergi Kesintisi ${kdvListe[widget.kidemveri11]}',
-                    '- ${NumberFormat("#,##0.00", "tr_TR").format(double.parse(widget.kidemveri7))} TL',
-                    Renk.kirmizi,
-                  ),
-                  Dekor.cizgi15,
-                  Yansatirikili.satir(
-                    'Damga Vergi Kesintisi % 0,759',
-                    '- ${NumberFormat("#,##0.00", "tr_TR").format(double.parse(widget.kidemveri8))} TL',
-                    Renk.kirmizi,
-                  ),
-                  Dekor.cizgi15,
-                  Yansatirikili.satir(
-                    'Net İhbar Tazminatı',
-                    '${NumberFormat("#,##0.00", "tr_TR").format(double.parse(widget.kidemveri9))} TL',
-                    Renk.pastelKoyuMavi,
-                  ),
-                  Dekor.cizgi15,
-                  ValueListenableBuilder<bool>(
-                    valueListenable: _showAdNotifier,
-                    builder: (context, showAd, child) {
-                      return showAd
-                          ? const Padding(
-                            padding: EdgeInsets.all(10.0),
-                            child: RepaintBoundary(child: YerelReklamiki()),
-                          )
-                          : const SizedBox.shrink();
-                    },
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.all(15.0),
-                    child: Text(
-                      ' Hesaplama ve hesaplatma için bu uygulamadaki veriler yasal olarak bağlayıcı değildir.Kullanıcı bu uygulamada verilen bilgileri hesaplatma sonuçlarını kendi hesaplamalarına veya kullanımlarına temel almadan önce doğrulatması gerekir.Bu sebepten dolayı bu uygulamada verilen bilgilerin ve elde edilen hesaplatma sonuçlarının doğruluna ilişkin olarak Kolay Hesap Uygulaması sorumluluk veya garanti üstlenmez.',
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                ],
+                    const SizedBox(height: 20),
+                  ],
+                ),
               ),
             ),
-          ),
-          const RepaintBoundary(child: BannerReklamiki()),
-        ],
+            const RepaintBoundary(child: BannerReklamiki()),
+          ],
+        ),
       ),
     );
   }

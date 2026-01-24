@@ -985,6 +985,7 @@ class _MesaiSecimDialogState extends State<MesaiSecimDialog> {
               child: AbsorbPointer(
                 child: TextField(
                   controller: widget.tarihController,
+                  style: TextStyle(fontSize: 14),
                   decoration: const InputDecoration(
                     labelText: 'Tarih',
                     suffixIcon: Icon(Icons.calendar_today),
@@ -1243,6 +1244,7 @@ class _MesaiSecimDialogState extends State<MesaiSecimDialog> {
             // Not Ekle alanı
             TextField(
               controller: widget.notController,
+              style: TextStyle(fontSize: 14),
               decoration: const InputDecoration(
                 labelText: 'Not Ekle',
                 hintText: 'Mesai detaylarını yazın (isteğe bağlı)',
@@ -1251,30 +1253,51 @@ class _MesaiSecimDialogState extends State<MesaiSecimDialog> {
             ),
             const SizedBox(height: 10),
 
-            // Mesai saat/gün seçimi listesi
-            SizedBox(
-              height: 2000, // Sabit bir yükseklik belirleyin
-              child: ListView.separated(
+            // Çalışma saat seçimi listesi
+            Container(
+              height: 500, // GridView için uygun yükseklik
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: GridView.builder(
                 shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
+                physics: const BouncingScrollPhysics(),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 4, // Her satırda 3 hücre
+                  crossAxisSpacing: 5,
+                  mainAxisSpacing: 5,
+                  childAspectRatio: 1.7, // Genişlik/Yükseklik oranı
+                ),
                 itemCount: widget.items.length,
-                separatorBuilder:
-                    (context, index) => const Divider(
-                      color: Renk.cita,
-                      height: 1,
-                      thickness: 1,
-                    ),
                 itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text(
-                      widget.items[index],
-                      style: const TextStyle(fontSize: 16),
-                    ),
+                  final item = widget.items[index];
+                  // Örnek: "0.5 Saat Çalışma" -> "0.5 saat" şeklinde kısalt
+                  final parts = item.split(' ');
+                  final deger = parts.isNotEmpty ? parts[0] : '';
+                  final birim = parts.length > 1 ? parts[1].toLowerCase() : '';
+
+                  return GestureDetector(
                     onTap: () {
                       Navigator.pop(context);
                       widget.onSelected(index);
                       widget.onUpdate?.call();
                     },
+                    child: CizgiliCerceve(
+                      golge: 5,
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              deger,
+                              style: const TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            Text(birim, style: TextStyle(fontSize: 11)),
+                          ],
+                        ),
+                      ),
+                    ),
                   );
                 },
               ),
