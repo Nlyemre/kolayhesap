@@ -1,67 +1,165 @@
-# Flutter/Dart/Pub related
+# =========================================================
+# Flutter / Dart / Pub
+# =========================================================
+
 **/doc/api/
-**/ios/Flutter/.last_build_id
 .dart_tool/
 .flutter-plugins
 .flutter-plugins-dependencies
 .packages
 .pub-cache/
 .pub/
-/build/
+build/
+**/build/
 
-# Web related
+# Web generated files
 lib/generated_plugin_registrant.dart
 
-# Symbolication related
+# Symbolication
 app.*.symbols
 
-# Obfuscation related
+# Obfuscation
 app.*.map.json
 
-# iOS related files
-**/Pods/
-**/ios/Flutter/.symlinks/
-**/ios/DerivedData/
-**/ios/Flutter/ephemeral/
-Flutter/App.framework
-Flutter/Flutter.framework
-Flutter/Flutter.podspec
-Flutter/Generated.xcconfig
-Flutter/app.flx
-Flutter/app.zip
-Flutter/flutter_assets/
-Flutter/flutter_export_environment.sh
-ServiceDefinitions.json
-Runner/GeneratedPluginRegistrant.*
 
-# Codemagic specific
+# =========================================================
+# iOS / Xcode / CocoaPods
+# =========================================================
+
+# CocoaPods
+ios/Pods/
+**/Pods/
+
+# Flutter generated iOS files
+ios/.symlinks/
+ios/Flutter/.symlinks/
+ios/Flutter/ephemeral/
+ios/Flutter/.last_build_id
+
+ios/Flutter/Generated.xcconfig
+ios/Flutter/flutter_export_environment.sh
+
+ios/Flutter/App.framework
+ios/Flutter/Flutter.framework
+ios/Flutter/Flutter.podspec
+
+ios/Flutter/app.flx
+ios/Flutter/app.zip
+ios/Flutter/flutter_assets/
+
+# Xcode generated data
+ios/DerivedData/
+**/DerivedData/
+
+ios/Runner/GeneratedPluginRegistrant.h
+ios/Runner/GeneratedPluginRegistrant.m
+
+# Xcode user-specific files
+**/*.xcuserstate
+**/xcuserdata/
+
+# Service definitions
+ServiceDefinitions.json
+
+# Swift Package Manager generated data
+.swiftpm/
+ios/.swiftpm/
+
+
+# =========================================================
+# IMPORTANT iOS files that MUST stay in Git
+# =========================================================
+
+# Podfile must be committed
+!ios/Podfile
+
+# Podfile.lock should normally be committed for application projects
+!ios/Podfile.lock
+
+# Flutter configuration source files
+!ios/Flutter/Debug.xcconfig
+!ios/Flutter/Release.xcconfig
+!ios/Flutter/AppFrameworkInfo.plist
+
+# Xcode project/workspace
+!ios/Runner.xcodeproj/
+!ios/Runner.xcworkspace/
+
+# Codemagic export configuration
 !ios/ExportOptions.plist
 
-# Miscellaneous
-*.class
-*.log
-*.pyc
-*.swp
-.DS_Store
-.atom/
-.build/
-.buildlog/
-.history
-.svn/
-.swiftpm/
-migrate_working_dir/
+# Firebase iOS configuration
+!ios/Runner/GoogleService-Info.plist
 
-# IntelliJ related
+# Entitlements / plist
+!ios/Runner/Runner.entitlements
+!ios/Runner/Info.plist
+
+
+# =========================================================
+# Android generated files
+# =========================================================
+
+android/.gradle/
+android/app/build/
+android/build/
+
+# Local machine Android settings
+android/local.properties
+
+# Signing secrets
+android/key.properties
+**/*.jks
+**/*.keystore
+
+
+# =========================================================
+# IDE / Editor
+# =========================================================
+
+.idea/
 *.iml
 *.ipr
 *.iws
-.idea/
 
-# Files to include in GitHub
+.vscode/
+
+.atom/
+.history/
+
+*.swp
+
+
+# =========================================================
+# OS / temporary files
+# =========================================================
+
+.DS_Store
+Thumbs.db
+
+*.class
+*.log
+*.pyc
+
+.build/
+.buildlog/
+migrate_working_dir/
+
+.svn/
+
+
+# =========================================================
+# Firebase / local tools
+# =========================================================
+
+firebase-tools-instant-win.exe
+
+
+# =========================================================
+# Xcode default shared files
+# =========================================================
+
 !default.mode1v3
 !default.mode2v3
 !default.pbxuser
 !default.perspectivev3
-
-# Firebase ile ilgili dosyalar
-firebase-tools-instant-win.exe
