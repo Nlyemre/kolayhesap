@@ -1,0 +1,61 @@
+workflows:
+  ios-production:
+    name: iOS Production Build
+    environment:
+      cocoapods: default
+      vars:
+        APP_ID: "com.kolayhesap.app"
+        BUILD_NUMBER: "$CM_BUILD_NUMBER"
+
+    triggering:
+      events:
+        - push
+      branch_patterns:
+        - pattern: "main"
+          include: true
+
+    scripts:
+      # 1. Projeyi temizle ve bağımlılıkları yükle
+      - name: Clean and Install
+        script: |
+          flutter clean
+          flutter pub get
+          flutter pub upgrade
+          cd ios && pod install --repo-update && cd ..
+
+      # 2. Build numarasını güncelle
+      - name: Update Build Numbers
+        script: |
+          cd ios
+          agvtool new-version -all $BUILD_NUMBER
+          agvtool new-marketing-version $FLUTTER_BUILD_NAME
+          cd ..
+
+      # 3. iOS build işlemi
+      - name: Build iOS
+        script: |
+          flutter build ios --release \
+            --no-codesign \
+            --dart-define=APP_ID=$APP_ID
+
+      # 5. Archive oluştur
+      - name: Create Archive
+        script: |
+          xcodebuild archive \
+            -workspace ios/Runner.xcworkspace \
+            -scheme Runner \
+            -archivePath build/ios/Runner.xcarchive \
+            -allowProvisioningUpdates
+
+      # 6. IPA oluştur
+      - name: Export IPA
+        script: |
+          xcodebuild -exportArchive \
+            -archivePath build/ios/Runner.xcarchive \
+            -exportOptionsPlist ios/ExportOptions.plist \
+            -exportPath build/ios/ipa \
+            -allowProvisioningUpdates
+
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - build/ios/Runner.xcarchive/**/*.dSYM

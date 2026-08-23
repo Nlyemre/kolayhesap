@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>API_KEY</key>
+	<string>AIzaSyDLJv5ZS3OWJYspDfTEzVjiv74EPSMgMGY</string>
+	<key>GCM_SENDER_ID</key>
+	<string>831534707030</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.kolayhesap.app</string>
+	<key>PROJECT_ID</key>
+	<string>kolayhesappro-f8747</string>
+	<key>STORAGE_BUCKET</key>
+	<string>kolayhesappro-f8747.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false/>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<true/>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true/>
+	<key>IS_GCM_ENABLED</key>
+	<true/>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true/>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:831534707030:ios:c3cb5fa15492e5622926f7</string>
+	<key>DATABASE_URL</key>
+	<string>https://kolayhesappro-f8747-default-rtdb.europe-west1.firebasedatabase.app</string>
+</dict>
+</plist>
