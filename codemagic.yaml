@@ -1,11 +1,23 @@
 workflows:
   ios-production:
     name: iOS Production Build
+    max_build_duration: 120
+    instance_type: mac_mini_m2
+
+    integrations:
+      app_store_connect: codemagic
+
     environment:
+      flutter: stable
+      xcode: latest
       cocoapods: default
+
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: com.kolayhesap.app
+
       vars:
         APP_ID: "com.kolayhesap.app"
-        BUILD_NUMBER: "$CM_BUILD_NUMBER"
 
     triggering:
       events:
@@ -13,49 +25,137 @@ workflows:
       branch_patterns:
         - pattern: "main"
           include: true
+          source: true
 
     scripts:
-      # 1. Projeyi temizle ve bağımlılıkları yükle
-      - name: Clean and Install
+      # ------------------------------------------------------------
+      # 1. Flutter projesini temizle
+      # ------------------------------------------------------------
+      - name: Clean Flutter Project
         script: |
+          echo "=== Flutter Clean ==="
           flutter clean
+
+      # ------------------------------------------------------------
+      # 2. Flutter paketlerini yükle
+      # pub upgrade KULLANMIYORUZ.
+      # pubspec.lock içindeki test edilmiş sürümler kullanılacak.
+      # ------------------------------------------------------------
+      - name: Get Flutter Packages
+        script: |
+          echo "=== Flutter Pub Get ==="
           flutter pub get
-          flutter pub upgrade
-          cd ios && pod install --repo-update && cd ..
 
-      # 2. Build numarasını güncelle
-      - name: Update Build Numbers
+      # ------------------------------------------------------------
+      # 3. Eski CocoaPods kalıntılarını temizle
+      # ------------------------------------------------------------
+      - name: Clean CocoaPods
         script: |
-          cd ios
-          agvtool new-version -all $BUILD_NUMBER
-          agvtool new-marketing-version $FLUTTER_BUILD_NAME
-          cd ..
+          echo "=== Cleaning CocoaPods ==="
 
-      # 3. iOS build işlemi
-      - name: Build iOS
-        script: |
-          flutter build ios --release \
-            --no-codesign \
-            --dart-define=APP_ID=$APP_ID
+          cd "$CM_BUILD_DIR/ios"
 
-      # 5. Archive oluştur
-      - name: Create Archive
-        script: |
-          xcodebuild archive \
-            -workspace ios/Runner.xcworkspace \
-            -scheme Runner \
-            -archivePath build/ios/Runner.xcarchive \
-            -allowProvisioningUpdates
+          rm -rf Pods
+          rm -rf .symlinks
+          rm -f Podfile.lock
 
-      # 6. IPA oluştur
-      - name: Export IPA
+          cd "$CM_BUILD_DIR"
+
+      # ------------------------------------------------------------
+      # 4. CocoaPods paketlerini yeniden oluştur
+      #
+      # Bu adım özellikle şu dosyaların yeniden üretilmesi için önemli:
+      #
+      # Pods-Runner-resources-Release-input-files.xcfilelist
+      # Pods-Runner-resources-Release-output-files.xcfilelist
+      # Pods-Runner-frameworks-Release-input-files.xcfilelist
+      # Pods-Runner-frameworks-Release-output-files.xcfilelist
+      # ------------------------------------------------------------
+      - name: Install CocoaPods
         script: |
-          xcodebuild -exportArchive \
-            -archivePath build/ios/Runner.xcarchive \
-            -exportOptionsPlist ios/ExportOptions.plist \
-            -exportPath build/ios/ipa \
-            -allowProvisioningUpdates
+          echo "=== Installing CocoaPods ==="
+
+          cd "$CM_BUILD_DIR/ios"
+
+          pod install --repo-update
+
+          echo "=== CocoaPods installation completed ==="
+
+          echo "=== Checking Pods Runner support files ==="
+
+          ls -la "Pods/Target Support Files/Pods-Runner" || true
+
+          cd "$CM_BUILD_DIR"
+
+      # ------------------------------------------------------------
+      # 5. Flutter analyze
+      # ------------------------------------------------------------
+      - name: Flutter Analyze
+        script: |
+          echo "=== Flutter Analyze ==="
+          flutter analyze
+
+      # ------------------------------------------------------------
+      # 6. Apple provisioning profile / certificate ayarlarını
+      # Xcode projesine uygula.
+      #
+      # Codemagic bu işlem sırasında export_options.plist üretir.
+      # ------------------------------------------------------------
+      - name: Configure iOS Code Signing
+        script: |
+          echo "=== Configuring iOS Code Signing ==="
+
+          xcode-project use-profiles
+
+          echo "=== Export Options ==="
+
+          if [ -f "/Users/builder/export_options.plist" ]; then
+            cat /Users/builder/export_options.plist
+          fi
+
+      # ------------------------------------------------------------
+      # 7. Build numarası
+      #
+      # CM_BUILD_NUMBER Codemagic tarafından otomatik oluşturulur.
+      # ------------------------------------------------------------
+      - name: Show Build Information
+        script: |
+          echo "Bundle ID: $APP_ID"
+          echo "Codemagic Build Number: $CM_BUILD_NUMBER"
+          flutter --version
+          xcodebuild -version
+          pod --version
+
+      # ------------------------------------------------------------
+      # 8. Signed IPA üret
+      #
+      # flutter build ios + xcodebuild archive + exportArchive
+      # şeklinde üç ayrı build YAPMIYORUZ.
+      #
+      # Flutter doğrudan archive + export işlemini yönetecek.
+      # ------------------------------------------------------------
+      - name: Build Signed IPA
+        script: |
+          echo "=== Building iOS IPA ==="
+
+          flutter build ipa \
+            --release \
+            --build-number="$CM_BUILD_NUMBER" \
+            --dart-define=APP_ID="$APP_ID" \
+            --export-options-plist=/Users/builder/export_options.plist
 
     artifacts:
       - build/ios/ipa/*.ipa
-      - build/ios/Runner.xcarchive/**/*.dSYM
+      - build/ios/archive/*.xcarchive/**/*.dSYM
+      - build/ios/archive/*.xcarchive
+      - /tmp/xcodebuild_logs/*.log
+
+    publishing:
+      app_store_connect:
+        auth: integration
+
+        # İlk aşamada TestFlight'a otomatik gönder.
+        submit_to_testflight: true
+
+        # App Store'a otomatik yayınlama yapma.
+        submit_to_app_store: false
