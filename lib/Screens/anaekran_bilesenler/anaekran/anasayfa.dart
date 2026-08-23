@@ -559,7 +559,7 @@ class AppDrawer extends StatelessWidget {
 
   Widget _buildVersionInfo() {
     return const Text(
-      'Version 3.0.0',
+      'Version 3.0.4',
       style: TextStyle(fontSize: 10.0),
       textAlign: TextAlign.center,
     );
