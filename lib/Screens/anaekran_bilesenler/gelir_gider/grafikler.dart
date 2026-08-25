@@ -360,13 +360,13 @@ class BarGrafik extends StatelessWidget {
           frequency: 1.0,
           max: etiketler.length.toDouble() - 1,
           min: 0.0,
-          textStyle: const TextStyle(color: Renk.koyuMavi, fontSize: 10),
+          textStyle: const TextStyle(color: Renk.pastelKoyuMavi, fontSize: 10),
         ),
         y: ChartAxisSettingsAxis(
           frequency: _calculateYFrequency(maxValue),
           max: maxValue,
           min: 0.0,
-          textStyle: const TextStyle(color: Renk.koyuMavi, fontSize: 10),
+          textStyle: const TextStyle(color: Renk.pastelKoyuMavi, fontSize: 10),
         ),
       ),
       labelX: (value) {
@@ -393,12 +393,12 @@ class BarGrafik extends StatelessWidget {
             seciliTur == IslemTuru.tumu
                 ? [
                   ChartGroupBarDataItem(
-                    color: Renk.acikMavi,
+                    color: Renk.pastelAcikMavi,
                     value: gelirDegerler[index],
                     x: index.toDouble(),
                   ),
                   ChartGroupBarDataItem(
-                    color: Renk.koyuMavi,
+                    color: Renk.pastelKoyuMavi,
                     value: giderDegerler[index],
                     x: index.toDouble(),
                   ),
@@ -407,8 +407,8 @@ class BarGrafik extends StatelessWidget {
                   ChartGroupBarDataItem(
                     color:
                         seciliTur == IslemTuru.giderler
-                            ? Renk.koyuMavi
-                            : Renk.acikMavi,
+                            ? Renk.pastelKoyuMavi
+                            : Renk.pastelAcikMavi,
                     value:
                         seciliTur == IslemTuru.giderler
                             ? giderDegerler[index]

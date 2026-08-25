@@ -69,7 +69,7 @@ class _GizlilikState extends State<Gizlilik> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: const BackButton(color: Renk.koyuMavi),
+        leading: const BackButton(color: Renk.pastelKoyuMavi),
 
         title: const Text("Gizlilik Politikası"),
       ),

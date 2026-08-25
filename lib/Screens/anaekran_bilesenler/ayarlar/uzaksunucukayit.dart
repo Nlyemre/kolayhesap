@@ -72,7 +72,7 @@ class _SunucuKayitState extends State<SunucuKayit> {
       },
       child: Scaffold(
         appBar: AppBar(
-          leading: const BackButton(color: Renk.koyuMavi),
+          leading: const BackButton(color: Renk.pastelKoyuMavi),
 
           title: const Text(
             "Uzak Sunucuya Kayıt",

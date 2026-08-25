@@ -145,11 +145,15 @@ class ZamHesaplamaState extends State<ZamHesaplama> {
               padding: const EdgeInsets.all(5.0),
               child: IconButton(
                 onPressed: ciktilar,
-                icon: const Icon(Icons.share, size: 20.0, color: Renk.koyuMavi),
+                icon: const Icon(
+                  Icons.share,
+                  size: 20.0,
+                  color: Renk.pastelKoyuMavi,
+                ),
               ),
             ),
           ],
-          leading: const BackButton(color: Renk.koyuMavi),
+          leading: const BackButton(color: Renk.pastelKoyuMavi),
           centerTitle: true,
           title: Text(
             widget.sayfaId == 3
@@ -379,14 +383,14 @@ class ZamHesaplamaState extends State<ZamHesaplama> {
     return Container(
       height: 45,
       width: double.infinity,
-      color: Renk.koyuMavi.withValues(alpha: 0.1),
+      color: Renk.pastelKoyuMavi.withValues(alpha: 0.1),
       child: Center(
         child: Text(
           metin,
           textAlign: TextAlign.center,
           style: const TextStyle(
             fontSize: 15,
-            color: Renk.koyuMavi,
+            color: Renk.pastelKoyuMavi,
             fontWeight: FontWeight.w400,
           ),
         ),

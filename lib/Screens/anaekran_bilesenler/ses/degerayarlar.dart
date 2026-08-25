@@ -168,14 +168,14 @@ class _FrekansControlsState extends State<FrekansControls> {
                             value: value,
                             min: min,
                             max: max,
-                            activeColor: const Color.fromARGB(200, 29, 84, 147),
+                            activeColor: Renk.pastelKoyuMavi,
                             inactiveColor: const Color.fromARGB(
                               255,
                               215,
                               215,
                               215,
                             ),
-                            thumbColor: const Color.fromARGB(200, 29, 84, 147),
+                            thumbColor: Renk.pastelKoyuMavi,
                             label:
                                 '${value.toStringAsFixed(value.truncateToDouble() == value ? 0 : 1)}$unit',
                             onChanged: onChanged,
@@ -264,9 +264,9 @@ class _DelayedSliderState extends State<DelayedSlider> {
       max: widget.max,
 
       label: widget.label,
-      activeColor: const Color.fromARGB(200, 29, 84, 147),
+      activeColor: Renk.pastelKoyuMavi,
       inactiveColor: const Color.fromARGB(255, 215, 215, 215),
-      thumbColor: const Color.fromARGB(200, 29, 84, 147),
+      thumbColor: Renk.pastelKoyuMavi,
       onChanged: (value) {
         setState(() {
           _currentValue = value;

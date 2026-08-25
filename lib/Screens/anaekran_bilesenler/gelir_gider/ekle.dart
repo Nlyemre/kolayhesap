@@ -110,7 +110,7 @@ class _EkleIslemSayfasiState extends State<EkleIslemSayfasi> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(kategori.ikon, color: Renk.mavibir, size: 30),
+                  Icon(kategori.ikon, color: Renk.pastelKoyuMavi, size: 30),
                   const SizedBox(height: 8),
                   Text(
                     kategori.ad,
@@ -164,7 +164,7 @@ class _EkleIslemSayfasiState extends State<EkleIslemSayfasi> {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
-        leading: const BackButton(color: Renk.koyuMavi),
+        leading: const BackButton(color: Renk.pastelKoyuMavi),
         title: Text(
           widget.duzenlenecekIslem != null
               ? (_giderMi ? 'Gider Düzenle' : 'Gelir Düzenle')

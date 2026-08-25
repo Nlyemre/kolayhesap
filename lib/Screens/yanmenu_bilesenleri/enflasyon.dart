@@ -60,18 +60,14 @@ class _EnflasyonState extends State<Enflasyon> {
               },
             ),
           )
-          ..loadRequest(
-            Uri.parse(
-              'https://www.tcmb.gov.tr/wps/wcm/connect/TR/TCMB+TR/Main+Menu/Istatistikler/Enflasyon+Verileri/Tuketici+Fiyatlari',
-            ),
-          );
+          ..loadRequest(Uri.parse('https://kolayhesappro.com/eflasyon'));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: const BackButton(color: Renk.koyuMavi),
+        leading: const BackButton(color: Renk.pastelKoyuMavi),
 
         title: const Text("Enflasyon"),
       ),

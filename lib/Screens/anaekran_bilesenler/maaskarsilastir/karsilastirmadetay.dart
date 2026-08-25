@@ -90,10 +90,14 @@ class _KarsilastirmaDetayState extends State<KarsilastirmaDetay> {
         actions: [
           IconButton(
             onPressed: _paylas,
-            icon: const Icon(Icons.share, size: 20.0, color: Renk.koyuMavi),
+            icon: const Icon(
+              Icons.share,
+              size: 20.0,
+              color: Renk.pastelKoyuMavi,
+            ),
           ),
         ],
-        leading: const BackButton(color: Renk.koyuMavi),
+        leading: const BackButton(color: Renk.pastelKoyuMavi),
 
         title: Text("${widget.aydetay2} Ayı Karşılaştırma"),
       ),

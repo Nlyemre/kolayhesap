@@ -154,7 +154,7 @@ class _ZamGrafikWidgetState extends State<ZamGrafikWidget> {
                   height: 40,
                   decoration: const BoxDecoration(
                     gradient: LinearGradient(
-                      colors: [Renk.acikMavi, Renk.koyuMavi],
+                      colors: [Renk.pastelAcikMavi, Renk.pastelKoyuMavi],
                       begin: Alignment(1.0, -1.0),
                       end: Alignment(1.0, 1.0),
                     ),
@@ -179,7 +179,7 @@ class _ZamGrafikWidgetState extends State<ZamGrafikWidget> {
                       height: 40,
                       decoration: const BoxDecoration(
                         gradient: LinearGradient(
-                          colors: [Renk.acikMavi, Renk.acikMavi],
+                          colors: [Renk.pastelAcikMavi, Renk.pastelAcikMavi],
                           begin: Alignment(1.0, -1.0),
                           end: Alignment(1.0, 1.0),
                         ),

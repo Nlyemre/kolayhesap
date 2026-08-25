@@ -184,10 +184,14 @@ class _IzinlerState extends State<Izinler> {
                   paylasMetin: _paylas,
                 );
               },
-              icon: const Icon(Icons.share, size: 20.0, color: Renk.koyuMavi),
+              icon: const Icon(
+                Icons.share,
+                size: 20.0,
+                color: Renk.pastelKoyuMavi,
+              ),
             ),
           ],
-          leading: const BackButton(color: Renk.koyuMavi),
+          leading: const BackButton(color: Renk.pastelKoyuMavi),
 
           title: const Text("İzinler"),
         ),
@@ -276,7 +280,7 @@ class _IzinlerState extends State<Izinler> {
                   "Hak ettiğiniz yıllık izin gün sayısını düzenle kısmından ekrana girebilir, kalan izin sürenizi hesaplayabilirsiniz.",
                 );
               },
-              icon: const Icon(Icons.info_outline, color: Renk.koyuMavi),
+              icon: const Icon(Icons.info_outline, color: Renk.pastelKoyuMavi),
             ),
           ],
         ),
@@ -288,7 +292,7 @@ class _IzinlerState extends State<Izinler> {
             child: Text(
               "Düzenle",
               style: TextStyle(
-                color: Renk.koyuMavi,
+                color: Renk.pastelKoyuMavi,
                 fontSize: 13,
                 fontWeight: FontWeight.w400,
               ),
@@ -382,13 +386,13 @@ class _IzinlerState extends State<Izinler> {
   Widget _izinlerListeBaslik() {
     return Container(
       height: 40,
-      color: Renk.koyuMavi.withValues(alpha: 0.1),
+      color: Renk.pastelKoyuMavi.withValues(alpha: 0.1),
       child: const Center(
         child: Text(
           "Kullanılan İzin Listesi",
           style: TextStyle(
             fontSize: 15,
-            color: Renk.koyuMavi,
+            color: Renk.pastelKoyuMavi,
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -415,7 +419,7 @@ class _IzinlerState extends State<Izinler> {
           child: Container(
             color:
                 _secilenIndex == index
-                    ? Renk.koyuMavi.withValues(alpha: 0.06)
+                    ? Renk.pastelKoyuMavi.withValues(alpha: 0.06)
                     : Colors.white,
             child: ListTile(
               title: Text(

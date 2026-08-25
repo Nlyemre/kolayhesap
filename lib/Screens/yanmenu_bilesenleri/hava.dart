@@ -344,7 +344,7 @@ class _HavaState extends State<Hava> {
                       textAlign: TextAlign.center,
                       style: const TextStyle(
                         fontSize: 16,
-                        color: Renk.koyuMavi,
+                        color: Renk.pastelKoyuMavi,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -362,7 +362,7 @@ class _HavaState extends State<Hava> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: const BackButton(color: Renk.koyuMavi),
+        leading: const BackButton(color: Renk.pastelKoyuMavi),
 
         title: const Text("Hava Durumu"),
       ),

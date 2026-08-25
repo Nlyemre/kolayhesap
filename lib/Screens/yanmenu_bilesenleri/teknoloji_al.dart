@@ -48,7 +48,7 @@ class _TeknolojiState extends State<Teknoloji> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: const BackButton(color: Renk.koyuMavi),
+        leading: const BackButton(color: Renk.pastelKoyuMavi),
 
         title: const Text("Teknoloji Haber"),
       ),

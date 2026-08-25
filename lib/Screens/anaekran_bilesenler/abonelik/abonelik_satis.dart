@@ -20,10 +20,10 @@ Widget anaKart({required Widget child}) {
     decoration: BoxDecoration(
       color: Colors.white,
       borderRadius: BorderRadius.circular(28),
-      border: Border.all(color: Renk.koyuMavi, width: 1),
+      border: Border.all(color: Renk.pastelKoyuMavi, width: 1),
       boxShadow: [
         BoxShadow(
-          color: Renk.koyuMavi.withValues(alpha: 0.15),
+          color: Renk.pastelKoyuMavi.withValues(alpha: 0.15),
           blurRadius: 20,
           offset: const Offset(0, 8),
         ),
@@ -61,7 +61,7 @@ GestureDetector ozellikliButon({
   );
 }
 
-Widget yuvarlakIcon(IconData icon, {Color renk = Renk.koyuMavi}) {
+Widget yuvarlakIcon(IconData icon, {Color renk = Renk.pastelKoyuMavi}) {
   return Container(
     decoration: const BoxDecoration(
       shape: BoxShape.circle,
@@ -204,8 +204,8 @@ class _SatinAlmaSayfasiState extends State<SatinAlmaSayfasi> {
       },
       child: Scaffold(
         appBar: AppBar(
-          leading: BackButton(color: Renk.koyuMavi, onPressed: geri),
-          iconTheme: const IconThemeData(color: Renk.koyuMavi),
+          leading: BackButton(color: Renk.pastelKoyuMavi, onPressed: geri),
+          iconTheme: const IconThemeData(color: Renk.pastelKoyuMavi),
           title: const Text('Abonelik Satın Al'),
           centerTitle: true,
         ),
@@ -223,7 +223,7 @@ class _SatinAlmaSayfasiState extends State<SatinAlmaSayfasi> {
                     style: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
-                      color: Renk.koyuMavi,
+                      color: Renk.pastelKoyuMavi,
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -239,10 +239,10 @@ class _SatinAlmaSayfasiState extends State<SatinAlmaSayfasi> {
                     height: 90,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: Renk.koyuMavi, width: 1),
+                      border: Border.all(color: Renk.pastelKoyuMavi, width: 1),
                       boxShadow: [
                         BoxShadow(
-                          color: Renk.koyuMavi.withValues(alpha: 0.1),
+                          color: Renk.pastelKoyuMavi.withValues(alpha: 0.1),
                           blurRadius: 12,
                           offset: const Offset(0, 6),
                         ),
@@ -254,7 +254,7 @@ class _SatinAlmaSayfasiState extends State<SatinAlmaSayfasi> {
                           text: '₺',
                           style: TextStyle(
                             fontSize: 28,
-                            color: Renk.koyuMavi,
+                            color: Renk.pastelKoyuMavi,
                             fontWeight: FontWeight.bold,
                           ),
                           children: [
@@ -263,7 +263,7 @@ class _SatinAlmaSayfasiState extends State<SatinAlmaSayfasi> {
                               style: TextStyle(
                                 fontSize: 56,
                                 fontWeight: FontWeight.w900,
-                                color: Renk.koyuMavi,
+                                color: Renk.pastelKoyuMavi,
                               ),
                             ),
                             TextSpan(
@@ -271,7 +271,7 @@ class _SatinAlmaSayfasiState extends State<SatinAlmaSayfasi> {
                               style: TextStyle(
                                 fontSize: 36,
                                 fontWeight: FontWeight.w900,
-                                color: Renk.koyuMavi,
+                                color: Renk.pastelKoyuMavi,
                               ),
                             ),
                             TextSpan(
@@ -305,7 +305,7 @@ class _SatinAlmaSayfasiState extends State<SatinAlmaSayfasi> {
                           child: const Text(
                             'Kullanıcı Sözleşmesi ve Gizlilik Politikası’nı kabul ediyorum.',
                             style: TextStyle(
-                              color: Renk.koyuMavi,
+                              color: Renk.pastelKoyuMavi,
                               decoration: TextDecoration.underline,
                             ),
                           ),
@@ -356,7 +356,7 @@ class _SatinAlmaSayfasiState extends State<SatinAlmaSayfasi> {
               style: TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.bold,
-                color: Renk.koyuMavi,
+                color: Renk.pastelKoyuMavi,
               ),
               textAlign: TextAlign.center,
             ),
@@ -438,7 +438,7 @@ class AbonelikIptalSayfasi extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        iconTheme: const IconThemeData(color: Renk.koyuMavi),
+        iconTheme: const IconThemeData(color: Renk.pastelKoyuMavi),
         title: const Text('Abonelik İptal'),
         centerTitle: true,
       ),
@@ -515,7 +515,7 @@ class _AbonelikGeriYuklemeSayfasiState
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        iconTheme: const IconThemeData(color: Renk.koyuMavi),
+        iconTheme: const IconThemeData(color: Renk.pastelKoyuMavi),
         title: const Text('Abonelik Geri Yükleme'),
         centerTitle: true,
       ),

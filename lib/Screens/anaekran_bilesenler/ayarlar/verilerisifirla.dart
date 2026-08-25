@@ -78,7 +78,7 @@ class _AyarlarsifirlamaState extends State<Ayarlarsifirlama> {
       },
       child: Scaffold(
         appBar: AppBar(
-          leading: const BackButton(color: Renk.koyuMavi),
+          leading: const BackButton(color: Renk.pastelKoyuMavi),
 
           title: const Text(
             "Tüm Verileri Sıfırla",

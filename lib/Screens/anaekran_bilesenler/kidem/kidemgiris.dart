@@ -1,12 +1,10 @@
-import 'dart:convert';
-
 import 'package:app/Screens/anaekran_bilesenler/kidem/kidem.dart';
 import 'package:app/Screens/anaekran_bilesenler/reklam/bannerreklam_3.dart';
 import 'package:app/Screens/anaekran_bilesenler/reklam/yerelreklam_3.dart';
 import 'package:app/Screens/anaekran_bilesenler/reklam/yerelreklam_4.dart';
 import 'package:app/Screens/anaekran_bilesenler/veriler/degiskenler.dart';
+import 'package:app/Screens/anaekran_bilesenler/veriler/girisveriler.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -58,10 +56,9 @@ class _KidemGirisState extends State<KidemGiris> {
   @override
   void initState() {
     super.initState();
-
-    _veriGuncelle();
     initializeDateFormatting('tr_TR');
     _kidemcekal();
+    kidemUstSinirr = GirisVerileri2026.kidemUstSinir;
   }
 
   @override
@@ -71,21 +68,6 @@ class _KidemGirisState extends State<KidemGiris> {
     _kidemyemekKontrol.dispose();
     _kidemizinKontrol.dispose();
     super.dispose();
-  }
-
-  Future<void> _veriGuncelle() async {
-    final response = await http.get(
-      Uri.parse('https://kolayhesappro.com/giris_veriler.php'),
-    );
-
-    if (response.statusCode == 200) {
-      final Map<String, dynamic> data = jsonDecode(response.body);
-      final yeniDeger = data["KIDEM_ÜST_SINIR"] ?? 53919.68;
-
-      if (mounted) {
-        kidemUstSinirr = yeniDeger;
-      }
-    }
   }
 
   void _klavyeyiKapat() {
@@ -221,7 +203,7 @@ class _KidemGirisState extends State<KidemGiris> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: const BackButton(color: Renk.koyuMavi),
+        leading: const BackButton(color: Renk.pastelKoyuMavi),
 
         title: const Text("Kıdem Tazminatı"),
       ),
@@ -270,7 +252,7 @@ class _KidemGirisState extends State<KidemGiris> {
                           child: Text(
                             girisTarihi,
                             style: const TextStyle(
-                              color: Renk.koyuMavi,
+                              color: Renk.pastelKoyuMavi,
                               fontSize: 15,
                               fontWeight: FontWeight.w500,
                             ),
@@ -321,7 +303,7 @@ class _KidemGirisState extends State<KidemGiris> {
                           child: Text(
                             cikisTarihi,
                             style: const TextStyle(
-                              color: Renk.koyuMavi,
+                              color: Renk.pastelKoyuMavi,
                               fontSize: 15,
                               fontWeight: FontWeight.w500,
                             ),
@@ -433,7 +415,7 @@ class _KidemGirisState extends State<KidemGiris> {
                                 child: Icon(
                                   Icons.info_outline,
                                   size: 18,
-                                  color: Renk.koyuMavi,
+                                  color: Renk.pastelKoyuMavi,
                                 ),
                               ),
                             ),
@@ -445,7 +427,7 @@ class _KidemGirisState extends State<KidemGiris> {
                               icon: const Icon(
                                 Icons.arrow_back_ios,
                                 size: 20,
-                                color: Renk.koyuMavi,
+                                color: Renk.pastelKoyuMavi,
                               ),
                               onPressed: () {
                                 setState(() {
@@ -468,7 +450,7 @@ class _KidemGirisState extends State<KidemGiris> {
                               icon: const Icon(
                                 Icons.arrow_forward_ios,
                                 size: 20,
-                                color: Renk.koyuMavi,
+                                color: Renk.pastelKoyuMavi,
                               ),
                               onPressed: () {
                                 setState(() {
@@ -509,7 +491,7 @@ class _KidemGirisState extends State<KidemGiris> {
                                 child: Icon(
                                   Icons.info_outline,
                                   size: 18,
-                                  color: Renk.koyuMavi,
+                                  color: Renk.pastelKoyuMavi,
                                 ),
                               ),
                             ),
@@ -521,7 +503,7 @@ class _KidemGirisState extends State<KidemGiris> {
                               icon: const Icon(
                                 Icons.arrow_back_ios,
                                 size: 20,
-                                color: Renk.koyuMavi,
+                                color: Renk.pastelKoyuMavi,
                               ),
                               onPressed: () {
                                 setState(() {
@@ -544,7 +526,7 @@ class _KidemGirisState extends State<KidemGiris> {
                               icon: const Icon(
                                 Icons.arrow_forward_ios,
                                 size: 20,
-                                color: Renk.koyuMavi,
+                                color: Renk.pastelKoyuMavi,
                               ),
                               onPressed: () {
                                 setState(() {

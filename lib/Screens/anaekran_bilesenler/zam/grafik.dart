@@ -123,7 +123,7 @@ class _GrafikWidgetState extends State<GrafikWidget> {
             padding: const EdgeInsets.all(8.0),
             decoration: const BoxDecoration(
               gradient: LinearGradient(
-                colors: [Renk.acikMavi, Renk.acikMavi],
+                colors: [Renk.pastelAcikMavi, Renk.pastelAcikMavi],
                 begin: Alignment(1.0, -1.0),
                 end: Alignment(1.0, 1.0),
               ),
@@ -173,7 +173,7 @@ class _GrafikWidgetState extends State<GrafikWidget> {
             style: const TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w500,
-              color: Renk.koyuMavi,
+              color: Renk.pastelKoyuMavi,
             ),
           ),
           Row(
@@ -183,7 +183,7 @@ class _GrafikWidgetState extends State<GrafikWidget> {
                 style: TextStyle(
                   fontSize: 11,
                   fontWeight: FontWeight.w500,
-                  color: Renk.koyuMavi,
+                  color: Renk.pastelKoyuMavi,
                 ),
               ),
               Text(
@@ -239,7 +239,7 @@ class _GrafikWidgetState extends State<GrafikWidget> {
                 height: 40,
                 decoration: const BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [Renk.acikMavi, Renk.acikMavi],
+                    colors: [Renk.pastelAcikMavi, Renk.pastelAcikMavi],
                     begin: Alignment(1.0, -1.0),
                     end: Alignment(1.0, 1.0),
                   ),

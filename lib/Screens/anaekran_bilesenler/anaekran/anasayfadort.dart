@@ -149,7 +149,7 @@ class _AltdortState extends State<Altdort> {
       child: Text(
         "Bize destek olmak ister \n misiniz?",
         textAlign: TextAlign.center,
-        style: TextStyle(fontSize: 24, fontWeight: FontWeight.w400),
+        style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
       ),
     );
   }
@@ -171,8 +171,8 @@ class _AltdortState extends State<Altdort> {
             "Değerlendir, yıldız ver\n ve paylaş",
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize: 24,
-              color: Renk.koyuMavi,
+              fontSize: 20,
+              color: Renk.pastelKoyuMavi,
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -197,8 +197,8 @@ class _AltdortState extends State<Altdort> {
           "Sosyal medya",
           textAlign: TextAlign.center,
           style: TextStyle(
-            fontSize: 24,
-            color: Renk.koyuMavi,
+            fontSize: 20,
+            color: Renk.pastelKoyuMavi,
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -232,60 +232,60 @@ class _AltdortState extends State<Altdort> {
           "Paylaşarak destekleyin",
           textAlign: TextAlign.center,
           style: TextStyle(
-            fontSize: 20,
-            color: Renk.koyuMavi,
+            fontSize: 18,
+            color: Renk.pastelKoyuMavi,
             fontWeight: FontWeight.w500,
           ),
         ),
         const Text(
           "Paylaşımlarımızı beğenerek ve paylaşarak daha geniş kitlelere ulaşmamıza yardımcı olun.",
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
         ),
         const SizedBox(height: 10),
         const Text(
           "Yorum yaparak destekleyin",
           textAlign: TextAlign.center,
           style: TextStyle(
-            fontSize: 20,
-            color: Renk.koyuMavi,
+            fontSize: 18,
+            color: Renk.pastelKoyuMavi,
             fontWeight: FontWeight.w500,
           ),
         ),
         const Text(
           "Düşüncelerinizi ve fikirlerinizi yorumlarda paylaşarak etkileşimi artırın.",
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
         ),
         const SizedBox(height: 10),
         const Text(
           "Etiket kullanarak destekleyin",
           textAlign: TextAlign.center,
           style: TextStyle(
-            fontSize: 20,
-            color: Renk.koyuMavi,
+            fontSize: 18,
+            color: Renk.pastelKoyuMavi,
             fontWeight: FontWeight.w500,
           ),
         ),
         const Text(
           "Paylaşımlarınızda #hashtag kullanarak daha fazla kişiye ulaşmamızı sağlayın.",
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
         ),
         const SizedBox(height: 10),
         const Text(
           "Bizi takip edin",
           textAlign: TextAlign.center,
           style: TextStyle(
-            fontSize: 20,
-            color: Renk.koyuMavi,
+            fontSize: 18,
+            color: Renk.pastelKoyuMavi,
             fontWeight: FontWeight.w500,
           ),
         ),
         const Text(
           "Bizi takip ederek her daim destekte bulunun \n Desteğinizle daha güçlü olalım!\n",
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
         ),
       ],
     );
@@ -318,8 +318,8 @@ class _AltdortState extends State<Altdort> {
             "Buy Me a Coffee",
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize: 24,
-              color: Renk.koyuMavi,
+              fontSize: 20,
+              color: Renk.pastelKoyuMavi,
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -337,7 +337,7 @@ class _AltdortState extends State<Altdort> {
           const Text(
             "Dilediğiniz kadar kahve ısmarlayarak bize destek olabilirsiniz.\n",
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
           ),
         ],
       ),
@@ -357,7 +357,7 @@ class _AltdortState extends State<Altdort> {
               'Sponsor verileri yüklenirken bir hata oluştu.',
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: 16,
+                fontSize: 14,
                 color: Colors.red,
                 fontWeight: FontWeight.w400,
               ),
@@ -376,7 +376,7 @@ class _AltdortState extends State<Altdort> {
         child: Text(
           'Henüz sponsor bulunmamaktadır.',
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
         ),
       );
     }
@@ -387,8 +387,8 @@ class _AltdortState extends State<Altdort> {
           "Uygulama Sponsorları",
           textAlign: TextAlign.center,
           style: TextStyle(
-            fontSize: 25,
-            color: Renk.koyuMavi,
+            fontSize: 20,
+            color: Renk.pastelKoyuMavi,
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -423,7 +423,7 @@ class _AltdortState extends State<Altdort> {
       child: Text(
         "Sizlere daha iyi hizmet verebilmek için tüm gücümüzle çalışıyoruz.\n\nDesteğiniz için teşekkürler.\n",
         textAlign: TextAlign.center,
-        style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+        style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
       ),
     );
   }

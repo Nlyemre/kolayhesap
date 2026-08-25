@@ -120,7 +120,7 @@ class _MesaileryilState extends State<Mesaileryil> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: const BackButton(color: Renk.koyuMavi),
+        leading: const BackButton(color: Renk.pastelKoyuMavi),
         actions: [
           IconButton(
             onPressed: () {
@@ -131,7 +131,11 @@ class _MesaileryilState extends State<Mesaileryil> {
                 paylasMetin: _paylas,
               );
             },
-            icon: const Icon(Icons.share, size: 20.0, color: Renk.koyuMavi),
+            icon: const Icon(
+              Icons.share,
+              size: 20.0,
+              color: Renk.pastelKoyuMavi,
+            ),
           ),
         ],
 
@@ -176,7 +180,7 @@ class _MesaileryilState extends State<Mesaileryil> {
                     child: Text(
                       "Aylara Göre Mesai Grafiği",
                       style: TextStyle(
-                        color: Renk.koyuMavi,
+                        color: Renk.pastelKoyuMavi,
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
                       ),
@@ -189,7 +193,7 @@ class _MesaileryilState extends State<Mesaileryil> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        _etiketKutusu(Renk.koyuMavi),
+                        _etiketKutusu(Renk.pastelKoyuMavi),
                         const Text(
                           '   Brüt Ücret       ',
                           style: TextStyle(
@@ -197,7 +201,7 @@ class _MesaileryilState extends State<Mesaileryil> {
                             fontWeight: FontWeight.w400,
                           ),
                         ),
-                        _etiketKutusu(Renk.acikMavi),
+                        _etiketKutusu(Renk.pastelAcikMavi),
                         const Text(
                           '   Net Ücret',
                           style: TextStyle(
@@ -301,7 +305,7 @@ class _MesaileryilState extends State<Mesaileryil> {
                 height: 40,
                 decoration: const BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [Renk.acikMavi, Renk.koyuMavi],
+                    colors: [Renk.pastelAcikMavi, Renk.pastelKoyuMavi],
                     begin: Alignment(1.0, -1.0),
                     end: Alignment(1.0, 1.0),
                   ),
@@ -373,7 +377,7 @@ class _MesaileryilState extends State<Mesaileryil> {
                   fontSize: 16,
                   color:
                       secilenYil == yilListe[index]
-                          ? Renk.koyuMavi
+                          ? Renk.pastelKoyuMavi
                           : Colors.black87,
                   fontWeight:
                       secilenYil == yilListe[index]
@@ -383,7 +387,11 @@ class _MesaileryilState extends State<Mesaileryil> {
               ),
               trailing:
                   secilenYil == yilListe[index]
-                      ? const Icon(Icons.check, color: Renk.koyuMavi, size: 24)
+                      ? const Icon(
+                        Icons.check,
+                        color: Renk.pastelKoyuMavi,
+                        size: 24,
+                      )
                       : null,
               onTap: () {
                 Navigator.of(context).pop();
@@ -420,7 +428,7 @@ class _MesaileryilState extends State<Mesaileryil> {
                   (i) => TableCell(
                     child: Container(
                       decoration: BoxDecoration(
-                        color: Renk.koyuMavi.withValues(alpha: 0.06),
+                        color: Renk.pastelKoyuMavi.withValues(alpha: 0.06),
                       ),
                       height: 40,
                       alignment: Alignment.center,
@@ -429,7 +437,7 @@ class _MesaileryilState extends State<Mesaileryil> {
                             ? (_selectedIndex == 0 ? 'Mesai Saat' : 'Mesai Gün')
                             : basliklar[i],
                         style: const TextStyle(
-                          color: Renk.koyuMavi,
+                          color: Renk.pastelKoyuMavi,
                           fontSize: 12,
                           fontWeight: FontWeight.w500,
                         ),
@@ -451,7 +459,7 @@ class _MesaileryilState extends State<Mesaileryil> {
                     color:
                         index.isEven
                             ? Colors.white
-                            : Renk.koyuMavi.withValues(alpha: 0.06),
+                            : Renk.pastelKoyuMavi.withValues(alpha: 0.06),
                   ),
                   children: List.generate(
                     4,
@@ -668,7 +676,7 @@ class _MesaileryilState extends State<Mesaileryil> {
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w500,
-              color: Renk.koyuMavi,
+              color: Renk.pastelKoyuMavi,
             ),
           ),
           SizedBox(height: 10),
@@ -682,7 +690,7 @@ class _MesaileryilState extends State<Mesaileryil> {
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w500,
-              color: Renk.koyuMavi,
+              color: Renk.pastelKoyuMavi,
             ),
           ),
           Text(
@@ -695,7 +703,7 @@ class _MesaileryilState extends State<Mesaileryil> {
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w500,
-              color: Renk.koyuMavi,
+              color: Renk.pastelKoyuMavi,
             ),
           ),
           Text(
@@ -710,7 +718,7 @@ class _MesaileryilState extends State<Mesaileryil> {
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w500,
-              color: Renk.koyuMavi,
+              color: Renk.pastelKoyuMavi,
             ),
           ),
           Text(
@@ -724,7 +732,7 @@ class _MesaileryilState extends State<Mesaileryil> {
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w500,
-              color: Renk.koyuMavi,
+              color: Renk.pastelKoyuMavi,
             ),
           ),
           Text(
@@ -739,7 +747,7 @@ class _MesaileryilState extends State<Mesaileryil> {
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w500,
-              color: Renk.koyuMavi,
+              color: Renk.pastelKoyuMavi,
             ),
           ),
           Text(
@@ -780,7 +788,7 @@ class GrafikTasarimiki extends StatelessWidget {
                     max: labels.length.toDouble(),
                     min: 1,
                     textStyle: const TextStyle(
-                      color: Renk.koyuMavi,
+                      color: Renk.pastelKoyuMavi,
                       fontSize: 10.0,
                     ),
                   ),
@@ -794,7 +802,7 @@ class GrafikTasarimiki extends StatelessWidget {
                         100,
                     min: 0.0,
                     textStyle: const TextStyle(
-                      color: Renk.koyuMavi,
+                      color: Renk.pastelKoyuMavi,
                       fontSize: 10.0,
                     ),
                   ),
@@ -812,13 +820,13 @@ class GrafikTasarimiki extends StatelessWidget {
                           (entry) => <ChartGroupBarDataItem>[
                             // İlk çubuk: `values`
                             ChartGroupBarDataItem(
-                              color: Renk.koyuMavi,
+                              color: Renk.pastelKoyuMavi,
                               value: entry.value,
                               x: entry.key.toDouble() + 1,
                             ),
                             // İkinci çubuk: `valuesiki`
                             ChartGroupBarDataItem(
-                              color: Renk.acikMavi,
+                              color: Renk.pastelAcikMavi,
                               value: valuesiki[entry.key],
                               x: entry.key.toDouble() + 1,
                             ),
@@ -846,7 +854,7 @@ class GrafikTasarimiki extends StatelessWidget {
                       ),
                       radius: 6.0,
                       textStyle: const TextStyle(
-                        color: Renk.koyuMavi,
+                        color: Renk.pastelKoyuMavi,
                         fontSize: 12.0,
                       ),
                     ),

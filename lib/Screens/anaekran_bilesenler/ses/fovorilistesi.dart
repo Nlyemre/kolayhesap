@@ -26,7 +26,7 @@ class _FavoriListesiState extends State<FavoriListesi> {
       appBar: AppBar(
         title: const Text("Favori Listesi"),
 
-        leading: const BackButton(color: Renk.koyuMavi),
+        leading: const BackButton(color: Renk.pastelKoyuMavi),
       ),
       body:
           widget.favorites.isEmpty
@@ -86,7 +86,7 @@ class _FavoriListesiState extends State<FavoriListesi> {
                         style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
-                          color: Renk.koyuMavi,
+                          color: Renk.pastelKoyuMavi,
                         ),
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -134,7 +134,7 @@ class _FavoriListesiState extends State<FavoriListesi> {
       padding: const EdgeInsets.symmetric(vertical: 4),
       child: Row(
         children: [
-          Icon(icon, size: 20, color: Renk.koyuMavi),
+          Icon(icon, size: 20, color: Renk.pastelKoyuMavi),
           const SizedBox(width: 8),
           Text('$label: ', style: const TextStyle(fontWeight: FontWeight.w500)),
           Text(value),

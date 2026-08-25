@@ -447,7 +447,7 @@ class MesaiHesaplama {
           prefs.getInt(
             '${selectedIndex.value}-$secilenYil-$secilenAy-mesaiKdv',
           ) ??
-          20;
+          15;
       mesaiYuzde =
           prefs.getInt(
             '${selectedIndex.value}-$secilenYil-$secilenAy-mesaiYüzde',
@@ -463,7 +463,7 @@ class MesaiHesaplama {
           prefs.getInt(
             '${selectedIndex.value}-$simdikiYil-$simdikiAy-mesaiKdv',
           ) ??
-          20;
+          15;
       mesaiYuzde =
           prefs.getInt(
             '${selectedIndex.value}-$simdikiYil-$simdikiAy-mesaiYüzde',
@@ -553,25 +553,91 @@ class MesaiHesaplama {
     hesaplaToplamlar();
   }
 
+  bool mesaiTarihZatenVarMi(String tarih) {
+    for (final metin in mesaiMetinListe.value) {
+      final parts = metin.split(' ');
+      if (parts.length > 1 && parts[1] == tarih) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /// Mesai tarih listesini getirir
+  List<String> getMesaiTarihListe() {
+    final List<String> tarihler = [];
+    for (final metin in mesaiMetinListe.value) {
+      final parts = metin.split(' ');
+      if (parts.length > 1) tarihler.add(parts[1]);
+    }
+    return tarihler;
+  }
+
   Future<void> mesaiEkleDialog(
     BuildContext context, {
     required VoidCallback onUpdate,
-    required bool isEksik, // Yeni parametre: Eksik giriş mi?
+    required bool isEksik,
   }) async {
     _klavyeyiKapat();
+
+    // Yardımcı fonksiyon: Ücret değerini kontrol et
+    double getUcretDegeri() {
+      if (selectedIndex.value == 0) {
+        return double.tryParse(saatUcretiSec.text) ?? 0;
+      } else if (selectedIndex.value == 1) {
+        return double.tryParse(gunlukUcretiSec.text) ?? 0;
+      } else {
+        return double.tryParse(aylikUcretiSec.text) ?? 0;
+      }
+    }
+
+    final ucret = getUcretDegeri();
+
+    // 1. Boş kontrolü
     if (selectedIndex.value == 0 && saatUcretiSec.text.isEmpty) {
       Mesaj.altmesaj(context, 'Lütfen Saat Ücretini Giriniz.', Colors.red);
+      return;
     } else if (selectedIndex.value == 1 && gunlukUcretiSec.text.isEmpty) {
       Mesaj.altmesaj(context, 'Lütfen Günlük Ücretini Giriniz.', Colors.red);
+      return;
     } else if (selectedIndex.value == 2 && aylikUcretiSec.text.isEmpty) {
       Mesaj.altmesaj(context, 'Lütfen Aylık Ücretini Giriniz.', Colors.red);
+      return;
+    }
+
+    // 2. 0 veya negatif kontrolü
+    if (ucret <= 0) {
+      final birim =
+          selectedIndex.value == 0
+              ? "Saat"
+              : selectedIndex.value == 1
+              ? "Günlük"
+              : "Aylık";
+
+      Mesaj.altmesaj(
+        context,
+        'Lütfen geçerli bir $birim ücreti giriniz.',
+        Colors.red,
+      );
+      return;
+    }
+
+    // 3. Geçerli bir sayı kontrolü
+    if (ucret.isNaN || !ucret.isFinite) {
+      Mesaj.altmesaj(
+        context,
+        'Lütfen geçerli bir ücret değeri giriniz.',
+        Colors.red,
+      );
+      return;
+    }
+
+    // Tüm kontroller geçerse devam et
+    notController.clear();
+    if (selectedIndex.value == 0) {
+      await mesaiSaatSecDialog(context, onUpdate: onUpdate, isEksik: isEksik);
     } else {
-      notController.clear();
-      if (selectedIndex.value == 0) {
-        await mesaiSaatSecDialog(context, onUpdate: onUpdate, isEksik: isEksik);
-      } else {
-        await mesaiGunSecDialog(context, onUpdate: onUpdate, isEksik: isEksik);
-      }
+      await mesaiGunSecDialog(context, onUpdate: onUpdate, isEksik: isEksik);
     }
   }
 
@@ -580,7 +646,7 @@ class MesaiHesaplama {
     required VoidCallback onUpdate,
     required bool isEksik,
   }) async {
-    tarihController.text = DateFormat('dd-MM-yyyy').format(DateTime.now());
+    // Tarih kontrolünü BURADAN KALDIRIYORUZ
     await AcilanPencere.show(
       context: context,
       title: isEksik ? 'Eksik Saat Seçiniz' : 'Mesai Saati Seçiniz',
@@ -589,10 +655,25 @@ class MesaiHesaplama {
         tarihController: tarihController,
         notController: notController,
         items: isEksik ? mesaiSaatEksikListe : mesaiSaatSecimListe,
-        onSelected: (index) {
-          secilenMesaiSaat =
+        onSelected: (index) async {
+          // async yapıyoruz
+          final secilenTarih = tarihController.text;
+          final secilenSaat =
               isEksik ? mesaiSaatEksikListe[index] : mesaiSaatSecimListe[index];
-          tarihMesai = tarihController.text;
+
+          // Tarih kontrolünü BURADA YAPIYORUZ
+          if (mesaiTarihZatenVarMi(secilenTarih)) {
+            Mesaj.altmesaj(
+              context,
+              '$secilenTarih tarihinde zaten mesai kaydı var! '
+              'Lütfen mevcut kaydı düzenleyin veya farklı bir tarih seçin.',
+              Colors.red,
+            );
+            return; // İşlemi durduruyoruz
+          }
+
+          secilenMesaiSaat = secilenSaat;
+          tarihMesai = secilenTarih;
           listeyiGuncelle(islem: "ekle");
           Mesaj.altmesaj(
             context,
@@ -604,6 +685,7 @@ class MesaiHesaplama {
           onUpdate();
         },
         onUpdate: () => mesaiListeKaydet(),
+        mesaiHesaplama: this,
       ),
     );
   }
@@ -613,7 +695,6 @@ class MesaiHesaplama {
     required VoidCallback onUpdate,
     required bool isEksik,
   }) async {
-    tarihController.text = DateFormat('dd-MM-yyyy').format(DateTime.now());
     await AcilanPencere.show(
       context: context,
       title: isEksik ? 'Eksik Gün Seçiniz' : 'Mesai Gün Seçiniz',
@@ -622,10 +703,25 @@ class MesaiHesaplama {
         tarihController: tarihController,
         notController: notController,
         items: isEksik ? mesaiGunEksikListe : mesaiGunSecimListe,
-        onSelected: (index) {
-          secilenMesaiSaat =
+        onSelected: (index) async {
+          // async yapıyoruz
+          final secilenTarih = tarihController.text;
+          final secilenGun =
               isEksik ? mesaiGunEksikListe[index] : mesaiGunSecimListe[index];
-          tarihMesai = tarihController.text;
+
+          // Tarih kontrolünü BURADA YAPIYORUZ
+          if (mesaiTarihZatenVarMi(secilenTarih)) {
+            Mesaj.altmesaj(
+              context,
+              '$secilenTarih tarihinde zaten mesai kaydı var! '
+              'Lütfen mevcut kaydı düzenleyin veya farklı bir tarih seçin.',
+              Colors.red,
+            );
+            return; // İşlemi durduruyoruz
+          }
+
+          secilenMesaiSaat = secilenGun;
+          tarihMesai = secilenTarih;
           listeyiGuncelle(islem: "ekle");
           Mesaj.altmesaj(
             context,
@@ -637,6 +733,7 @@ class MesaiHesaplama {
           onUpdate();
         },
         onUpdate: () => mesaiListeKaydet(),
+        mesaiHesaplama: this,
       ),
     );
   }
@@ -651,6 +748,7 @@ class MesaiHesaplama {
     notController.text =
         mesaiNotListe.length > index ? mesaiNotListe[index] : "";
     final isEksik = mesaiSaatListe[index] < 0;
+
     await AcilanPencere.show(
       context: context,
       title:
@@ -673,8 +771,22 @@ class MesaiHesaplama {
                 : isEksik
                 ? mesaiGunEksikListe
                 : mesaiGunSecimListe,
-        onSelected: (listIndex) {
-          tarihMesai = tarihController.text;
+        onSelected: (listIndex) async {
+          // async yapıyoruz
+          final yeniTarih = tarihController.text;
+
+          // Eğer tarih değişmişse ve yeni tarihte zaten mesai varsa
+          if (yeniTarih != eskitarih && mesaiTarihZatenVarMi(yeniTarih)) {
+            Mesaj.altmesaj(
+              context,
+              '$yeniTarih tarihinde zaten mesai kaydı var! '
+              'Farklı bir tarih seçin veya mevcut kaydı silin.',
+              Colors.red,
+            );
+            return; // İşlemi durduruyoruz
+          }
+
+          tarihMesai = yeniTarih;
           secilenMesaiSaat =
               selectedIndex.value == 0
                   ? isEksik
@@ -688,6 +800,7 @@ class MesaiHesaplama {
           onUpdate();
         },
         onUpdate: () => mesaiListeKaydet(),
+        mesaiHesaplama: this,
       ),
     );
   }

@@ -5,53 +5,165 @@ import 'package:app/Screens/anaekran_bilesenler/veriler/degiskenler.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-class AltinSayfasi extends StatefulWidget {
-  const AltinSayfasi({super.key});
+class DovizSayfasi extends StatefulWidget {
+  const DovizSayfasi({super.key});
 
   @override
-  State<AltinSayfasi> createState() => _AltinSayfasiState();
+  State<DovizSayfasi> createState() => _DovizSayfasiState();
 }
 
-class _AltinSayfasiState extends State<AltinSayfasi>
+class _DovizSayfasiState extends State<DovizSayfasi>
     with AutomaticKeepAliveClientMixin {
-  Map<String, dynamic> altinler = {};
+  Map<String, dynamic> dovizler = {};
   bool yukleniyor = true;
   String? hata;
 
-  // Göstermek istediğimiz altın türleri (sırayla, popüler olanlar önce)
-  final List<String> altinKodlari = [
-    'GA', // Gram Altın
-    '22', // 22 Ayar Bilezik (gram)
-    'C', // Çeyrek Altın
-    'Y', // Yarım Altın
-    'T', // Tam Altın
-    'ATA', // Ata Altın
-    'CMR', // Cumhuriyet Altını
-    'GR', // Gremse Altın
-    'RA', // Reşat Altın
-    'HA', // Hamit Altın
-    '14', // 14 Ayar
-    '18', // 18 Ayar
-    'XAUUSD', // Ons Altın (USD)
+  // Tüm dövizler (TRY hariç, popüler olanlar önce, kalanlar alfabetik)
+  final List<String> paralar = [
+    // En popüler ve yüksek ilgi görenler (öncelikli sıralama)
+    'USD', 'EUR', 'GBP', 'CHF', 'CAD', 'AUD', 'JPY',
+    'KWD', 'BHD', 'OMR', 'SAR', 'AED', 'SGD',
+    'RUB', 'CNY', 'PLN', 'DKK', 'SEK', 'NOK', 'NZD',
+
+    // Kalanlar alfabetik sırada
+    'ALL', 'ARS', 'AZN', 'BAM', 'BGN', 'BRL',
+    'CLP', 'COP', 'CRC', 'DZD', 'EGP', 'GEL',
+    'HKD', 'HUF', 'IDR', 'INR', 'IQD', 'IRR',
+    'ISK', 'KRW', 'KZT', 'LBP', 'LKR', 'LYD',
+    'MAD', 'MDL', 'MKD', 'MXN', 'MYR', 'PEN',
+    'PHP', 'PKR', 'QAR', 'RON', 'RSD', 'SYP',
+    'THB', 'TND', 'TWD', 'UAH', 'UYU', 'ZAR',
   ];
 
-  final Map<String, String> altinIsimleri = {
-    'GA': 'Gram Altın',
-    '22': '22 Ayar Bilezik (Gram)',
-    'C': 'Çeyrek Altın',
-    'Y': 'Yarım Altın',
-    'T': 'Tam Altın',
-    'ATA': 'Ata Altın',
-    'CMR': 'Cumhuriyet Altını',
-    'GR': 'Gremse Altın',
-    'RA': 'Reşat Altın',
-    'HA': 'Hamit Altın',
-    '14': '14 Ayar Altın',
-    '18': '18 Ayar Altın',
-    'XAUUSD': 'Ons Altın',
+  final Map<String, String> bayraklar = {
+    'USD': '🇺🇸',
+    'EUR': '🇪🇺',
+    'GBP': '🇬🇧',
+    'CHF': '🇨🇭',
+    'JPY': '🇯🇵',
+    'CAD': '🇨🇦',
+    'AUD': '🇦🇺',
+    'NZD': '🇳🇿',
+    'SEK': '🇸🇪',
+    'NOK': '🇳🇴',
+    'DKK': '🇩🇰',
+    'CNY': '🇨🇳',
+    'RUB': '🇷🇺',
+    'SAR': '🇸🇦',
+    'AED': '🇦🇪',
+    'KWD': '🇰🇼',
+    'BHD': '🇧🇭',
+    'OMR': '🇴🇲',
+    'SGD': '🇸🇬',
+    'PLN': '🇵🇱',
+    'ZAR': '🇿🇦',
+    'ALL': '🇦🇱',
+    'ARS': '🇦🇷',
+    'AZN': '🇦🇿',
+    'BAM': '🇧🇦',
+    'BGN': '🇧🇬',
+    'BRL': '🇧🇷',
+    'CLP': '🇨🇱',
+    'COP': '🇨🇴',
+    'CRC': '🇨🇷',
+    'DZD': '🇩🇿',
+    'EGP': '🇪🇬',
+    'GEL': '🇬🇪',
+    'HKD': '🇭🇰',
+    'HUF': '🇭🇺',
+    'IDR': '🇮🇩',
+    'INR': '🇮🇳',
+    'IQD': '🇮🇶',
+    'IRR': '🇮🇷',
+    'ISK': '🇮🇸',
+    'KRW': '🇰🇷',
+    'KZT': '🇰🇿',
+    'LBP': '🇱🇧',
+    'LKR': '🇱🇰',
+    'LYD': '🇱🇾',
+    'MAD': '🇲🇦',
+    'MDL': '🇲🇩',
+    'MKD': '🇲🇰',
+    'MXN': '🇲🇽',
+    'MYR': '🇲🇾',
+    'PEN': '🇵🇪',
+    'PHP': '🇵🇭',
+    'PKR': '🇵🇰',
+    'QAR': '🇶🇦',
+    'RON': '🇷🇴',
+    'RSD': '🇷🇸',
+    'SYP': '🇸🇾',
+    'THB': '🇹🇭',
+    'TND': '🇹🇳',
+    'TWD': '🇹🇼',
+    'UAH': '🇺🇦',
+    'UYU': '🇺🇾',
   };
 
-  final String altinEmoji = '🪙';
+  final Map<String, String> paraIsimleri = {
+    'USD': 'ABD Doları',
+    'EUR': 'Euro',
+    'GBP': 'İngiliz Sterlini',
+    'CHF': 'İsviçre Frangı',
+    'JPY': 'Japon Yeni',
+    'CAD': 'Kanada Doları',
+    'AUD': 'Avustralya Doları',
+    'NZD': 'Yeni Zelanda Doları',
+    'SEK': 'İsveç Kronu',
+    'NOK': 'Norveç Kronu',
+    'DKK': 'Danimarka Kronu',
+    'CNY': 'Çin Yuanı',
+    'RUB': 'Rus Rublesi',
+    'SAR': 'Suudi Riyali',
+    'AED': 'BAE Dirhemi',
+    'KWD': 'Kuveyt Dinarı',
+    'BHD': 'Bahreyn Dinarı',
+    'OMR': 'Umman Riyali',
+    'SGD': 'Singapur Doları',
+    'PLN': 'Polonya Zlotisi',
+    'ZAR': 'Güney Afrika Randı',
+    'ALL': 'Arnavutluk Leki',
+    'ARS': 'Arjantin Pesosu',
+    'AZN': 'Azerbaycan Manatı',
+    'BAM': 'Bosna Hersek Markı',
+    'BGN': 'Bulgar Levası',
+    'BRL': 'Brezilya Reali',
+    'CLP': 'Şili Pesosu',
+    'COP': 'Kolombiya Pesosu',
+    'CRC': 'Kosta Rika Kolonu',
+    'DZD': 'Cezayir Dinarı',
+    'EGP': 'Mısır Lirası',
+    'GEL': 'Gürcistan Larisi',
+    'HKD': 'Hong Kong Doları',
+    'HUF': 'Macar Forinti',
+    'IDR': 'Endonezya Rupisi',
+    'INR': 'Hindistan Rupisi',
+    'IQD': 'Irak Dinarı',
+    'IRR': 'İran Riyali',
+    'ISK': 'İzlanda Kronu',
+    'KRW': 'Güney Kore Wonu',
+    'KZT': 'Kazakistan Tengesi',
+    'LBP': 'Lübnan Lirası',
+    'LKR': 'Sri Lanka Rupisi',
+    'LYD': 'Libya Dinarı',
+    'MAD': 'Fas Dirhemi',
+    'MDL': 'Moldova Leyi',
+    'MKD': 'Kuzey Makedonya Dinarı',
+    'MXN': 'Meksika Pesosu',
+    'MYR': 'Malezya Ringgiti',
+    'PEN': 'Peru Solü',
+    'PHP': 'Filipin Pesosu',
+    'PKR': 'Pakistan Rupisi',
+    'QAR': 'Katar Riyali',
+    'RON': 'Rumen Leyi',
+    'RSD': 'Sırp Dinarı',
+    'SYP': 'Suriye Lirası',
+    'THB': 'Tayland Bahtı',
+    'TND': 'Tunus Dinarı',
+    'TWD': 'Tayvan Doları',
+    'UAH': 'Ukrayna Grivnası',
+    'UYU': 'Uruguay Pesosu',
+  };
 
   @override
   bool get wantKeepAlive => true;
@@ -59,13 +171,13 @@ class _AltinSayfasiState extends State<AltinSayfasi>
   @override
   void initState() {
     super.initState();
-    altinGetir();
+    dovizGetir();
   }
 
-  Future<void> altinGetir() async {
+  Future<void> dovizGetir() async {
     try {
       final res = await http.get(
-        Uri.parse('https://api.genelpara.com/json/?list=altin&sembol=all'),
+        Uri.parse('https://api.genelpara.com/json/?list=doviz&sembol=all'),
       );
 
       if (!mounted) return;
@@ -73,7 +185,7 @@ class _AltinSayfasiState extends State<AltinSayfasi>
       if (res.statusCode == 200) {
         final decoded = json.decode(res.body);
         setState(() {
-          altinler = decoded['data'] ?? {};
+          dovizler = decoded['data'] ?? {};
           yukleniyor = false;
           hata = null;
         });
@@ -99,13 +211,13 @@ class _AltinSayfasiState extends State<AltinSayfasi>
     return Scaffold(
       appBar: AppBar(
         leading: const BackButton(color: Renk.pastelKoyuMavi),
-        title: const Text('Canlı Altın Fiyatları'),
+        title: const Text('Canlı Döviz Kurları'),
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh, color: Renk.pastelKoyuMavi),
             onPressed: () {
               setState(() => yukleniyor = true);
-              altinGetir();
+              dovizGetir();
             },
           ),
         ],
@@ -119,13 +231,13 @@ class _AltinSayfasiState extends State<AltinSayfasi>
                 children: [
                   Expanded(
                     child: RefreshIndicator(
-                      onRefresh: altinGetir,
+                      onRefresh: dovizGetir,
                       child: ListView.builder(
                         physics: const AlwaysScrollableScrollPhysics(),
-                        itemCount: altinKodlari.length,
+                        itemCount: paralar.length,
                         itemBuilder: (context, index) {
-                          final kod = altinKodlari[index];
-                          final veri = altinler[kod];
+                          final kod = paralar[index];
+                          final veri = dovizler[kod];
                           if (veri == null) return const SizedBox.shrink();
 
                           final degisim =
@@ -153,7 +265,7 @@ class _AltinSayfasiState extends State<AltinSayfasi>
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        '$altinEmoji ${altinIsimleri[kod] ?? kod}',
+                                        '${bayraklar[kod] ?? ''} ${paraIsimleri[kod] ?? kod}',
                                         style: const TextStyle(
                                           fontSize: 18,
                                           fontWeight: FontWeight.bold,

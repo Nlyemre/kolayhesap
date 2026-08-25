@@ -97,13 +97,13 @@ class Kaydet {
         final file = File(selectedFile.path!);
 
         // Şifreli veriyi dosyadan oku
-        final encryptedData = await file.readAsString();
+        String encryptedData = await file.readAsString();
 
         // Şifreli veriyi çöz
-        final jsonString = decryptData(encryptedData);
+        String jsonString = decryptData(encryptedData);
 
         // Veriyi JSON'a çevir
-        final Map<String, dynamic> jsonMap = jsonDecode(jsonString);
+        Map<String, dynamic> jsonMap = jsonDecode(jsonString);
 
         // SharedPreferences'a geri kaydet
         final prefs = await SharedPreferences.getInstance();
@@ -114,14 +114,12 @@ class Kaydet {
         // JSON dosyası başarıyla yüklendiğinde bayrağı true yap
         await prefs.setBool('isJsonLoaded', true);
 
-        // JSON verilerini kaydet
-        for (final entry in jsonMap.entries) {
-          final key = entry.key;
-          final value = entry.value;
-
+        // JSON verilerini kaydet (bayrak true olsa bile)
+        jsonMap.forEach((key, value) async {
           if (key != 'degerlendir' &&
               key != 'isJsonLoaded' &&
               key != 'ilkGiris') {
+            // Jeton dışında tüm verileri güncelle
             if (value is int) {
               await prefs.setInt(key, value);
             } else if (value is double) {
@@ -130,14 +128,11 @@ class Kaydet {
               await prefs.setBool(key, value);
             } else if (value is String) {
               await prefs.setString(key, value);
-            } else if (value is List) {
-              await prefs.setStringList(
-                key,
-                value.map((e) => e.toString()).toList(),
-              );
+            } else if (value is List<String>) {
+              await prefs.setStringList(key, value.cast<String>());
             }
           }
-        }
+        });
 
         onSuccess("Veriler başarıyla çözüldü, yüklendi ve kaydedildi");
       } else {

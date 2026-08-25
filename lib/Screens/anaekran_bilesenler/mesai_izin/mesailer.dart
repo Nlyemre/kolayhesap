@@ -27,7 +27,7 @@ class _MesailerState extends State<Mesailer> {
     _mesaiHesaplama
         .init()
         .then((_) {
-          return _mesaiHesaplama.mesaiListeCagir();
+          _mesaiHesaplama.mesaiListeCagir();
         })
         .then((_) {
           setState(() {
@@ -98,7 +98,17 @@ class _MesailerState extends State<Mesailer> {
                               onIndexChanged: (index) {
                                 _mesaiHesaplama.selectedIndex.value = index;
                                 _mesaiHesaplama.veriDegisti = true;
-                                setState(() {});
+                              },
+                              onTipDegisti: () async {
+                                _mesaiHesaplama.mesaiMetinListe.value = [];
+                                _mesaiHesaplama.mesaiSaatListe.clear();
+                                _mesaiHesaplama.mesaiBurutListe.clear();
+                                _mesaiHesaplama.mesaiNetListe.clear();
+                                _mesaiHesaplama.mesaiNotListe.clear();
+
+                                await _mesaiHesaplama.mesaiListeCagir();
+
+                                if (mounted) setState(() {});
                               },
                               saatUcretiController:
                                   _mesaiHesaplama.saatUcretiSec,
@@ -121,20 +131,9 @@ class _MesailerState extends State<Mesailer> {
                           ),
                           child: RepaintBoundary(child: YerelReklambes()),
                         ),
-                        MesaiDegiskenler(
-                          mesaiHesaplama: _mesaiHesaplama,
-                          onUpdate: () {
-                            _mesaiHesaplama.mesaiListeKaydet();
-                            setState(() {});
-                          },
-                        ),
                         Padding(
                           padding: const EdgeInsets.only(bottom: 10),
-                          child: MesaiListeBaslik(
-                            secilenYil: _mesaiHesaplama.secilenYil,
-                            secilenAy: _mesaiHesaplama.secilenAy,
-                            metin: "Mesai Listesi",
-                          ),
+                          child: _buildAySecim(context),
                         ),
                         ValueListenableBuilder<List<String>>(
                           valueListenable: _mesaiHesaplama.mesaiMetinListe,
@@ -176,7 +175,7 @@ class _MesailerState extends State<Mesailer> {
                                             child: Text(
                                               "Şimdi Mesai Ekle",
                                               style: TextStyle(
-                                                color: Renk.koyuMavi,
+                                                color: Renk.pastelKoyuMavi,
                                                 fontSize: 14,
                                                 fontWeight: FontWeight.w400,
                                               ),
@@ -281,7 +280,7 @@ class _MesailerState extends State<Mesailer> {
                       child: const Icon(
                         Icons.add,
                         size: 30,
-                        color: Renk.koyuMavi,
+                        color: Renk.pastelKoyuMavi,
                       ),
                     ),
                   ),
@@ -324,6 +323,77 @@ class _MesailerState extends State<Mesailer> {
       ),
     );
   }
+
+  void _oncekiAy() async {
+    if (_mesaiHesaplama.secilenAy > 1) {
+      _mesaiHesaplama.secilenAy--;
+    } else if (_mesaiHesaplama.secilenAy == 1 &&
+        _mesaiHesaplama.secilenYil > 2024) {
+      _mesaiHesaplama.secilenYil--;
+      _mesaiHesaplama.secilenAy = 12;
+    }
+    await _mesaiHesaplama.mesaiListeCagir();
+    if (mounted) setState(() {});
+  }
+
+  void _sonrakiAy() async {
+    if (_mesaiHesaplama.secilenAy < 12) {
+      _mesaiHesaplama.secilenAy++;
+    } else if (_mesaiHesaplama.secilenAy == 12 &&
+        _mesaiHesaplama.secilenYil < 2035) {
+      _mesaiHesaplama.secilenYil++;
+      _mesaiHesaplama.secilenAy = 1;
+    }
+    await _mesaiHesaplama.mesaiListeCagir();
+    if (mounted) setState(() {});
+  }
+
+  Widget _buildAySecim(BuildContext context) {
+    return Container(
+      height: 40,
+      width: double.infinity,
+      color: Renk.pastelKoyuMavi.withValues(alpha: 0.1),
+      child: Padding(
+        padding: const EdgeInsets.only(left: 15),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            IconButton(
+              icon: const Icon(
+                Icons.arrow_back_ios,
+                size: 18,
+                color: Renk.pastelKoyuMavi,
+              ),
+              onPressed: _oncekiAy,
+            ),
+            Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "${_mesaiHesaplama.secilenYil} ${MesaiHesaplama.ayListe[_mesaiHesaplama.secilenAy]} Mesai Listesi",
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            IconButton(
+              icon: const Icon(
+                Icons.arrow_forward_ios,
+                size: 18,
+                color: Renk.pastelKoyuMavi,
+              ),
+              onPressed: _sonrakiAy,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -344,11 +414,15 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           padding: const EdgeInsets.all(5.0),
           child: IconButton(
             onPressed: onSharePressed,
-            icon: const Icon(Icons.share, size: 20.0, color: Renk.koyuMavi),
+            icon: const Icon(
+              Icons.share,
+              size: 20.0,
+              color: Renk.pastelKoyuMavi,
+            ),
           ),
         ),
       ],
-      leading: BackButton(color: Renk.koyuMavi, onPressed: onBackPressed),
+      leading: BackButton(color: Renk.pastelKoyuMavi, onPressed: onBackPressed),
       title: const Text("Mesailer"),
     );
   }
@@ -360,6 +434,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 class MesaiSecenekler extends StatelessWidget {
   final int selectedIndex;
   final ValueChanged<int> onIndexChanged;
+  final VoidCallback onTipDegisti; // 👈 YENİ
   final TextEditingController saatUcretiController;
   final TextEditingController gunlukUcretiController;
   final TextEditingController aylikUcretiController;
@@ -369,6 +444,7 @@ class MesaiSecenekler extends StatelessWidget {
     super.key,
     required this.selectedIndex,
     required this.onIndexChanged,
+    required this.onTipDegisti, // 👈 YENİ
     required this.saatUcretiController,
     required this.gunlukUcretiController,
     required this.aylikUcretiController,
@@ -392,21 +468,7 @@ class MesaiSecenekler extends StatelessWidget {
                     text: MesaiHesaplama.butonyazi[index],
                     onSelected: () {
                       onIndexChanged(index);
-                      // MesaiHesaplama sınıfındaki listeleri sıfırla ve verileri yeniden yükle
-                      final mesaiHesaplama =
-                          context
-                              .findAncestorStateOfType<_MesailerState>()!
-                              ._mesaiHesaplama;
-                      mesaiHesaplama.mesaiMetinListe.value = [];
-                      mesaiHesaplama.mesaiSaatListe = [];
-                      mesaiHesaplama.mesaiBurutListe = [];
-                      mesaiHesaplama.mesaiNetListe = [];
-                      mesaiHesaplama.mesaiListeCagir().then((_) {
-                        // ignore: use_build_context_synchronously
-                        context.findAncestorStateOfType<_MesailerState>()!
-                        // ignore: invalid_use_of_protected_member
-                        .setState(() {});
-                      });
+                      onTipDegisti(); // 👈 sadece haber ver
                     },
                     height: 40,
                   ),
@@ -462,399 +524,6 @@ class MesaiSecenekler extends StatelessWidget {
         keyboardType: const TextInputType.numberWithOptions(decimal: true),
         onChanged: (value) => onUcretChanged(),
         clearButtonVisible: true,
-      ),
-    );
-  }
-}
-
-class MesaiDegiskenler extends StatelessWidget {
-  final MesaiHesaplama mesaiHesaplama;
-  final VoidCallback onUpdate;
-
-  const MesaiDegiskenler({
-    super.key,
-    required this.mesaiHesaplama,
-    required this.onUpdate,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Theme(
-      data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-      child: ExpansionTile(
-        tilePadding: const EdgeInsets.only(left: 5, right: 15),
-        childrenPadding: const EdgeInsets.only(left: 4, right: 5),
-        title: Padding(
-          padding: const EdgeInsets.only(left: 10, right: 30),
-          child: Row(
-            children: [
-              const Text(
-                "Daha Fazla Detay Düzenle",
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
-                overflow: TextOverflow.ellipsis,
-                maxLines: 1,
-              ),
-              _bilgi(context, "..."),
-            ],
-          ),
-        ),
-        children: [
-          _buildYilSecim(context),
-          Dekor.cizgi15,
-          _buildAySecim(context),
-          Dekor.cizgi15,
-          _buildCalisanTipi(context),
-          Dekor.cizgi15,
-          _buildMesai(context),
-          Dekor.cizgi15,
-          _buildKdvOrani(context),
-          const SizedBox(height: 10),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildYilSecim(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 15),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            children: [
-              const Text(
-                "Mesai Yıl'ı",
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
-              ),
-              _bilgi(context, "..."),
-            ],
-          ),
-          Row(
-            children: [
-              IconButton(
-                icon: const Icon(
-                  Icons.arrow_back_ios,
-                  size: 18,
-                  color: Renk.koyuMavi,
-                ),
-                onPressed: () {
-                  if (mesaiHesaplama.secilenYil > 2024) {
-                    mesaiHesaplama.secilenYil--;
-                    mesaiHesaplama.mesaiListeCagir().then((_) => onUpdate());
-                  }
-                },
-              ),
-              SizedBox(
-                width: 60,
-                child: Text(
-                  mesaiHesaplama.secilenYil.toString(),
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-              ),
-              IconButton(
-                icon: const Icon(
-                  Icons.arrow_forward_ios,
-                  size: 18,
-                  color: Renk.koyuMavi,
-                ),
-                onPressed: () {
-                  if (mesaiHesaplama.secilenYil < 2035) {
-                    mesaiHesaplama.secilenYil++;
-                    mesaiHesaplama.mesaiListeCagir().then((_) => onUpdate());
-                  }
-                },
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildAySecim(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 15),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            children: [
-              const Text(
-                "Mesai Ay'ı",
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
-              ),
-              _bilgi(context, "..."),
-            ],
-          ),
-          Row(
-            children: [
-              IconButton(
-                icon: const Icon(
-                  Icons.arrow_back_ios,
-                  size: 18,
-                  color: Renk.koyuMavi,
-                ),
-                onPressed: () {
-                  if (mesaiHesaplama.secilenAy > 1) {
-                    mesaiHesaplama.secilenAy--;
-                    mesaiHesaplama.mesaiListeCagir().then((_) => onUpdate());
-                  }
-                },
-              ),
-              SizedBox(
-                width: 60,
-                child: Text(
-                  MesaiHesaplama.ayListe[mesaiHesaplama.secilenAy],
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-              ),
-              IconButton(
-                icon: const Icon(
-                  Icons.arrow_forward_ios,
-                  size: 18,
-                  color: Renk.koyuMavi,
-                ),
-                onPressed: () {
-                  if (mesaiHesaplama.secilenAy <
-                      MesaiHesaplama.ayListe.length - 1) {
-                    mesaiHesaplama.secilenAy++;
-                    mesaiHesaplama.mesaiListeCagir().then((_) => onUpdate());
-                  }
-                },
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildCalisanTipi(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 15),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            children: [
-              const Text(
-                'Çalışan Tipi',
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
-              ),
-              _bilgi(context, "..."),
-            ],
-          ),
-          Row(
-            children: [
-              IconButton(
-                icon: const Icon(
-                  Icons.arrow_back_ios,
-                  size: 18,
-                  color: Renk.koyuMavi,
-                ),
-                onPressed: () {
-                  mesaiHesaplama.calisanTipi =
-                      mesaiHesaplama.calisanTipi == 'Emekli'
-                          ? 'Normal'
-                          : mesaiHesaplama.calisanTipi == 'Normal'
-                          ? 'SGK Yok'
-                          : 'Emekli';
-                  mesaiHesaplama.mesaiListeKaydet();
-                  onUpdate();
-                },
-              ),
-              SizedBox(
-                width: 60,
-                child: Text(
-                  mesaiHesaplama.calisanTipi,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-              ),
-              IconButton(
-                icon: const Icon(
-                  Icons.arrow_forward_ios,
-                  size: 18,
-                  color: Renk.koyuMavi,
-                ),
-                onPressed: () {
-                  mesaiHesaplama.calisanTipi =
-                      mesaiHesaplama.calisanTipi == 'Normal'
-                          ? 'Emekli'
-                          : mesaiHesaplama.calisanTipi == 'Emekli'
-                          ? 'SGK Yok'
-                          : 'Normal';
-                  mesaiHesaplama.mesaiListeKaydet();
-                  onUpdate();
-                },
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildMesai(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 15),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            children: [
-              const Text(
-                "Mesai %'si",
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
-              ),
-              _bilgi(context, "..."),
-            ],
-          ),
-          Row(
-            children: [
-              IconButton(
-                icon: const Icon(
-                  Icons.arrow_back_ios,
-                  size: 18,
-                  color: Renk.koyuMavi,
-                ),
-                onPressed: () {
-                  if (mesaiHesaplama.mesaiSayi > 0) {
-                    mesaiHesaplama.mesaiSayi--;
-                    mesaiHesaplama.mesaiSec.text =
-                        MesaiHesaplama.mesaiListe[mesaiHesaplama.mesaiSayi];
-                    mesaiHesaplama.mesaiListeKaydet();
-                    onUpdate();
-                  }
-                },
-              ),
-              SizedBox(
-                width: 60,
-                child: Text(
-                  mesaiHesaplama.mesaiSec.text,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-              ),
-              IconButton(
-                icon: const Icon(
-                  Icons.arrow_forward_ios,
-                  size: 18,
-                  color: Renk.koyuMavi,
-                ),
-                onPressed: () {
-                  if (mesaiHesaplama.mesaiSayi <
-                      MesaiHesaplama.mesaiListe.length - 1) {
-                    mesaiHesaplama.mesaiSayi++;
-                    mesaiHesaplama.mesaiSec.text =
-                        MesaiHesaplama.mesaiListe[mesaiHesaplama.mesaiSayi];
-                    mesaiHesaplama.mesaiListeKaydet();
-                    onUpdate();
-                  }
-                },
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildKdvOrani(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 15),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            children: [
-              const Text(
-                "Kdv Oranı",
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
-              ),
-              _bilgi(context, "..."),
-            ],
-          ),
-          Row(
-            children: [
-              IconButton(
-                icon: const Icon(
-                  Icons.arrow_back_ios,
-                  size: 18,
-                  color: Renk.koyuMavi,
-                ),
-                onPressed: () {
-                  if (mesaiHesaplama.kdvSayi > 0) {
-                    mesaiHesaplama.kdvSayi--;
-                    mesaiHesaplama.kdvSec.text =
-                        MesaiHesaplama.kdvListe[mesaiHesaplama.kdvSayi];
-                    mesaiHesaplama.mesaiListeKaydet();
-                    onUpdate();
-                  }
-                },
-              ),
-              SizedBox(
-                width: 60,
-                child: Text(
-                  mesaiHesaplama.kdvSec.text,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-              ),
-              IconButton(
-                icon: const Icon(
-                  Icons.arrow_forward_ios,
-                  size: 18,
-                  color: Renk.koyuMavi,
-                ),
-                onPressed: () {
-                  if (mesaiHesaplama.kdvSayi <
-                      MesaiHesaplama.kdvListe.length - 1) {
-                    mesaiHesaplama.kdvSayi++;
-                    mesaiHesaplama.kdvSec.text =
-                        MesaiHesaplama.kdvListe[mesaiHesaplama.kdvSayi];
-                    mesaiHesaplama.mesaiListeKaydet();
-                    onUpdate();
-                  }
-                },
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _bilgi(BuildContext context, String yazi) {
-    return GestureDetector(
-      onTap: () {
-        BilgiDialog.showCustomDialog(
-          context: context,
-          title: 'Bilgilendirme',
-          content: yazi,
-          buttonText: 'Kapat',
-        );
-      },
-      child: const Padding(
-        padding: EdgeInsets.only(left: 10, right: 5),
-        child: Icon(Icons.info_outline, size: 18, color: Renk.koyuMavi),
       ),
     );
   }
@@ -960,7 +629,7 @@ class MesaiItem extends StatelessWidget {
                                         Text(
                                           "Düzenle",
                                           style: TextStyle(
-                                            color: Renk.koyuMavi,
+                                            color: Renk.pastelKoyuMavi,
                                             fontSize: 11,
                                             fontWeight: FontWeight.w400,
                                           ),
@@ -1136,10 +805,7 @@ class MesaiItem extends StatelessWidget {
         Text(
           title,
           textAlign: TextAlign.center,
-          style: const TextStyle(
-            color: Color.fromARGB(255, 29, 84, 147),
-            fontSize: 13,
-          ),
+          style: const TextStyle(color: Renk.pastelKoyuMavi, fontSize: 13),
         ),
         Text(
           value,
@@ -1173,16 +839,9 @@ class MesaiToplamKartlar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double? calisan =
-        calisanTipi == 'Normal'
-            ? 15
-            : calisanTipi == 'Emekli'
-            ? 7.5
-            : 0.0;
-    final double? brutsayi = double.tryParse(brutMesai);
-    final double? netsayi = double.tryParse(netMesai);
-    final sgk = (brutsayi! / 100) * calisan;
-    final vergi = brutsayi - (netsayi! + sgk);
+    final double brutsayi = double.tryParse(brutMesai) ?? 0.0;
+    final double netsayi = double.tryParse(netMesai) ?? 0.0;
+    final kesintiler = brutsayi - netsayi;
     return ValueListenableBuilder<int>(
       valueListenable: selectedIndex,
       builder: (context, index, _) {
@@ -1194,40 +853,30 @@ class MesaiToplamKartlar extends StatelessWidget {
                   ? Yansatirikili.satir(
                     "Toplam Mesai Saat",
                     '${NumberFormat("#,##0.00", "tr_TR").format(double.tryParse(toplamMesai))} ST',
-                    Renk.koyuMavi,
+                    Renk.pastelKoyuMavi,
                   )
                   : Yansatirikili.satir(
                     "Toplam Mesai Gün",
                     '${NumberFormat("#,##0.00", "tr_TR").format(double.tryParse(toplamMesai))} GN',
-                    Renk.koyuMavi,
+                    Renk.pastelKoyuMavi,
                   ),
               Dekor.cizgi15,
               Yansatirikili.satir(
                 'Toplam Mesai Brüt',
                 '${NumberFormat("#,##0.00", "tr_TR").format(double.tryParse(brutMesai))} TL',
-                Renk.koyuMavi,
+                Renk.pastelKoyuMavi,
               ),
               Dekor.cizgi15,
               Yansatirikili.satir(
-                'Sgk Ve Damga Kesintisi %$calisan',
-                brutsayi > 0
-                    ? '- ${NumberFormat("#,##0.00", "tr_TR").format(double.tryParse(sgk.toString()))} TL'
-                    : '${NumberFormat("#,##0.00", "tr_TR").format(double.tryParse(sgk.abs().toString()))} TL',
-                Renk.kirmizi,
-              ),
-              Dekor.cizgi15,
-              Yansatirikili.satir(
-                'Gelir Vergi Kesintisi',
-                brutsayi > 0
-                    ? '- ${NumberFormat("#,##0.00", "tr_TR").format(double.tryParse(vergi.toString()))} TL'
-                    : '${NumberFormat("#,##0.00", "tr_TR").format(double.tryParse(vergi.abs().toString()))} TL',
+                'Toplam Kesintiler',
+                '${NumberFormat("#,##0.00", "tr_TR").format(double.tryParse(kesintiler.abs().toString()))} TL',
                 Renk.kirmizi,
               ),
               Dekor.cizgi15,
               Yansatirikili.satir(
                 'Toplam Mesai Net',
                 '${NumberFormat("#,##0.00", "tr_TR").format(double.tryParse(netMesai))} TL',
-                Renk.koyuMavi,
+                Renk.pastelKoyuMavi,
               ),
             ],
           ),
@@ -1254,7 +903,7 @@ class MesaiListeBaslik extends StatelessWidget {
     return Container(
       height: 40,
       width: double.infinity,
-      color: Renk.koyuMavi.withValues(alpha: 0.1),
+      color: Renk.pastelKoyuMavi.withValues(alpha: 0.1),
       child: Center(
         child: Text(
           secilenYil == 0
@@ -1263,7 +912,7 @@ class MesaiListeBaslik extends StatelessWidget {
           textAlign: TextAlign.center,
           style: const TextStyle(
             fontSize: 16,
-            color: Renk.koyuMavi,
+            color: Renk.pastelKoyuMavi,
             fontWeight: FontWeight.w400,
           ),
         ),
@@ -1272,12 +921,13 @@ class MesaiListeBaslik extends StatelessWidget {
   }
 }
 
-class MesaiSecimDialog extends StatelessWidget {
+class MesaiSecimDialog extends StatefulWidget {
   final TextEditingController tarihController;
   final TextEditingController notController;
   final List<String> items;
   final ValueChanged<int> onSelected;
   final VoidCallback? onUpdate;
+  final MesaiHesaplama? mesaiHesaplama;
 
   const MesaiSecimDialog({
     super.key,
@@ -1286,7 +936,24 @@ class MesaiSecimDialog extends StatelessWidget {
     required this.items,
     required this.onSelected,
     this.onUpdate,
+    this.mesaiHesaplama,
   });
+
+  @override
+  State<MesaiSecimDialog> createState() => _MesaiSecimDialogState();
+}
+
+class _MesaiSecimDialogState extends State<MesaiSecimDialog> {
+  @override
+  void initState() {
+    super.initState();
+    // İlk yükleme için tarihi ayarla
+    if (widget.tarihController.text.isEmpty) {
+      widget.tarihController.text = DateFormat(
+        'dd-MM-yyyy',
+      ).format(DateTime.now());
+    }
+  }
 
   void _tarihSec(BuildContext context) async {
     final DateTime? pickedDate = await showDatePicker(
@@ -1297,61 +964,364 @@ class MesaiSecimDialog extends StatelessWidget {
       locale: const Locale('tr', 'TR'),
     );
     if (pickedDate != null) {
-      tarihController.text = DateFormat('dd-MM-yyyy').format(pickedDate);
+      setState(() {
+        widget.tarihController.text = DateFormat(
+          'dd-MM-yyyy',
+        ).format(pickedDate);
+      });
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 10, right: 10),
-      child: Column(
-        children: [
-          GestureDetector(
-            onTap: () => _tarihSec(context),
-            child: AbsorbPointer(
-              child: TextField(
-                controller: tarihController,
-                decoration: const InputDecoration(
-                  labelText: 'Tarih',
-                  suffixIcon: Icon(Icons.calendar_today),
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.only(left: 10, right: 10, top: 5),
+        child: Column(
+          children: [
+            // Tarih seçimi
+            GestureDetector(
+              onTap: () => _tarihSec(context),
+              child: AbsorbPointer(
+                child: TextField(
+                  controller: widget.tarihController,
+                  style: const TextStyle(fontSize: 14),
+                  decoration: const InputDecoration(
+                    labelText: 'Tarih',
+                    suffixIcon: Icon(Icons.calendar_today),
+                  ),
                 ),
               ),
             ),
-          ),
-          const SizedBox(height: 10),
-          TextField(
-            controller: notController,
-            decoration: const InputDecoration(
-              labelText: 'Not Ekle',
-              hintText: 'Mesai detaylarını yazın',
-            ),
-            maxLines: 2,
-          ),
+            const SizedBox(height: 10),
 
-          const SizedBox(height: 5),
-          Expanded(
-            child: ListView.separated(
-              itemCount: items.length,
-              separatorBuilder:
-                  (context, index) =>
-                      const Divider(color: Renk.cita, height: 5, thickness: 1),
-              itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text(
-                    items[index],
-                    style: const TextStyle(fontSize: 16),
-                  ),
-                  onTap: () {
-                    Navigator.pop(context);
-                    onSelected(index);
-                    onUpdate?.call();
-                  },
-                );
-              },
+            // Mesai detay ayarları (kaydırılabilir)
+            if (widget.mesaiHesaplama != null) ...[
+              // Çalışan Tipi
+              Padding(
+                padding: const EdgeInsets.only(left: 15),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      'Çalışan Tipi',
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                    _buildInfoIcon(
+                      context,
+                      "Emekli misiniz yoksa normal çalışan mı? Emekliler için sigorta kesintisi %7.5, normal çalışanlar için ise %15 olarak hesaplanacaktır. Eğer SGK yok seçerseniz kesinti %0 olarak uygulanacaktır.",
+                    ),
+                    Row(
+                      children: [
+                        IconButton(
+                          icon: const Icon(
+                            Icons.arrow_back_ios,
+                            size: 18,
+                            color: Renk.pastelKoyuMavi,
+                          ),
+                          onPressed: () {
+                            if (widget.mesaiHesaplama != null) {
+                              setState(() {
+                                widget.mesaiHesaplama!.calisanTipi =
+                                    widget.mesaiHesaplama!.calisanTipi ==
+                                            'Emekli'
+                                        ? 'Normal'
+                                        : widget.mesaiHesaplama!.calisanTipi ==
+                                            'Normal'
+                                        ? 'SGK Yok'
+                                        : 'Emekli';
+                                widget.mesaiHesaplama!.mesaiListeKaydet();
+                              });
+                              widget.onUpdate?.call();
+                            }
+                          },
+                        ),
+                        SizedBox(
+                          width: 60,
+                          child: Text(
+                            widget.mesaiHesaplama?.calisanTipi ?? 'Normal',
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ),
+                        IconButton(
+                          icon: const Icon(
+                            Icons.arrow_forward_ios,
+                            size: 18,
+                            color: Renk.pastelKoyuMavi,
+                          ),
+                          onPressed: () {
+                            if (widget.mesaiHesaplama != null) {
+                              setState(() {
+                                widget.mesaiHesaplama!.calisanTipi =
+                                    widget.mesaiHesaplama!.calisanTipi ==
+                                            'Normal'
+                                        ? 'Emekli'
+                                        : widget.mesaiHesaplama!.calisanTipi ==
+                                            'Emekli'
+                                        ? 'SGK Yok'
+                                        : 'Normal';
+                                widget.mesaiHesaplama!.mesaiListeKaydet();
+                              });
+                              widget.onUpdate?.call();
+                            }
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              Dekor.cizgi15,
+
+              // Mesai %'si
+              Padding(
+                padding: const EdgeInsets.only(left: 15),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      "Mesai %'si",
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                    _buildInfoIcon(
+                      context,
+                      "Seçtiğiniz yüzdeye göre mesai ücretinizin katsayısı hesaplanacaktır.",
+                    ),
+                    Row(
+                      children: [
+                        IconButton(
+                          icon: const Icon(
+                            Icons.arrow_back_ios,
+                            size: 18,
+                            color: Renk.pastelKoyuMavi,
+                          ),
+                          onPressed: () {
+                            if (widget.mesaiHesaplama != null &&
+                                widget.mesaiHesaplama!.mesaiSayi > 0) {
+                              setState(() {
+                                widget.mesaiHesaplama!.mesaiSayi--;
+                                widget.mesaiHesaplama!.mesaiSec.text =
+                                    MesaiHesaplama.mesaiListe[widget
+                                        .mesaiHesaplama!
+                                        .mesaiSayi];
+                                widget.mesaiHesaplama!.mesaiListeKaydet();
+                              });
+                              widget.onUpdate?.call();
+                            }
+                          },
+                        ),
+                        SizedBox(
+                          width: 60,
+                          child: Text(
+                            widget.mesaiHesaplama?.mesaiSec.text ?? '% 100',
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ),
+                        IconButton(
+                          icon: const Icon(
+                            Icons.arrow_forward_ios,
+                            size: 18,
+                            color: Renk.pastelKoyuMavi,
+                          ),
+                          onPressed: () {
+                            if (widget.mesaiHesaplama != null &&
+                                widget.mesaiHesaplama!.mesaiSayi <
+                                    MesaiHesaplama.mesaiListe.length - 1) {
+                              setState(() {
+                                widget.mesaiHesaplama!.mesaiSayi++;
+                                widget.mesaiHesaplama!.mesaiSec.text =
+                                    MesaiHesaplama.mesaiListe[widget
+                                        .mesaiHesaplama!
+                                        .mesaiSayi];
+                                widget.mesaiHesaplama!.mesaiListeKaydet();
+                              });
+                              widget.onUpdate?.call();
+                            }
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              Dekor.cizgi15,
+
+              // KDV Oranı
+              Padding(
+                padding: const EdgeInsets.only(left: 15),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      "Vergi Oranı",
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                    _buildInfoIcon(
+                      context,
+                      "Seçtiğiniz yüzdeye göre mesai ücretinizden Kdv vergi kesintisi yapılacaktır.",
+                    ),
+                    Row(
+                      children: [
+                        IconButton(
+                          icon: const Icon(
+                            Icons.arrow_back_ios,
+                            size: 18,
+                            color: Renk.pastelKoyuMavi,
+                          ),
+                          onPressed: () {
+                            if (widget.mesaiHesaplama != null &&
+                                widget.mesaiHesaplama!.kdvSayi > 0) {
+                              setState(() {
+                                widget.mesaiHesaplama!.kdvSayi--;
+                                widget.mesaiHesaplama!.kdvSec.text =
+                                    MesaiHesaplama.kdvListe[widget
+                                        .mesaiHesaplama!
+                                        .kdvSayi];
+                                widget.mesaiHesaplama!.mesaiListeKaydet();
+                              });
+                              widget.onUpdate?.call();
+                            }
+                          },
+                        ),
+                        SizedBox(
+                          width: 60,
+                          child: Text(
+                            widget.mesaiHesaplama?.kdvSec.text ?? '% 15',
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ),
+                        IconButton(
+                          icon: const Icon(
+                            Icons.arrow_forward_ios,
+                            size: 18,
+                            color: Renk.pastelKoyuMavi,
+                          ),
+                          onPressed: () {
+                            if (widget.mesaiHesaplama != null &&
+                                widget.mesaiHesaplama!.kdvSayi <
+                                    MesaiHesaplama.kdvListe.length - 1) {
+                              setState(() {
+                                widget.mesaiHesaplama!.kdvSayi++;
+                                widget.mesaiHesaplama!.kdvSec.text =
+                                    MesaiHesaplama.kdvListe[widget
+                                        .mesaiHesaplama!
+                                        .kdvSayi];
+                                widget.mesaiHesaplama!.mesaiListeKaydet();
+                              });
+                              widget.onUpdate?.call();
+                            }
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 10),
+            ],
+
+            // Not Ekle alanı
+            TextField(
+              controller: widget.notController,
+              style: const TextStyle(fontSize: 14),
+              decoration: const InputDecoration(
+                labelText: 'Not Ekle',
+                hintText: 'Mesai detaylarını yazın (isteğe bağlı)',
+              ),
+              maxLines: 2,
             ),
-          ),
-        ],
+            const SizedBox(height: 10),
+
+            // Çalışma saat seçimi listesi
+            Container(
+              height: 500, // GridView için uygun yükseklik
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: GridView.builder(
+                shrinkWrap: true,
+                physics: const BouncingScrollPhysics(),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 4, // Her satırda 3 hücre
+                  crossAxisSpacing: 5,
+                  mainAxisSpacing: 5,
+                  childAspectRatio: 1.7, // Genişlik/Yükseklik oranı
+                ),
+                itemCount: widget.items.length,
+                itemBuilder: (context, index) {
+                  final item = widget.items[index];
+                  // Örnek: "0.5 Saat Çalışma" -> "0.5 saat" şeklinde kısalt
+                  final parts = item.split(' ');
+                  final deger = parts.isNotEmpty ? parts[0] : '';
+                  final birim = parts.length > 1 ? parts[1].toLowerCase() : '';
+
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context);
+                      widget.onSelected(index);
+                      widget.onUpdate?.call();
+                    },
+                    child: CizgiliCerceve(
+                      golge: 5,
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              deger,
+                              style: const TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            Text(birim, style: const TextStyle(fontSize: 11)),
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+            const SizedBox(height: 10),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildInfoIcon(BuildContext context, String yazi) {
+    return GestureDetector(
+      onTap: () {
+        BilgiDialog.showCustomDialog(
+          context: context,
+          title: 'Bilgilendirme',
+          content: yazi,
+          buttonText: 'Kapat',
+        );
+      },
+      child: const Padding(
+        padding: EdgeInsets.only(left: 10, right: 5),
+        child: Icon(Icons.info_outline, size: 18, color: Renk.pastelKoyuMavi),
       ),
     );
   }
@@ -1373,7 +1343,7 @@ class MesaiBilgilendirme extends StatelessWidget {
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w500,
-              color: Renk.koyuMavi,
+              color: Renk.pastelKoyuMavi,
             ),
           ),
           Text(
@@ -1388,7 +1358,7 @@ class MesaiBilgilendirme extends StatelessWidget {
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w500,
-              color: Renk.koyuMavi,
+              color: Renk.pastelKoyuMavi,
             ),
           ),
           Text(
@@ -1402,7 +1372,7 @@ class MesaiBilgilendirme extends StatelessWidget {
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w500,
-              color: Renk.koyuMavi,
+              color: Renk.pastelKoyuMavi,
             ),
           ),
           Text(
@@ -1416,7 +1386,7 @@ class MesaiBilgilendirme extends StatelessWidget {
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w500,
-              color: Renk.koyuMavi,
+              color: Renk.pastelKoyuMavi,
             ),
           ),
           Text(
@@ -1430,7 +1400,7 @@ class MesaiBilgilendirme extends StatelessWidget {
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w500,
-              color: Renk.koyuMavi,
+              color: Renk.pastelKoyuMavi,
             ),
           ),
           Text(
@@ -1444,7 +1414,7 @@ class MesaiBilgilendirme extends StatelessWidget {
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w500,
-              color: Renk.koyuMavi,
+              color: Renk.pastelKoyuMavi,
             ),
           ),
           Text(

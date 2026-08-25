@@ -179,7 +179,7 @@ class _YapilacaklarListesiState extends State<YapilacaklarListesi> {
         const Text(
           "Alarm İzni Gerekli",
           style: TextStyle(
-            color: Renk.koyuMavi,
+            color: Renk.pastelKoyuMavi,
             fontSize: 16,
             fontWeight: FontWeight.w400,
             overflow: TextOverflow.ellipsis,
@@ -222,7 +222,7 @@ class _YapilacaklarListesiState extends State<YapilacaklarListesi> {
                   child: const Text(
                     "Ayarlara Git",
                     style: TextStyle(
-                      color: Renk.koyuMavi,
+                      color: Renk.pastelKoyuMavi,
                       fontSize: 13,
                       fontWeight: FontWeight.w400,
                       overflow: TextOverflow.ellipsis,
@@ -679,7 +679,7 @@ class _YapilacaklarListesiState extends State<YapilacaklarListesi> {
     if (fark.isNegative) {
       return Colors.red;
     } else {
-      return Renk.koyuMavi;
+      return Renk.pastelKoyuMavi;
     }
   }
 
@@ -705,7 +705,7 @@ class _YapilacaklarListesiState extends State<YapilacaklarListesi> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: const BackButton(color: Renk.koyuMavi),
+        leading: const BackButton(color: Renk.pastelKoyuMavi),
 
         title: const Text("Yapılacaklar Listesi"),
       ),
@@ -957,7 +957,11 @@ class _YapilacaklarListesiState extends State<YapilacaklarListesi> {
                 onPressed: _yeniGorevEkleDialog,
                 backgroundColor: Colors.white,
                 elevation: 5,
-                child: const Icon(Icons.add, size: 30, color: Renk.koyuMavi),
+                child: const Icon(
+                  Icons.add,
+                  size: 30,
+                  color: Renk.pastelKoyuMavi,
+                ),
               ),
             ),
           ),

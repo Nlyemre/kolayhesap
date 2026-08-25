@@ -19,7 +19,7 @@ class Tema {
         backgroundColor: Colors.white,
         surfaceTintColor: Colors.white,
         dayStyle: TextStyle(color: Colors.black, fontFamily: 'Ubuntu'),
-        todayBorder: BorderSide(color: Color.fromARGB(255, 31, 86, 150)),
+        todayBorder: BorderSide(color: Renk.pastelKoyuMavi),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(10.0)),
           side: BorderSide(color: Color.fromARGB(255, 224, 224, 224)),
@@ -28,7 +28,7 @@ class Tema {
       // Dialog ve ColorScheme (DatePicker için)
       dialogTheme: const DialogThemeData(backgroundColor: Colors.white),
       colorScheme: const ColorScheme.light(
-        primary: Color.fromARGB(255, 31, 86, 150),
+        primary: Renk.pastelKoyuMavi,
         onPrimary: Colors.white,
         onSurface: Colors.black,
       ),
@@ -36,7 +36,7 @@ class Tema {
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-          foregroundColor: const Color.fromARGB(255, 31, 86, 150),
+          foregroundColor: Renk.pastelKoyuMavi,
           padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 15),
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(5.0)),
@@ -73,7 +73,7 @@ class Tema {
           fontFamily: 'Ubuntu',
           fontSize: 20,
           fontWeight: FontWeight.w500,
-          color: Renk.koyuMavi,
+          color: Renk.pastelKoyuMavi,
         ),
         surfaceTintColor:
             Colors
@@ -95,7 +95,7 @@ class Tema {
       inputDecorationTheme: const InputDecorationTheme(
         isDense: true,
         labelStyle: TextStyle(
-          color: Renk.koyuMavi,
+          color: Renk.pastelKoyuMavi,
           fontSize: 15,
           fontWeight: FontWeight.w400,
         ),
